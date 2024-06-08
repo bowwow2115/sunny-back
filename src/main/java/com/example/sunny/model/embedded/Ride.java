@@ -10,8 +10,8 @@ import javax.persistence.Embeddable;
 @Setter
 @NoArgsConstructor
 @Embeddable
-public class Address {
-    private String zipCode;
-    private String address;
-    private String detailAddress;
+public class Ride {
+    private String name;
+    private String time;
+    private String comment;
 }

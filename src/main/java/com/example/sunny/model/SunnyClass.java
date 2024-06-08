@@ -13,7 +13,7 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @Entity
 @Table(name = "sunny_class")
-public class Class extends BaseEntity{
-    @Column(name = "className")
-    private String className;
+public class SunnyClass extends BaseEntity{
+    @Column(name = "name")
+    private String name;
 }

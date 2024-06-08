@@ -4,21 +4,24 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
-import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import java.util.Set;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
 @Table(name = "sunny_parents")
-public class Parent extends Person{
+public class Parents extends Person{
     @Column(name = "telephone")
     private String telephone;
 
     @Column(name = "relation")
     private String relation;
 
-    @OneToMany(mappedBy = "parent")
-    private List<ChildParent> childList;
+    @OneToMany(mappedBy = "parents")
+    private Set<ChildParents> childList;
 }

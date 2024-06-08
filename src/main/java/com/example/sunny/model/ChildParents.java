@@ -10,14 +10,14 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "sunny_children_parent")
-public class ChildParent extends BaseEntity{
+@Table(name = "sunny_children_parents")
+public class ChildParents extends BaseEntity{
 
     @ManyToOne
     @JoinColumn(name = "child_id")
     private Child child;
 
     @ManyToOne
-    @JoinColumn(name = "parent_id")
-    private Parent parent;
+    @JoinColumn(name = "parents_id")
+    private Parents parents;
 }
