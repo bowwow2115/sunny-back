@@ -15,6 +15,10 @@ public abstract class BasicController {
         return ResponseEntity.ok(response);
     }
 
+    protected ResponseEntity<Map<String, Object>> createResponse(Object data) {
+        return createResponse("0", data);
+    }
+
     protected ResponseEntity<Map<String, Object>> createResponse() {
         Map<String, Object> response = new HashMap<>();
         response.put("code", "0");

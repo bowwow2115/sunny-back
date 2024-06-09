@@ -1,7 +1,7 @@
 package com.example.sunny.repository;
 
 import com.example.sunny.model.SunnyClass;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ClassRepository extends CrudRepository<SunnyClass, Long> {
+public interface ClassRepository extends JpaRepository<SunnyClass, Long> {
 }

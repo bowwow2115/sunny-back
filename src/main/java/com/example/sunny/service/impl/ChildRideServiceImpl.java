@@ -6,8 +6,7 @@ import com.example.sunny.service.ChildRideService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -15,10 +14,10 @@ public class ChildRideServiceImpl implements ChildRideService {
     private final ChildRideRepository childRideRepository;
 
     @Override
-    public Set<ChildRide> findAll() {
-        Set<ChildRide> childRides = new HashSet<>();
-        childRideRepository.findAll().forEach(childRides::add);
-        return childRides;
+    public List<ChildRide> findAll() {
+//        Set<ChildRide> childRides = new HashSet<>();
+//        childRideRepository.findAll().forEach(childRides::add);
+        return childRideRepository.findAll();
     }
 
     @Override

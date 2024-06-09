@@ -6,8 +6,7 @@ import com.example.sunny.service.ClassServcie;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -16,10 +15,10 @@ public class ClsssServiceImpl implements ClassServcie {
     private final ClassRepository classRepository;
 
     @Override
-    public Set<SunnyClass> findAll() {
-        Set<SunnyClass> sunnyClasses = new HashSet<>();
-        classRepository.findAll().forEach(sunnyClasses::add);
-        return sunnyClasses;
+    public List<SunnyClass> findAll() {
+//        Set<SunnyClass> sunnyClasses = new HashSet<>();
+//        classRepository.findAll().forEach(sunnyClasses::add);
+        return classRepository.findAll();
     }
 
     @Override

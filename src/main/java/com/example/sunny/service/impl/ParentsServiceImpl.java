@@ -6,8 +6,7 @@ import com.example.sunny.service.ParentsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -15,10 +14,10 @@ public class ParentsServiceImpl implements ParentsService {
     private final ParentsRepository parentsRepository;
 
     @Override
-    public Set<Parents> findAll() {
-        Set<Parents> parents = new HashSet<>();
-        parentsRepository.findAll().forEach(parents::add);
-        return parents;
+    public List<Parents> findAll() {
+//        Set<Parents> parents = new HashSet<>();
+//        parentsRepository.findAll().forEach(parents::add);
+        return parentsRepository.findAll();
     }
 
     @Override

@@ -6,8 +6,7 @@ import com.example.sunny.service.ChildService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -20,10 +19,10 @@ public class ChildServiceImpl implements ChildService {
     }
 
     @Override
-    public Set<Child> findAll() {
-        Set<Child> children = new HashSet<>();
-        childRepository.findAll().forEach(children::add);
-        return children;
+    public List<Child> findAll() {
+//        Set<Child> children = new HashSet<>();
+//        childRepository.findAll().forEach(children::add);
+        return childRepository.findAll();
     }
 
     @Override
