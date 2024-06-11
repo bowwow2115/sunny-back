@@ -14,10 +14,10 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "sunny_user")
 public class User extends Person {
-    @Column(name = "user_id")
+    @Column(name = "user_id", nullable = false, unique = true)
     private String userId;
 
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
 
     @Column(name = "role")

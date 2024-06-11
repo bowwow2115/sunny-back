@@ -1,4 +1,4 @@
-package com.example.sunny.service.impl;
+package com.example.sunny.service;
 
 import com.example.sunny.model.User;
 import com.example.sunny.repository.UserRepository;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserDetailsService {
+public class AuthUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Override
