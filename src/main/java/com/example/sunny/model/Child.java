@@ -2,16 +2,15 @@ package com.example.sunny.model;
 
 import com.example.sunny.model.embedded.Address;
 import com.example.sunny.model.embedded.Ride;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
 
 @Getter
-@Setter
+@AllArgsConstructor
+@Builder
 @NoArgsConstructor
 @Entity
 @Table(name = "sunny_children")

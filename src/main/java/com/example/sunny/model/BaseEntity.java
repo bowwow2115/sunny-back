@@ -12,7 +12,6 @@ import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 
 @Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @MappedSuperclass
