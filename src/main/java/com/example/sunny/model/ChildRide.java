@@ -1,14 +1,13 @@
 package com.example.sunny.model;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Getter
-@Setter
+@AllArgsConstructor
+@Builder
 @NoArgsConstructor
 @Entity
 @Table(name = "sunny_ride")
