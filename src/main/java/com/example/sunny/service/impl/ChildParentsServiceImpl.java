@@ -24,7 +24,12 @@ public class ChildParentsServiceImpl implements CrudService<ChildParents, Long> 
     }
 
     @Override
-    public ChildParents save(ChildParents object) {
+    public ChildParents create(ChildParents object) {
+        return childParentsRepository.save(object);
+    }
+
+    @Override
+    public ChildParents update(ChildParents object) {
         return childParentsRepository.save(object);
     }
 

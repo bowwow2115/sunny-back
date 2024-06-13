@@ -1,12 +1,17 @@
 package com.example.sunny.service.impl;
 
+import com.example.sunny.config.error.BusinessException;
+import com.example.sunny.config.error.ErrorCode;
 import com.example.sunny.model.Child;
+import com.example.sunny.model.dto.ChildDto;
 import com.example.sunny.repository.ChildRepository;
 import com.example.sunny.service.ChildService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -14,30 +19,36 @@ public class ChildServiceImpl implements ChildService {
     private final ChildRepository childRepository;
 
     @Override
-    public Child findByName(String name) {
-        return childRepository.findByname(name);
+    public ChildDto findByName(String name) {
+        return new ChildDto(childRepository.findByname(name));
     }
 
     @Override
-    public List<Child> findAll() {
-//        Set<Child> children = new HashSet<>();
-//        childRepository.findAll().forEach(children::add);
-        return childRepository.findAll();
+    public List<ChildDto> findAll() {
+        return childRepository.findAll().stream()
+                .map(ChildDto::new)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Child findById(Long aLong) {
-        return childRepository.findById(aLong).orElse(null);
+    public ChildDto findById(Long aLong) {
+        Child child = childRepository.findById(aLong).orElseThrow(() -> new BusinessException(ErrorCode.ENTITY_NOT_FOUND));
+        return new ChildDto(child);
     }
 
     @Override
-    public Child save(Child object) {
-        return childRepository.save(object);
+    public ChildDto create(ChildDto object) {
+        return new ChildDto(childRepository.save(object.toEntity()));
     }
 
     @Override
-    public void delete(Child object) {
-        childRepository.delete(object);
+    public ChildDto update(ChildDto object) {
+        return new ChildDto(childRepository.save(object.toEntity()));
+    }
+
+    @Override
+    public void delete(ChildDto object) {
+        childRepository.delete(object.toEntity());
     }
 
     @Override

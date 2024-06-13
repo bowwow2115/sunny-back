@@ -6,11 +6,10 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.List;
 import java.util.Set;
 
 @Getter
-@AllArgsConstructor
-@Builder
 @NoArgsConstructor
 @Entity
 @Table(name = "sunny_parents")
@@ -22,5 +21,13 @@ public class Parents extends Person{
     private String relation;
 
     @OneToMany(mappedBy = "parents")
-    private Set<ChildParents> childList;
+    private List<ChildParents> childList;
+
+    @Builder
+    public Parents(Long id, String name, String telephone, String relation, List<ChildParents> childList) {
+        super(id, name);
+        this.telephone = telephone;
+        this.relation = relation;
+        this.childList = childList;
+    }
 }

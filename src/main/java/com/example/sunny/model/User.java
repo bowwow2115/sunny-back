@@ -1,5 +1,6 @@
 package com.example.sunny.model;
 
+import com.example.sunny.model.dto.UserDto;
 import lombok.*;
 
 import javax.persistence.Column;
@@ -17,13 +18,14 @@ public class User extends Person {
     private String password;
     @Column(name = "role")
     private String role;
-    @Column(name = "status")
+    @Column(name = "status", nullable = false)
     private boolean status;
     @Builder
-    public User(String name, String userId, String password, boolean status) {
-        super(name);
+    public User(Long id, String name, String userId, String password, String role, boolean status) {
+        super(id, name);
         this.userId = userId;
         this.password = password;
+        this.role = role;
         this.status = status;
     }
 }
