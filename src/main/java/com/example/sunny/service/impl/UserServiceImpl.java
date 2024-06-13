@@ -30,6 +30,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDto create(UserDto object) {
+        return null;
+    }
+
+    @Override
+    public UserDto update(UserDto object) {
+        return null;
+    }
+
+    @Override
     public UserDto save(UserDto object) {
         User user = User.builder()
                 .userId(object.getUserId())

@@ -74,7 +74,7 @@ public class LoginController extends BasicController {
     public ResponseEntity<Map<String, Object>> addUser(@RequestBody UserDto userDto) {
         if(userDto.getUserId().isEmpty() || userDto.getPassword().isEmpty() || userDto.getUserName().isEmpty())
             throw new BusinessException(ErrorCode.INVALID_INPUT_VALUE);
-        return createResponse(userService.save(userDto));
+        return createResponse(userService.create(userDto));
     }
 
 }

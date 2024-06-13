@@ -1,6 +1,7 @@
 package com.example.sunny.controller;
 
 import com.example.sunny.model.Child;
+import com.example.sunny.model.dto.ChildDto;
 import com.example.sunny.service.ChildService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -31,13 +32,14 @@ public class ChildController extends BasicController {
     }
 
     @PostMapping
-    public ResponseEntity<Map<String, Object>> addChild(Child child) {
-        Child result = childService.save(child);
-        return createResponse(result);
+    public ResponseEntity<Map<String, Object>> addChild(ChildDto child) {
+//        ChildDto result = childService.save(child);
+//        return createResponse(result);
+        return null;
     }
 
     @PutMapping
-    public ResponseEntity<Map<String, Object>> editChild(Child child) {
+    public ResponseEntity<Map<String, Object>> editChild(ChildDto child) {
         return addChild(child);
     }
 }
