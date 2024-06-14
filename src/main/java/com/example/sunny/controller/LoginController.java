@@ -43,7 +43,7 @@ public class LoginController extends BasicController {
             String token = jwtTokenUtil.generateToken(userDetails);
             String refreshToken = jwtTokenUtil.generateRefreshToken(userDetails);
 
-            result.put("token", token);
+            result.put("accessToken", token);
             result.put("refreshToken", refreshToken);
             result.put("userId", user.getUserId());
             result.put("role", user.getRole());
