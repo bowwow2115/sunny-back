@@ -73,8 +73,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/app/fonts/**",
                         "/test/**"
                 ).permitAll()
-                //로그인 개발 될 때까지 미적용
-//				.anyRequest().authenticated()
+				.anyRequest().authenticated()
                 .and()
                 .exceptionHandling()	//custom exception 처리
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
