@@ -32,14 +32,13 @@ public class ChildController extends BasicController {
     }
 
     @PostMapping
-    public ResponseEntity<Map<String, Object>> addChild(ChildDto child) {
-//        ChildDto result = childService.save(child);
-//        return createResponse(result);
-        return null;
+    public ResponseEntity<Map<String, Object>> addChild(@RequestBody ChildDto child) {
+        ChildDto result = childService.create(child);
+        return createResponse(result);
     }
 
     @PutMapping
-    public ResponseEntity<Map<String, Object>> editChild(ChildDto child) {
+    public ResponseEntity<Map<String, Object>> editChild(@RequestBody ChildDto child) {
         return addChild(child);
     }
 }

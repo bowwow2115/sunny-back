@@ -37,32 +37,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto create(UserDto object) {
-        return null;
+        return new UserDto(userRepository.save(object.toEntity()));
     }
 
     @Override
     public UserDto update(UserDto object) {
-        return null;
-    }
-
-    @Override
-    public UserDto save(UserDto object) {
-        User user = User.builder()
-                .userId(object.getUserId())
-                .password(passwordEncoder.encode(object.getPassword()))
-                .name(object.getUserName())
-                .status(true)
-                .build();
-         return new UserDto(userRepository.save(user));
+        return new UserDto(userRepository.save(object.toEntity()));
     }
 
     @Override
     public void delete(UserDto object) {
-
+        userRepository.delete(object.toEntity());
     }
 
     @Override
     public void deleteById(Long aLong) {
-
+        userRepository.deleteById(aLong);
     }
 }
