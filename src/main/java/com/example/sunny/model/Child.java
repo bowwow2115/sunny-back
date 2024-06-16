@@ -1,14 +1,14 @@
 package com.example.sunny.model;
 
-import com.example.sunny.model.dto.ChildDto;
 import com.example.sunny.model.embedded.Address;
 import com.example.sunny.model.embedded.Ride;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @NoArgsConstructor
@@ -19,6 +19,8 @@ public class Child extends Person{
     private String childCode;
     @Column(name = "admission_date")
     private Date admissionDate;
+    @Column(name = "birthday")
+    private Date birthday;
     @Column(name = "class_name")
     private String className;
     @Embedded
@@ -47,10 +49,11 @@ public class Child extends Person{
         return status;
     }
     @Builder
-    public Child(Long id, String name, String childCode, Date admissionDate, String className, Address address, List<ChildParents> parentList, Ride amRide, Ride pmRide, boolean status) {
+    public Child(Long id, String name, String childCode, Date admissionDate, Date birthday, String className, Address address, List<ChildParents> parentList, Ride amRide, Ride pmRide, boolean status) {
         super(id, name);
         this.childCode = childCode;
         this.admissionDate = admissionDate;
+        this.birthday = birthday;
         this.className = className;
         this.address = address;
         this.parentList = parentList;
