@@ -19,10 +19,14 @@ public class User extends Person {
     @Column(name = "password", nullable = false)
     private String password;
     @Column(name = "role")
-    @ColumnDefault("tch")
+    @ColumnDefault("user")
     private String role;
     @Column(name = "status", nullable = false)
     private boolean status;
+    @Column(name = "email", nullable = false)
+    private String email;
+    @Column(name = "telephone", nullable = false)
+    private String telephone;
     @Builder
     public User(Long id, String name, String userId, String password, String role, boolean status) {
         super(id, name);
