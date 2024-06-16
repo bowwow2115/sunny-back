@@ -4,15 +4,16 @@ import com.example.sunny.util.ServletUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
+import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -51,7 +52,7 @@ public class JwtTokenUtil implements Serializable {
 
     //for retrieveing any information from token we will need the secret key
     private Claims getAllClaimsFromToken(String token) {
-        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+        return Jwts.parserBuilder().setSigningKey(secret).build().parseClaimsJws(token).getBody();
     }
 
     //check if the token has expired
@@ -81,17 +82,16 @@ public class JwtTokenUtil implements Serializable {
     //3. According to JWS Compact Serialization(https://tools.ietf.org/html/draft-ietf-jose-json-web-signature-41#section-3.1)
     //   compaction of the JWT to a URL-safe string
     private String doGenerateToken(Map<String, Object> claims, String subject) {
-
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + (jwtAccessHours*JWT_TOKEN_VALIDITY * 1000)))
-                .signWith(SignatureAlgorithm.HS256, secret).compact();
-    }
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .compact();    }
 
     public String doGenerateRefreshToken(Map<String, Object> claims, String subject) {
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + (jwtRefreshDay*REFRESH_TOKEN_VALIDITY * 1000)))
-                .signWith(SignatureAlgorithm.HS256, secret).compact();
-
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .compact();
     }
 
     //validate token
@@ -102,8 +102,9 @@ public class JwtTokenUtil implements Serializable {
     }
 
     public String extractRole(String token) {
-        Claims claims = Jwts.parser()
-                .setSigningKey(secret)
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
                 .parseClaimsJws(token)
                 .getBody();
 
@@ -121,8 +122,9 @@ public class JwtTokenUtil implements Serializable {
     }
 
     public String getUserIdFromToken(String token) {
-        return Jwts.parser()
-                .setSigningKey(secret)
+        return Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
@@ -131,6 +133,11 @@ public class JwtTokenUtil implements Serializable {
     public boolean getIsAdmin(String token) {
         String role = this.extractRole(token);
         return "admin".equals(role);
+    }
+
+    private Key getSigningKey() {
+        byte[] keyBytes = secret.getBytes();
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 
 }

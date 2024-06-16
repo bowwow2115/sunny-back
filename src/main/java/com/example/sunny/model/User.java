@@ -1,7 +1,9 @@
 package com.example.sunny.model;
 
-import com.example.sunny.model.dto.UserDto;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,6 +19,7 @@ public class User extends Person {
     @Column(name = "password", nullable = false)
     private String password;
     @Column(name = "role")
+    @ColumnDefault("tch")
     private String role;
     @Column(name = "status", nullable = false)
     private boolean status;

@@ -6,10 +6,8 @@ import com.example.sunny.model.embedded.Address;
 import com.example.sunny.model.embedded.Ride;
 import lombok.*;
 
-import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -22,6 +20,7 @@ public class ChildDto {
     private Date admissionDate;
     private String className;
     private Address address;
+    private Date birthday;
     private List<ChildParents> parentList;
     private boolean status;
     private Ride amRide;
@@ -30,6 +29,7 @@ public class ChildDto {
 
     public ChildDto(Child child) {
         this.id = child.getId();
+        this.birthday = child.getBirthday();
         this.childCode = child.getChildCode();
         this.admissionDate = child.getAdmissionDate();
         this.className = child.getClassName();
@@ -52,6 +52,7 @@ public class ChildDto {
                 .pmRide(pmRide)
                 .address(address)
                 .childCode(childCode)
+                .birthday(birthday)
                 .className(className)
                 .build();
     }
