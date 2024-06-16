@@ -8,6 +8,8 @@ import com.example.sunny.repository.UserRepository;
 import com.example.sunny.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +39,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto create(UserDto object) {
-        return new UserDto(userRepository.save(object.toEntity()));
+        User user = null;
+        try {
+            user = userRepository.save(object.toEntity());
+        } catch (ConstraintViolationException e) {
+            throw new BusinessException(ErrorCode.USERALREADYEXISTS);
+        } catch (DataIntegrityViolationException e) {
+            throw new BusinessException(ErrorCode.USERALREADYEXISTS);
+        }
+        return new UserDto(user);
     }
 
     @Override
