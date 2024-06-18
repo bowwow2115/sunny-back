@@ -7,6 +7,7 @@ import com.example.sunny.model.User;
 import com.example.sunny.model.dto.UserDto;
 import com.example.sunny.service.AuthUserDetailsService;
 import com.example.sunny.service.UserService;
+import com.example.sunny.util.StringUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -68,7 +69,8 @@ public class LoginController extends BasicController {
 
     @PostMapping("/user")
     public ResponseEntity<Map<String, Object>> addUser(@RequestBody UserDto userDto) {
-        if(userDto.getUserId().isEmpty() || userDto.getPassword().isEmpty() || userDto.getUserName().isEmpty())
+        if(StringUtil.isEmpty(userDto.getUserId()) || StringUtil.isEmpty(userDto.getPassword()) || StringUtil.isEmpty(userDto.getUserName())
+                || StringUtil.isEmpty(userDto.getTelephone()) || StringUtil.isEmpty(userDto.getEmail()))
             throw new BusinessException(ErrorCode.INVALID_INPUT_VALUE);
         return createResponse(userService.create(userDto));
     }
