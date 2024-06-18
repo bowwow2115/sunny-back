@@ -28,11 +28,13 @@ public class User extends Person {
     @Column(name = "telephone", nullable = false)
     private String telephone;
     @Builder
-    public User(Long id, String name, String userId, String password, String role, boolean status) {
+    public User(Long id, String name, String userId, String password, String role, boolean status, String email, String telephone) {
         super(id, name);
         this.userId = userId;
         this.password = password;
         this.role = role;
         this.status = status;
+        this.email = email;
+        this.telephone = telephone;
     }
 }

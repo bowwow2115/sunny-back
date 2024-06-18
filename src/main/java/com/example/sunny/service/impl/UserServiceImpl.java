@@ -1,5 +1,6 @@
 package com.example.sunny.service.impl;
 
+import com.example.sunny.code.SunnyCode;
 import com.example.sunny.config.error.BusinessException;
 import com.example.sunny.config.error.ErrorCode;
 import com.example.sunny.model.User;
@@ -41,7 +42,17 @@ public class UserServiceImpl implements UserService {
     public UserDto create(UserDto object) {
         User user = null;
         try {
-            user = userRepository.save(object.toEntity());
+            user = userRepository.save(
+                    User.builder()
+                            .telephone(object.getTelephone())
+                            .email(object.getEmail())
+                            .userId(object.getUserId())
+                            .name(object.getUserName())
+                            .status(false)
+                            .password(passwordEncoder.encode(object.getPassword()))
+                            .role(SunnyCode.ROLE_GENERAL_USER)
+                            .build()
+            );
         } catch (ConstraintViolationException e) {
             throw new BusinessException(ErrorCode.USERALREADYEXISTS);
         } catch (DataIntegrityViolationException e) {
@@ -52,8 +63,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto update(UserDto object) {
-        object.setPassword(passwordEncoder.encode(object.getPassword()));
-        return new UserDto(userRepository.save(object.toEntity()));
+        return new UserDto(userRepository.save(
+                User.builder()
+                        .telephone(object.getTelephone())
+                        .email(object.getEmail())
+                        .id(object.getId())
+                        .name(object.getUserName())
+                        .status(object.isStatus())
+                        .password(passwordEncoder.encode(object.getPassword()))
+                        .build()
+        ));
     }
 
     @Override

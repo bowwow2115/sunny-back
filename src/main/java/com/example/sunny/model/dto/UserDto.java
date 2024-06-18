@@ -17,6 +17,8 @@ public class UserDto {
     private String password;
     private String userName;
     private String role;
+    private String telephone;
+    private String email;
     private boolean status;
 
     public UserDto(User user) {
@@ -26,6 +28,8 @@ public class UserDto {
         this.userName = user.getName();
         this.role = user.getRole();
         this.status = user.isStatus();
+        this.telephone = user.getTelephone();
+        this.email = user.getEmail();
     }
 
     public User toEntity() {
@@ -36,6 +40,8 @@ public class UserDto {
                 .name(userName)
                 .status(status)
                 .role(role)
+                .email(email)
+                .telephone(telephone)
                 .build();
     }
 
