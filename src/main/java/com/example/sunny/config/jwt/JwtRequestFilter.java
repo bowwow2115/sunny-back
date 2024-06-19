@@ -52,9 +52,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         } catch (IllegalArgumentException e) {
             log.error(e.getMessage());
             return;
-        } catch (ExpiredJwtException ee) { // 토큰 만료?
+        } catch (ExpiredJwtException ee) {
             log.error(ee.getMessage());
-            // 프론트 화면 단에서 쿠키 가지고 있을 수 있어서 키우완 브런치 이동 후 삭제 예정.
             Cookie cookie = ServletUtil.getCookies(request.getCookies(), "auth");
             if (cookie != null) {
                 cookie.setMaxAge(0);
