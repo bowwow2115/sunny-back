@@ -1,5 +1,7 @@
 package com.example.sunny.config.jwt;
 
+import com.example.sunny.config.error.BusinessException;
+import com.example.sunny.config.error.ErrorCode;
 import com.example.sunny.util.ServletUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -11,9 +13,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.security.Key;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,9 +39,22 @@ public class JwtTokenUtil implements Serializable {
     private long jwtAccessHours;
     @Value("${jwt.jwtRefreshDay}")
     private long jwtRefreshDay;
-    @Value("${jwt.secret}")
-    private String secret;
 
+    private String secret;
+//    private String SECRET_KEY;
+
+    @PostConstruct
+    private void secretKeyGen() {
+        KeyGenerator keyGen = null;
+        try {
+            keyGen = KeyGenerator.getInstance("HmacSHA512");
+        } catch (NoSuchAlgorithmException e) {
+            throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
+        SecretKey secretKey = keyGen.generateKey();
+        // Secret Key를 Base64로 인코딩하여 문자열로 저장
+        this.secret = Base64.getEncoder().encodeToString(secretKey.getEncoded());
+    }
 
     public String getUsernameFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
@@ -82,15 +103,18 @@ public class JwtTokenUtil implements Serializable {
     //3. According to JWS Compact Serialization(https://tools.ietf.org/html/draft-ietf-jose-json-web-signature-41#section-3.1)
     //   compaction of the JWT to a URL-safe string
     private String doGenerateToken(Map<String, Object> claims, String subject) {
-        return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(subject)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + (jwtAccessHours*JWT_TOKEN_VALIDITY * 1000)))
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .signWith(getSigningKey(), SignatureAlgorithm.HS512)
                 .compact();    }
 
     public String doGenerateRefreshToken(Map<String, Object> claims, String subject) {
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + (jwtRefreshDay*REFRESH_TOKEN_VALIDITY * 1000)))
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .signWith(getSigningKey(), SignatureAlgorithm.HS512)
                 .compact();
     }
 
@@ -135,9 +159,9 @@ public class JwtTokenUtil implements Serializable {
         return "admin".equals(role);
     }
 
-    private Key getSigningKey() {
-        byte[] keyBytes = secret.getBytes();
-        return Keys.hmacShaKeyFor(keyBytes);
+    public Key getSigningKey() {
+        byte[] keyBytes = Base64.getDecoder().decode(secret);
+        return new SecretKeySpec(keyBytes, SignatureAlgorithm.HS512.getJcaName());
     }
 
 }

@@ -15,7 +15,7 @@ import java.util.List;
 @Entity
 @Table(name = "sunny_children")
 public class Child extends Person{
-    @Column(name = "child_code")
+    @Column(name = "child_code",unique = true)
     private String childCode;
     @Column(name = "admission_date")
     private Date admissionDate;
