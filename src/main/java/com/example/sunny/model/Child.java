@@ -15,11 +15,11 @@ import java.util.List;
 @Entity
 @Table(name = "sunny_children")
 public class Child extends Person{
-    @Column(name = "child_code",unique = true)
+    @Column(name = "child_code",unique = true, nullable = false)
     private String childCode;
-    @Column(name = "admission_date")
+    @Column(name = "admission_date", nullable = false)
     private Date admissionDate;
-    @Column(name = "birthday")
+    @Column(name = "birthday", nullable = false)
     private Date birthday;
     @Column(name = "class_name")
     private String className;
