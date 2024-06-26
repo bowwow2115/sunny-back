@@ -1,8 +1,10 @@
 package com.example.sunny.controller;
 
-import com.example.sunny.model.Child;
 import com.example.sunny.model.dto.ChildDto;
+import com.example.sunny.model.dto.ParentsDto;
+import com.example.sunny.service.ChildParentsService;
 import com.example.sunny.service.ChildService;
+import com.example.sunny.service.ParentsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,8 @@ import java.util.Map;
 public class ChildController extends BasicController {
 
     private final ChildService childService;
+    private final ParentsService parentsService;
+    private final ChildParentsService childParentsService;
 
     @GetMapping
     public ResponseEntity<Map<String, Object>> getAllChildren() {
@@ -33,7 +37,12 @@ public class ChildController extends BasicController {
 
     @PostMapping
     public ResponseEntity<Map<String, Object>> addChild(@RequestBody ChildDto child) {
-        ChildDto result = childService.create(child);
+        ChildDto childResult = childService.create(child);
+        ParentsDto parentResult = null;
+        for(ParentsDto parentsDto : child.getParentList()) {
+            parentResult = parentsService.create(parentsDto);
+        }
+
         return createResponse(result);
     }
 

@@ -25,7 +25,7 @@ public class Child extends Person{
     private String className;
     @Embedded
     private Address address;
-    @OneToMany(mappedBy = "child")
+    @OneToMany(mappedBy = "child", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ChildParents> parentList;
     @Embedded
     @AttributeOverrides({

@@ -1,13 +1,11 @@
 package com.example.sunny.model;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @NoArgsConstructor
@@ -20,7 +18,7 @@ public class Parents extends Person{
     @Column(name = "relation")
     private String relation;
 
-    @OneToMany(mappedBy = "parents")
+    @OneToMany(mappedBy = "parents", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ChildParents> childList;
 
     @Builder

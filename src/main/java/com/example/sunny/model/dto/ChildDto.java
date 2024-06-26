@@ -1,7 +1,6 @@
 package com.example.sunny.model.dto;
 
 import com.example.sunny.model.Child;
-import com.example.sunny.model.ChildParents;
 import com.example.sunny.model.embedded.Address;
 import com.example.sunny.model.embedded.Ride;
 import lombok.*;
@@ -21,7 +20,7 @@ public class ChildDto {
     private String className;
     private Address address;
     private Date birthday;
-    private List<ChildParents> parentList;
+    private List<ParentsDto> parentList;
     private boolean status;
     private Ride amRide;
     private Ride pmRide;
@@ -34,7 +33,6 @@ public class ChildDto {
         this.admissionDate = child.getAdmissionDate();
         this.className = child.getClassName();
         this.address = child.getAddress();
-        this.parentList = child.getParentList();
         this.status = child.getStatus();
         this.amRide = child.getAmRide();
         this.pmRide = child.getPmRide();
@@ -46,7 +44,6 @@ public class ChildDto {
                 .id(id)
                 .name(name)
                 .status(status)
-                .parentList(parentList)
                 .admissionDate(admissionDate)
                 .amRide(amRide)
                 .pmRide(pmRide)

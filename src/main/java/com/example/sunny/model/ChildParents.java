@@ -12,11 +12,11 @@ import javax.persistence.*;
 @Table(name = "sunny_children_parents")
 public class ChildParents extends BaseEntity{
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "child_id")
     private Child child;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parents_id")
     private Parents parents;
 }
