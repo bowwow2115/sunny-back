@@ -5,6 +5,7 @@ import com.example.sunny.model.embedded.Ride;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ public class Child extends Person{
     @Column(name = "child_code",unique = true, nullable = false)
     private String childCode;
     @Column(name = "admission_date", nullable = false)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date admissionDate;
     @Column(name = "birthday", nullable = false)
     private Date birthday;
@@ -49,9 +51,11 @@ public class Child extends Person{
     public boolean getStatus() {
         return status;
     }
+
+    //빌더 설정 시 parentsList는 add, remove 메소드로 관리하기 때문에 제외
     @Builder
-    public Child(Long id, String name, String childCode, Date admissionDate, Date birthday, String className, Address address, Ride amRide, Ride pmRide, boolean status) {
-        super(id, name);
+    public Child(Long id, String createdBy, String modifiedBy, String name, String childCode, Date admissionDate, Date birthday, String className, Address address, Ride amRide, Ride pmRide, boolean status) {
+        super(id, createdBy, modifiedBy, name);
         this.childCode = childCode;
         this.admissionDate = admissionDate;
         this.birthday = birthday;
@@ -61,6 +65,8 @@ public class Child extends Person{
         this.pmRide = pmRide;
         this.status = status;
     }
+
+
 
     public void addParents(Parents parents) {
         this.parentList.add(parents);

@@ -22,9 +22,10 @@ public class Parents extends Person{
     private Child child;
 
     @Builder
-    public Parents(Long id, String name, String telephone, String relation) {
-        super(id, name);
+    public Parents(Long id, String createdBy, String modifiedBy, String name, String telephone, String relation, Child child) {
+        super(id, createdBy, modifiedBy, name);
         this.telephone = telephone;
         this.relation = relation;
+        this.child = child;
     }
 }
