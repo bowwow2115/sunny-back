@@ -6,17 +6,19 @@ import com.example.sunny.model.Child;
 import com.example.sunny.model.dto.ChildDto;
 import com.example.sunny.repository.ChildRepository;
 import com.example.sunny.service.ChildService;
+import com.example.sunny.service.ParentsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ChildServiceImpl implements ChildService {
     private final ChildRepository childRepository;
+    private final ParentsService parentsService;
 
     @Override
     public ChildDto findByName(String name) {
@@ -35,9 +37,17 @@ public class ChildServiceImpl implements ChildService {
         Child child = childRepository.findById(aLong).orElseThrow(() -> new BusinessException(ErrorCode.ENTITY_NOT_FOUND));
         return new ChildDto(child);
     }
-
+    @Transactional
     @Override
     public ChildDto create(ChildDto object) {
+//        List<ParentsDto> parentsDtoList = new ArrayList<>();
+//        if(object.getParentList() != null && object.getParentList().size() != 0) {
+//            for(ParentsDto parentsDto : object.getParentList()) {
+//                ParentsDto savedParentsDto = parentsService.create(parentsDto);
+//                parentsDtoList.add(savedParentsDto);
+//            }
+//        }
+//        object.setParentList(parentsDtoList);
         return new ChildDto(childRepository.save(object.toEntity()));
     }
 

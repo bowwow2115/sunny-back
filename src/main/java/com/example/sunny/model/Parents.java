@@ -1,14 +1,12 @@
 package com.example.sunny.model;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "sunny_parents")
 public class Parents extends Person{
@@ -18,14 +16,15 @@ public class Parents extends Person{
     @Column(name = "relation")
     private String relation;
 
-    @OneToMany(mappedBy = "parents", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ChildParents> childList;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "child_id")
+    @Setter
+    private Child child;
 
     @Builder
-    public Parents(Long id, String name, String telephone, String relation, List<ChildParents> childList) {
+    public Parents(Long id, String name, String telephone, String relation) {
         super(id, name);
         this.telephone = telephone;
         this.relation = relation;
-        this.childList = childList;
     }
 }
