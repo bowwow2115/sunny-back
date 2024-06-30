@@ -1,7 +1,6 @@
 package com.example.sunny.model;
 
 import com.example.sunny.model.embedded.Address;
-import com.example.sunny.model.embedded.Ride;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,20 +29,22 @@ public class Child extends Person{
     private Address address;
     @OneToMany(mappedBy = "child", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Parents> parentList = new ArrayList<>();
-    @Embedded
-    @AttributeOverrides({
-            @AttributeOverride(name = "name", column = @Column(name = "am_ride_name")),
-            @AttributeOverride(name = "time", column = @Column(name = "am_ride_time")),
-            @AttributeOverride(name = "comment", column = @Column(name = "am_ride_comment")),
-    })
-    private Ride amRide;
-    @Embedded
-    @AttributeOverrides({
-            @AttributeOverride(name = "name", column = @Column(name = "pm_ride_name")),
-            @AttributeOverride(name = "time", column = @Column(name = "pm_ride_time")),
-            @AttributeOverride(name = "comment", column = @Column(name = "pm_ride_comment")),
-    })
-    private Ride pmRide;
+//    @Embedded
+//    @AttributeOverrides({
+//            @AttributeOverride(name = "name", column = @Column(name = "am_ride_name")),
+//            @AttributeOverride(name = "time", column = @Column(name = "am_ride_time")),
+//            @AttributeOverride(name = "comment", column = @Column(name = "am_ride_comment")),
+//    })
+//    private Ride amRide;
+//    @Embedded
+//    @AttributeOverrides({
+//            @AttributeOverride(name = "name", column = @Column(name = "pm_ride_name")),
+//            @AttributeOverride(name = "time", column = @Column(name = "pm_ride_time")),
+//            @AttributeOverride(name = "comment", column = @Column(name = "pm_ride_comment")),
+//    })
+//    private Ride pmRide;
+    @OneToMany(mappedBy = "child", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SunnyChildRide> sunnyChildRideList = new ArrayList<>();
 
     @Column(name = "status")
     private boolean status;
@@ -54,15 +55,13 @@ public class Child extends Person{
 
     //빌더 설정 시 parentsList는 add, remove 메소드로 관리하기 때문에 제외
     @Builder
-    public Child(Long id, String createdBy, String modifiedBy, String name, String childCode, Date admissionDate, Date birthday, String className, Address address, Ride amRide, Ride pmRide, boolean status) {
+    public Child(Long id, String createdBy, String modifiedBy, String name, String childCode, Date admissionDate, Date birthday, String className, Address address, boolean status) {
         super(id, createdBy, modifiedBy, name);
         this.childCode = childCode;
         this.admissionDate = admissionDate;
         this.birthday = birthday;
         this.className = className;
         this.address = address;
-        this.amRide = amRide;
-        this.pmRide = pmRide;
         this.status = status;
     }
 
@@ -77,4 +76,15 @@ public class Child extends Person{
         this.parentList.remove(parents);
         parents.setChild(null);
     }
+
+    public void addRide(SunnyChildRide ride) {
+        this.sunnyChildRideList.add(ride);
+        ride.setChild(this);
+    }
+
+    public void removeRide(SunnyChildRide ride) {
+        this.sunnyChildRideList.remove(ride);
+        ride.setChild(this);
+    }
+
 }

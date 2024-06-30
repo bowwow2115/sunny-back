@@ -2,7 +2,7 @@ package com.example.sunny.model.dto;
 
 import com.example.sunny.model.Child;
 import com.example.sunny.model.embedded.Address;
-import com.example.sunny.model.embedded.Ride;
+import com.example.sunny.model.embedded.SunnyRideDto;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -24,8 +24,8 @@ public class ChildDto {
     private Date birthday;
     private List<ParentsDto> parentList = new ArrayList<>();
     private boolean status;
-    private Ride amRide;
-    private Ride pmRide;
+    private SunnyRideDto amSunnyRideDto;
+    private SunnyRideDto pmSunnyRideDto;
     private String name;
 
     public ChildDto(Child child) {
@@ -36,9 +36,8 @@ public class ChildDto {
         this.className = child.getClassName();
         this.address = child.getAddress();
         this.status = child.getStatus();
-        this.amRide = child.getAmRide();
-        this.pmRide = child.getPmRide();
         this.name = child.getName();
+        //TODO: ride 체크 추가
         if(child.getParentList() != null && child.getParentList().size() != 0)
             this.parentList = child.getParentList().stream().map(ParentsDto::new).collect(Collectors.toList());
     }
@@ -49,8 +48,6 @@ public class ChildDto {
                 .name(name)
                 .status(status)
                 .admissionDate(admissionDate)
-                .amRide(amRide)
-                .pmRide(pmRide)
                 .address(address)
                 .childCode(childCode)
                 .birthday(birthday)
