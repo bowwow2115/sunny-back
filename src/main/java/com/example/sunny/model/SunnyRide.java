@@ -12,7 +12,7 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @Entity
 @Table(name = "sunny_ride")
-public class ChildRide extends BaseEntity {
+public class SunnyRide extends BaseEntity {
     @Column(name = "name", nullable = false, unique = true)
     private String name;
     @Column(name = "is_am", nullable = false)
@@ -21,7 +21,7 @@ public class ChildRide extends BaseEntity {
     private String comment;
 
     @Builder
-    public ChildRide(Long id, String createdBy, String modifiedBy, String name, boolean isAm, String comment) {
+    public SunnyRide(Long id, String createdBy, String modifiedBy, String name, boolean isAm, String comment) {
         super(id, createdBy, modifiedBy);
         this.name = name;
         this.isAm = isAm;

@@ -1,30 +1,28 @@
 package com.example.sunny.model.dto;
 
-import com.example.sunny.model.ChildRide;
+import com.example.sunny.model.SunnyRide;
 import lombok.*;
-
-import javax.persistence.Column;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
-public class ChildRideDto {
+public class SunnyRideDto {
     private Long id;
     private String name;
     private boolean isAm;
     private String comment;
 
-    public ChildRideDto(ChildRide childRide) {
+    public SunnyRideDto(SunnyRide childRide) {
         this.id = childRide.getId();
         this.name = childRide.getName();
         this.isAm = childRide.isAm();
         this.comment = childRide.getComment();
     }
 
-    public ChildRide toEntity() {
-        return ChildRide.builder()
+    public SunnyRide toEntity() {
+        return SunnyRide.builder()
                 .id(id)
                 .name(name)
                 .isAm(isAm)
