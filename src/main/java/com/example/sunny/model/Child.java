@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class Child extends Person{
     @Embedded
     private Address address;
     @OneToMany(mappedBy = "child", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ChildParents> parentList;
+    private List<Parents> parentList = new ArrayList<>();
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "name", column = @Column(name = "am_ride_name")),
@@ -49,16 +50,25 @@ public class Child extends Person{
         return status;
     }
     @Builder
-    public Child(Long id, String name, String childCode, Date admissionDate, Date birthday, String className, Address address, List<ChildParents> parentList, Ride amRide, Ride pmRide, boolean status) {
+    public Child(Long id, String name, String childCode, Date admissionDate, Date birthday, String className, Address address, Ride amRide, Ride pmRide, boolean status) {
         super(id, name);
         this.childCode = childCode;
         this.admissionDate = admissionDate;
         this.birthday = birthday;
         this.className = className;
         this.address = address;
-        this.parentList = parentList;
         this.amRide = amRide;
         this.pmRide = pmRide;
         this.status = status;
+    }
+
+    public void addParents(Parents parents) {
+        this.parentList.add(parents);
+        parents.setChild(this);
+    }
+
+    public void removeParents(Parents parents) {
+        this.parentList.remove(parents);
+        parents.setChild(null);
     }
 }

@@ -8,20 +8,16 @@ import com.example.sunny.model.dto.UserDto;
 import com.example.sunny.service.AuthUserDetailsService;
 import com.example.sunny.service.UserService;
 import com.example.sunny.util.StringUtil;
-import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.*;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,7 +33,7 @@ public class LoginController extends BasicController {
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> doLogin(@RequestBody User user) {
         Map<String,Object> result =new HashMap();
-        try {
+//        try {
             // AuthenticationManager 에게 사용자 입력 정보를 전달한다
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUserId(), user.getPassword()));
             UserDetails userDetails = authUserDetailsService.loadUserByUsername(user.getUserId());
@@ -51,22 +47,23 @@ public class LoginController extends BasicController {
             result.put("refreshToken", refreshToken);
             result.put("userId", user.getUserId());
             result.put("role", user.getRole());
-        } catch (DisabledException e) {
-            throw new BusinessException(ErrorCode.USERDISABLED, "계정이 비활성화 되어있습니다. 관리자에게 문의바랍니다.");
-        } catch (UsernameNotFoundException e1) { //계정 없음
-            throw new  BusinessException(ErrorCode.WRONG_ID_OR_PASSWORD, "아이디나 비밀번호 값이 올바르지 않습니다.");
-        } catch (InternalAuthenticationServiceException e2) { //계정 없음
-            throw new  BusinessException(ErrorCode.WRONG_ID_OR_PASSWORD, "아이디나 비밀번호 값이 올바르지 않습니다.");
-        } catch (BadCredentialsException e3) { //비밀번호 틀림
-//            loginService.updateTrycnt(userId); // trycnt 1 추가
-            throw new  BusinessException(ErrorCode.WRONG_ID_OR_PASSWORD, "아이디나 비밀번호 값이 올바르지 않습니다.");
-        } catch (AuthenticationCredentialsNotFoundException e4) { //인증 실패
-            throw new  BusinessException(ErrorCode.AUTHEXCEPTION, "로그인 할 수 없습니다. 관리자에게 문의바랍니다.");
-        } catch (IllegalArgumentException e) {
-            throw new  BusinessException(ErrorCode.AUTHEXCEPTION, "로그인 할 수 없습니다. 관리자에게 문의바랍니다.");
-        } catch (LockedException e) {
-            throw new  BusinessException(ErrorCode.USERDISABLED, "비밀번호 오류로 계정이 잠겼습니다. 관리자에게 문의바랍니다.");
-        }
+//        } catch (DisabledException e) {
+//            throw new BusinessException(ErrorCode.USERDISABLED, "계정이 비활성화 되어있습니다. 관리자에게 문의바랍니다.");
+//        } catch (UsernameNotFoundException e1) { //계정 없음
+//            throw new  BusinessException(ErrorCode.WRONG_ID_OR_PASSWORD, "아이디나 비밀번호 값이 올바르지 않습니다.");
+//        } catch (InternalAuthenticationServiceException e2) { //계정 없음
+//            throw new  BusinessException(ErrorCode.WRONG_ID_OR_PASSWORD, "아이디나 비밀번호 값이 올바르지 않습니다.");
+//        } catch (BadCredentialsException e3) { //비밀번호 틀림
+////            loginService.updateTrycnt(userId); // trycnt 1 추가
+//            throw new  BusinessException(ErrorCode.WRONG_ID_OR_PASSWORD, "아이디나 비밀번호 값이 올바르지 않습니다.");
+//        } catch (AuthenticationCredentialsNotFoundException e4) { //인증 실패
+//            throw new  BusinessException(ErrorCode.AUTHEXCEPTION, "로그인 할 수 없습니다. 관리자에게 문의바랍니다.");
+//        } catch (IllegalArgumentException e) {
+//            throw new  BusinessException(ErrorCode.AUTHEXCEPTION, "로그인 할 수 없습니다. 관리자에게 문의바랍니다.");
+//        } catch (LockedException e) {
+//            throw new  BusinessException(ErrorCode.USERDISABLED, "비밀번호 오류로 계정이 잠겼습니다. 관리자에게 문의바랍니다.");
+//        }
+
 
         return createResponse(result);
     }

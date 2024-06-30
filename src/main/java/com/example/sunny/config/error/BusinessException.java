@@ -16,7 +16,12 @@ public class BusinessException extends RuntimeException {
     public BusinessException(ErrorCode errorCode ,String message) {
         //  super(message);
         this.errorCode = errorCode;
-        this.errorCode.setMessage(message);
+        try {
+            this.errorCode.setMessage(message);
+        } catch (NullPointerException e) {
+            this.errorCode.setMessage(errorCode.getCode());
+        }
+
     }
 
     public BusinessException(ErrorCode errorCode) {

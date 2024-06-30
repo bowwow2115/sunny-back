@@ -1,26 +1,19 @@
 package com.example.sunny.config.jwt;
 
-import com.example.sunny.config.error.BusinessException;
-import com.example.sunny.config.error.ErrorCode;
 import com.example.sunny.util.ServletUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.security.Key;
-import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
@@ -40,21 +33,22 @@ public class JwtTokenUtil implements Serializable {
     @Value("${jwt.jwtRefreshDay}")
     private long jwtRefreshDay;
 
+    @Value("${jwt.secret}")
     private String secret;
-//    private String SECRET_KEY;
 
-    @PostConstruct
-    private void secretKeyGen() {
-        KeyGenerator keyGen = null;
-        try {
-            keyGen = KeyGenerator.getInstance("HmacSHA512");
-        } catch (NoSuchAlgorithmException e) {
-            throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR);
-        }
-        SecretKey secretKey = keyGen.generateKey();
-        // Secret Key를 Base64로 인코딩하여 문자열로 저장
-        this.secret = Base64.getEncoder().encodeToString(secretKey.getEncoded());
-    }
+    //TODO:정식 배포 시 위에 jwt secret 삭제 후 해제
+//    @PostConstruct
+//    private void secretKeyGen() {
+//        KeyGenerator keyGen = null;
+//        try {
+//            keyGen = KeyGenerator.getInstance("HmacSHA512");
+//        } catch (NoSuchAlgorithmException e) {
+//            throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR);
+//        }
+//        SecretKey secretKey = keyGen.generateKey();
+//        // Secret Key를 Base64로 인코딩하여 문자열로 저장
+//        this.secret = Base64.getEncoder().encodeToString(secretKey.getEncoded());
+//    }
 
     public String getUsernameFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
@@ -97,11 +91,6 @@ public class JwtTokenUtil implements Serializable {
         return doGenerateRefreshToken(claims,  userDetails.getUsername());
     }
 
-    //while creating the token -
-    //1. Define  claims of the token, like Issuer, Expiration, Subject, and the ID
-    //2. Sign the JWT using the HS512 algorithm and secret key.
-    //3. According to JWS Compact Serialization(https://tools.ietf.org/html/draft-ietf-jose-json-web-signature-41#section-3.1)
-    //   compaction of the JWT to a URL-safe string
     private String doGenerateToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()
                 .setClaims(claims)
