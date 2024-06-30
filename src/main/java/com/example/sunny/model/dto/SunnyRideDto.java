@@ -13,12 +13,14 @@ public class SunnyRideDto {
     private String name;
     private boolean isAm;
     private String comment;
+    private String time;
 
     public SunnyRideDto(SunnyRide childRide) {
         this.id = childRide.getId();
         this.name = childRide.getName();
         this.isAm = childRide.isAm();
         this.comment = childRide.getComment();
+        this.time = childRide.getTime();
     }
 
     public SunnyRide toEntity() {

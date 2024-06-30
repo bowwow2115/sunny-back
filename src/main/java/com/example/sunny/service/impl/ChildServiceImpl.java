@@ -47,22 +47,22 @@ public class ChildServiceImpl implements ChildService {
     @Override
     public ChildDto create(ChildDto object) {
         Child child = object.toEntity();
-        SunnyChildRide sunnyChildRide = new SunnyChildRide();
-        if(object.getAmSunnyRideDto() != null || object.getPmSunnyRideDto() != null) {
-            if (object.getAmSunnyRideDto() != null) {
-                SunnyRide amRide = sunnyRideRepository.findById(object.getAmSunnyRideDto().getId()).orElseThrow(
-                        () -> new BusinessException(ErrorCode.INVALID_INPUT_VALUE, "선택한 차량이 존재하지 않습니다."));
-                sunnyChildRide.setSunnyRide(amRide);
-            }
-            if (object.getPmSunnyRideDto() != null) {
-                SunnyRide pmRide = sunnyRideRepository.findById(object.getAmSunnyRideDto().getId()).orElseThrow(
-                        () -> new BusinessException(ErrorCode.INVALID_INPUT_VALUE, "선택한 차량이 존재하지 않습니다."));
-                sunnyChildRide.setSunnyRide(pmRide);
-            }
+        //차량등록
+        if (object.getAmRide() != null) {
+            SunnyRide amRide = sunnyRideRepository.findById(object.getAmRide().getId()).orElseThrow(
+                    () -> new BusinessException(ErrorCode.INVALID_INPUT_VALUE, "선택한 차량이 존재하지 않습니다."));
+            SunnyChildRide sunnyChildRide = new SunnyChildRide();
+            sunnyChildRide.setSunnyRide(amRide);
+            child.addRide(sunnyChildRide);
+        }
+        if (object.getPmRide() != null) {
+            SunnyRide pmRide = sunnyRideRepository.findById(object.getPmRide().getId()).orElseThrow(
+                    () -> new BusinessException(ErrorCode.INVALID_INPUT_VALUE, "선택한 차량이 존재하지 않습니다."));
+            SunnyChildRide sunnyChildRide = new SunnyChildRide();
+            sunnyChildRide.setSunnyRide(pmRide);
             child.addRide(sunnyChildRide);
             sunnyChildRide.setChild(child);
         }
-
         return new ChildDto(childRepository.save(child));
     }
 
