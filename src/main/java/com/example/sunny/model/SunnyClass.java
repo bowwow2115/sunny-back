@@ -1,11 +1,13 @@
 package com.example.sunny.model;
 
-import com.example.sunny.model.dto.SunnyClassDto;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
@@ -16,8 +18,8 @@ public class SunnyClass extends BaseEntity{
     private String name;
 
     @Builder
-    public SunnyClass(Long id, String name) {
-        super(id);
+    public SunnyClass(Long id, LocalDateTime createdDate, LocalDateTime modifiedDate, String createdBy, String modifiedBy, String name) {
+        super(id, createdDate, modifiedDate, createdBy, modifiedBy);
         this.name = name;
     }
 }

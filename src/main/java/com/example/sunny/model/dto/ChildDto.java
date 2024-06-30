@@ -39,7 +39,8 @@ public class ChildDto {
         this.amRide = child.getAmRide();
         this.pmRide = child.getPmRide();
         this.name = child.getName();
-        this.parentList = child.getParentList().stream().map(ParentsDto::new).collect(Collectors.toList());
+        if(child.getParentList() != null && child.getParentList().size() != 0)
+            this.parentList = child.getParentList().stream().map(ParentsDto::new).collect(Collectors.toList());
     }
 
     public Child toEntity() {

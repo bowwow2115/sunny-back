@@ -1,12 +1,12 @@
 package com.example.sunny.model;
 
-import com.example.sunny.model.dto.ChildRideDto;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import java.util.Map;
 
 @Getter
 @NoArgsConstructor
@@ -21,8 +21,8 @@ public class ChildRide extends BaseEntity {
     private String comment;
 
     @Builder
-    public ChildRide(Long id, String name, boolean isAm, String comment) {
-        super(id);
+    public ChildRide(Long id, String createdBy, String modifiedBy, String name, boolean isAm, String comment) {
+        super(id, createdBy, modifiedBy);
         this.name = name;
         this.isAm = isAm;
         this.comment = comment;

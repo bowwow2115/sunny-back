@@ -40,14 +40,6 @@ public class ChildServiceImpl implements ChildService {
     @Transactional
     @Override
     public ChildDto create(ChildDto object) {
-//        List<ParentsDto> parentsDtoList = new ArrayList<>();
-//        if(object.getParentList() != null && object.getParentList().size() != 0) {
-//            for(ParentsDto parentsDto : object.getParentList()) {
-//                ParentsDto savedParentsDto = parentsService.create(parentsDto);
-//                parentsDtoList.add(savedParentsDto);
-//            }
-//        }
-//        object.setParentList(parentsDtoList);
         return new ChildDto(childRepository.save(object.toEntity()));
     }
 
