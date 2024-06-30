@@ -1,6 +1,5 @@
 package com.example.sunny.service.impl;
 
-import com.example.sunny.code.SunnyCode;
 import com.example.sunny.config.error.BusinessException;
 import com.example.sunny.config.error.ErrorCode;
 import com.example.sunny.model.User;
@@ -50,7 +49,9 @@ public class UserServiceImpl implements UserService {
                             .name(object.getUserName())
                             .status(false)
                             .password(passwordEncoder.encode(object.getPassword()))
-                            .role(SunnyCode.ROLE_GENERAL_USER)
+//                            TODO: 배포 시 변경해야함
+                            .role(object.getRole())
+//                            .role(SunnyCode.ROLE_GENERAL_USER)
                             .build()
             );
         } catch (ConstraintViolationException e) {
