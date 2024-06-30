@@ -3,7 +3,6 @@ package com.example.sunny.controller;
 import com.example.sunny.config.error.BusinessException;
 import com.example.sunny.config.error.ErrorCode;
 import com.example.sunny.config.jwt.JwtTokenUtil;
-import com.example.sunny.model.User;
 import com.example.sunny.service.AuthUserDetailsService;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -11,9 +10,8 @@ import io.jsonwebtoken.SignatureException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.*;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -72,8 +70,7 @@ public class AuthController extends BasicController{
         }catch( ExpiredJwtException e) { // 토큰 만료?
             throw new BusinessException(ErrorCode.EXPIRED_TOKEN);
         }
-
-        return createResponse();
+        return createResponse(jwtTokenUtil.extractRole(sid));
     }
 
 //    @GetMapping("/auth")

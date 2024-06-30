@@ -79,15 +79,13 @@ public class JwtTokenUtil implements Serializable {
     //generate token for user
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-//        UserVo userVo = (UserVo) userDetails;
-//        claims.put("role", userVo.getAuthCode());
+        claims.put("roles", userDetails.getAuthorities());
         return doGenerateToken(claims, userDetails.getUsername());
     }
 
     public String generateRefreshToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-//        UserVo userVo = (UserVo) userDetails;
-//        claims.put("role", userVo.getAuthCode());
+        claims.put("roles", userDetails.getAuthorities());
         return doGenerateRefreshToken(claims,  userDetails.getUsername());
     }
 
@@ -114,14 +112,14 @@ public class JwtTokenUtil implements Serializable {
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
-    public String extractRole(String token) {
+    public Object extractRole(String token) {
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(getSigningKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
 
-        return (String) claims.get("role");
+        return claims.get("roles");
     }
 
     public String getTokenFromRequest(HttpServletRequest request) {
@@ -143,10 +141,10 @@ public class JwtTokenUtil implements Serializable {
                 .getSubject();
     }
 
-    public boolean getIsAdmin(String token) {
-        String role = this.extractRole(token);
-        return "admin".equals(role);
-    }
+//    public boolean getIsAdmin(String token) {
+//        String role = this.extractRole(token);
+//        return "admin".equals(role);
+//    }
 
     public Key getSigningKey() {
         byte[] keyBytes = Base64.getDecoder().decode(secret);

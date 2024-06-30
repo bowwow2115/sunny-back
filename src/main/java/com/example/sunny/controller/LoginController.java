@@ -45,8 +45,8 @@ public class LoginController extends BasicController {
 
             result.put("accessToken", token);
             result.put("refreshToken", refreshToken);
-            result.put("userId", user.getUserId());
-            result.put("role", user.getRole());
+            result.put("userId", userDetails.getUsername());
+            result.put("roles", userDetails.getAuthorities());
 //        } catch (DisabledException e) {
 //            throw new BusinessException(ErrorCode.USERDISABLED, "계정이 비활성화 되어있습니다. 관리자에게 문의바랍니다.");
 //        } catch (UsernameNotFoundException e1) { //계정 없음

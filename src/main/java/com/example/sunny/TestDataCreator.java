@@ -1,5 +1,6 @@
 package com.example.sunny;
 
+import com.example.sunny.code.SunnyCode;
 import com.example.sunny.model.dto.*;
 import com.example.sunny.model.embedded.Address;
 import com.example.sunny.service.ChildService;
@@ -31,7 +32,7 @@ public class TestDataCreator implements CommandLineRunner {
                 .password("test")
                 .userId("test")
                 .userName("관리자")
-                .role("admin")
+                .role(SunnyCode.ROLE_GENERAL_ADMIN)
                 .status(true)
                 .email("test@test.com")
                 .telephone("010-1234-1234")
