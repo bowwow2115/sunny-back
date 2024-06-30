@@ -10,7 +10,8 @@ import javax.persistence.Embeddable;
 @Setter
 @NoArgsConstructor
 @Embeddable
-public class Ride {
+public class SunnyRideDto {
+    private Long id;
     private String name;
     private String time;
     private String comment;
