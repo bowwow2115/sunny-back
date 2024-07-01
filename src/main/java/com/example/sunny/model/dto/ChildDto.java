@@ -23,8 +23,8 @@ public class ChildDto {
     private LocalDateTime birthday;
     private List<ParentsDto> parentList = new ArrayList<>();
     private boolean status;
-    private SunnyRideDto amRide;
-    private SunnyRideDto pmRide;
+    private SunnyChildRideDto amRide;
+    private SunnyChildRideDto pmRide;
     private String name;
 
     public ChildDto(Child child) {
@@ -36,18 +36,33 @@ public class ChildDto {
         this.address = child.getAddress();
         this.status = child.getStatus();
         this.name = child.getName();
-        //TODO: ride 체크 추가
+        //childRide 할당
         if(child.getSunnyChildRideList() != null && child.getSunnyChildRideList().size() != 0) {
             child.getSunnyChildRideList().stream()
                     .filter((item) -> item.getSunnyRide().isAm())
                     .findAny()
-                    .ifPresent((item) -> this.amRide = new SunnyRideDto(item.getSunnyRide()));
+                    .ifPresent((item) -> {
+                        this.amRide = SunnyChildRideDto.builder()
+                                .comment(item.getComment())
+                                .sunnyRide(new SunnyRideDto(item.getSunnyRide()))
+                                .time(item.getTime())
+                                .id(item.getId())
+                                .build();
+                    });
 
             child.getSunnyChildRideList().stream()
                     .filter((item) -> !item.getSunnyRide().isAm())
                     .findAny()
-                    .ifPresent((item) -> this.pmRide = new SunnyRideDto(item.getSunnyRide()));
+                    .ifPresent((item) -> {
+                        this.pmRide = SunnyChildRideDto.builder()
+                                .comment(item.getComment())
+                                .sunnyRide(new SunnyRideDto(item.getSunnyRide()))
+                                .time(item.getTime())
+                                .id(item.getId())
+                                .build();
+                    });
         }
+        //parents 할당
         if(child.getParentList() != null && child.getParentList().size() != 0)
             this.parentList = child.getParentList().stream().map(ParentsDto::new).collect(Collectors.toList());
     }

@@ -98,12 +98,79 @@ public class TestDataCreator implements CommandLineRunner {
                 .status(true)
                 .name("김아무개")
                 .parentList(parentsDtoList)
-                .amRide(amRide)
-                .pmRide(pmRide)
                 .build();
+
+        SunnyChildRideDto sunnyChildRideAm = SunnyChildRideDto.builder()
+                .time("09:00")
+                .comment("계단 옆")
+                //TODO: 밑에 차일드 지워보고 다시 올리기
+                .child(childDto)
+                .sunnyRide(amRide)
+                .build();
+
+        SunnyChildRideDto sunnyChildRidePm = SunnyChildRideDto.builder()
+                .time("16:00")
+                .comment("아파트 뒷문")
+                //TODO: 밑에 차일드 지워보고 다시 올리기
+                .child(childDto)
+                .sunnyRide(pmRide)
+                .build();
+
+        childDto.setAmRide(sunnyChildRideAm);
+        childDto.setPmRide(sunnyChildRidePm);
 
         ChildDto child = childService.create(childDto);
         if(child != null) log.info("원아생성");
+
+        Address address2 = new Address();
+        address2.setAddress("서울시 종로구 본동");
+        address2.setDetailAddress("한미아파트 103동 403호");
+        address2.setZipCode("10101");
+
+        List<ParentsDto> parentsDtoList2 = new ArrayList<>();
+        ParentsDto father2 = ParentsDto.builder()
+                .telephone("010-2222-2222")
+                .name("고아빠")
+                .relation("부")
+                .build();
+
+        ParentsDto mother2 = ParentsDto.builder()
+                .telephone("010-3333-3333")
+                .name("이엄마")
+                .relation("모")
+                .build();
+
+        parentsDtoList2.add(father2);
+        parentsDtoList2.add(mother2);
+
+        ChildDto childDto2 = ChildDto.builder()
+                .address(address)
+                .childCode("A00002")
+                .admissionDate(LocalDateTime.of(2024, 05, 01, 0, 0))
+                .birthday(LocalDateTime.of(2019, 03, 01, 0, 0))
+                .className(sunnyClass.getName())
+                .status(true)
+                .name("김어린이")
+                .parentList(parentsDtoList2)
+                .build();
+
+        SunnyChildRideDto sunnyChildRideAm2 = SunnyChildRideDto.builder()
+                .time("09:00")
+                .comment("계단 옆")
+                .sunnyRide(amRide)
+                .build();
+
+        SunnyChildRideDto sunnyChildRidePm2 = SunnyChildRideDto.builder()
+                .time("16:00")
+                .comment("아파트 뒷문")
+                .sunnyRide(pmRide)
+                .build();
+
+        childDto2.setAmRide(sunnyChildRideAm2);
+        childDto2.setPmRide(sunnyChildRidePm2);
+
+        ChildDto child2 = childService.create(childDto2);
+        if(child2 != null) log.info("원아생성");
 
     }
 }

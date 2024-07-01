@@ -46,22 +46,28 @@ public class ChildServiceImpl implements ChildService {
     @Transactional
     @Override
     public ChildDto create(ChildDto object) {
+        //등록된 차량인지 확인
         Child child = object.toEntity();
-        //차량등록
+        SunnyRide amRide = null;
+        SunnyRide pmRide = null;
         if (object.getAmRide() != null) {
-            SunnyRide amRide = sunnyRideRepository.findById(object.getAmRide().getId()).orElseThrow(
+            amRide = sunnyRideRepository.findById(object.getAmRide().getSunnyRide().getId()).orElseThrow(
                     () -> new BusinessException(ErrorCode.INVALID_INPUT_VALUE, "선택한 차량이 존재하지 않습니다."));
             SunnyChildRide sunnyChildRide = new SunnyChildRide();
             sunnyChildRide.setSunnyRide(amRide);
+            sunnyChildRide.setTime(object.getAmRide().getTime());
+            sunnyChildRide.setComment(object.getAmRide().getComment());
             child.addRide(sunnyChildRide);
         }
         if (object.getPmRide() != null) {
-            SunnyRide pmRide = sunnyRideRepository.findById(object.getPmRide().getId()).orElseThrow(
+            pmRide = sunnyRideRepository.findById(object.getPmRide().getSunnyRide().getId()).orElseThrow(
                     () -> new BusinessException(ErrorCode.INVALID_INPUT_VALUE, "선택한 차량이 존재하지 않습니다."));
             SunnyChildRide sunnyChildRide = new SunnyChildRide();
             sunnyChildRide.setSunnyRide(pmRide);
+//            sunnyChildRide.setChild(child);
+            sunnyChildRide.setTime(object.getPmRide().getTime());
+            sunnyChildRide.setComment(object.getPmRide().getComment());
             child.addRide(sunnyChildRide);
-            sunnyChildRide.setChild(child);
         }
         return new ChildDto(childRepository.save(child));
     }
