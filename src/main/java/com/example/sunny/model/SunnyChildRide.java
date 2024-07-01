@@ -23,12 +23,19 @@ public class SunnyChildRide extends BaseEntity {
     private SunnyRide sunnyRide;
 
     @Column(name = "comment")
+    @Setter
     private String comment;
 
+    @Column(name = "time")
+    @Setter
+    private String time;
+
     @Builder
-    public SunnyChildRide(Long id, String createdBy, String modifiedBy, Child child, SunnyRide sunnyRide) {
+    public SunnyChildRide(Long id, String createdBy, String modifiedBy, Child child, SunnyRide sunnyRide, String comment, String time) {
         super(id, createdBy, modifiedBy);
         this.child = child;
         this.sunnyRide = sunnyRide;
+        this.comment = comment;
+        this.time = time;
     }
 }
