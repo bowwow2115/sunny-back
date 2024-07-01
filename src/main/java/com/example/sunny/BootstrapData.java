@@ -19,7 +19,7 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class TestDataCreator implements CommandLineRunner {
+public class BootstrapData implements CommandLineRunner {
 
     private final UserService userService;
     private final SunnyRideService sunnyRideService;
@@ -67,6 +67,20 @@ public class TestDataCreator implements CommandLineRunner {
 
         SunnyClassDto sunnyClass = sunnyClassServcie.create(sunnyClassDto);
         if(sunnyClass != null) log.info("반 생성");
+
+        SunnyClassDto sunnyClassDto2 = SunnyClassDto.builder()
+                .name("씨앗반")
+                .build();
+
+        SunnyClassDto sunnyClass2 = sunnyClassServcie.create(sunnyClassDto2);
+        if(sunnyClass2 != null) log.info("반 생성");
+
+        SunnyClassDto sunnyClassDto3 = SunnyClassDto.builder()
+                .name("꽃잎반")
+                .build();
+
+        SunnyClassDto sunnyClass3 = sunnyClassServcie.create(sunnyClassDto3);
+        if(sunnyClass3 != null) log.info("반 생성");
 
         Address address = new Address();
         address.setAddress("서울시 종로구");
