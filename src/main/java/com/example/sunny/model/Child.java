@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,10 +20,10 @@ public class Child extends Person{
     private String childCode;
     @Column(name = "admission_date", nullable = false)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDateTime admissionDate;
+    private LocalDate admissionDate;
     @Column(name = "birthday", nullable = false)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDateTime birthday;
+    private LocalDate birthday;
     @Column(name = "class_name")
     private String className;
     @Embedded
@@ -56,7 +56,7 @@ public class Child extends Person{
 
     //빌더 설정 시 parentsList는 add, remove 메소드로 관리하기 때문에 제외
     @Builder
-    public Child(Long id, String createdBy, String modifiedBy, String name, String childCode, LocalDateTime admissionDate, LocalDateTime birthday, String className, Address address, boolean status) {
+    public Child(Long id, String createdBy, String modifiedBy, String name, String childCode, LocalDate admissionDate, LocalDate birthday, String className, Address address, boolean status) {
         super(id, createdBy, modifiedBy, name);
         this.childCode = childCode;
         this.admissionDate = admissionDate;

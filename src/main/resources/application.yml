@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: sunny
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: sunny
+    password: sunny
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 20
+      idle-timeout: 30000
+      max-lifetime: 1800000
+      connection-timeout: 30000
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        default_schema: sunny
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+
+server:
+  servlet:
+    context-path: /sunny
+  port: 8084
+
+jwt:
+  jwtAccessHours: 1
+  jwtRefreshDay: 7
+  secret: c3VubnlUZXN0c3VubnlUZXN0c3VubnlUZXN0c3VubnlUZXN0c3VubnlUZXN0c3VubnlUZXN0c3VubnlUZXN0c3VubnlUZXN0c3VubnlUZXN0c3VubnlUZXN0c3VubnlUZXN0c3VubnlUZXN0c3VubnlUZXN0c3VubnlUZXN0c3VubnlUZXN0c3VubnlUZXN0

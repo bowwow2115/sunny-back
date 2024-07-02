@@ -4,7 +4,7 @@ import com.example.sunny.model.Child;
 import com.example.sunny.model.embedded.Address;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,10 +17,10 @@ import java.util.stream.Collectors;
 public class ChildDto {
     private Long id;
     private String childCode;
-    private LocalDateTime admissionDate;
+    private LocalDate admissionDate;
     private String className;
     private Address address;
-    private LocalDateTime birthday;
+    private LocalDate birthday;
     private List<ParentsDto> parentList = new ArrayList<>();
     private boolean status;
     private SunnyChildRideDto amRide;
