@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -106,8 +106,8 @@ public class BootstrapData implements CommandLineRunner {
         ChildDto childDto = ChildDto.builder()
                 .address(address)
                 .childCode("A00001")
-                .admissionDate(LocalDateTime.of(2022, 05, 01, 0, 0))
-                .birthday(LocalDateTime.of(2017, 02, 21, 0, 0))
+                .admissionDate(LocalDate.of(2022, 05, 01))
+                .birthday(LocalDate.of(2017, 02, 21))
                 .className(sunnyClass.getName())
                 .status(true)
                 .name("김아무개")
@@ -117,16 +117,12 @@ public class BootstrapData implements CommandLineRunner {
         SunnyChildRideDto sunnyChildRideAm = SunnyChildRideDto.builder()
                 .time("09:00")
                 .comment("계단 옆")
-                //TODO: 밑에 차일드 지워보고 다시 올리기
-                .child(childDto)
                 .sunnyRide(amRide)
                 .build();
 
         SunnyChildRideDto sunnyChildRidePm = SunnyChildRideDto.builder()
                 .time("16:00")
                 .comment("아파트 뒷문")
-                //TODO: 밑에 차일드 지워보고 다시 올리기
-                .child(childDto)
                 .sunnyRide(pmRide)
                 .build();
 
@@ -160,8 +156,8 @@ public class BootstrapData implements CommandLineRunner {
         ChildDto childDto2 = ChildDto.builder()
                 .address(address)
                 .childCode("A00002")
-                .admissionDate(LocalDateTime.of(2024, 05, 01, 0, 0))
-                .birthday(LocalDateTime.of(2019, 03, 01, 0, 0))
+                .admissionDate(LocalDate.of(2024, 05, 01))
+                .birthday(LocalDate.of(2019, 03, 01))
                 .className(sunnyClass.getName())
                 .status(true)
                 .name("김어린이")
