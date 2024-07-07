@@ -14,5 +14,4 @@ public class SunnyChildRideDto {
     private String time;
     private ChildDto child;
     private SunnyRideDto sunnyRide;
-
 }

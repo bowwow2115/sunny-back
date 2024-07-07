@@ -32,8 +32,8 @@ public class RideController extends BasicController{
     }
 
     @DeleteMapping
-    public  ResponseEntity<Map<String, Object>> deelteRide(@RequestBody SunnyRideDto sunnyClass) {
-        sunnyRideService.delete(sunnyClass);
+    public  ResponseEntity<Map<String, Object>> deelteRide(@RequestParam Long id) {
+        sunnyRideService.deleteById(id);
         return createResponse();
     }
 }

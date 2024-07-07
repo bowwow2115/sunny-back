@@ -3,6 +3,8 @@ package com.example.sunny.model.dto;
 import com.example.sunny.model.SunnyRide;
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -14,6 +16,7 @@ public class SunnyRideDto {
     private boolean isAm;
     private String comment;
     private String time;
+    private List<SunnyChildRideDto> sunnyChildRideList;
 
     public SunnyRideDto(SunnyRide childRide) {
         this.id = childRide.getId();

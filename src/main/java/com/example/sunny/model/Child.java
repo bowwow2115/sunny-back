@@ -4,6 +4,7 @@ import com.example.sunny.model.embedded.Address;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -29,6 +30,7 @@ public class Child extends Person{
     @Embedded
     private Address address;
     @OneToMany(mappedBy = "child", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Setter
     private List<Parents> parentList = new ArrayList<>();
 //    @Embedded
 //    @AttributeOverrides({
