@@ -3,10 +3,10 @@ package com.example.sunny.model.dto;
 import com.example.sunny.model.SunnyRide;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
@@ -16,7 +16,7 @@ public class SunnyRideDto {
     private boolean isAm;
     private String comment;
     private String time;
-    private List<SunnyChildRideDto> sunnyChildRideList;
+    private List<SunnyChildRideDto> sunnyChildRideList = new ArrayList<>();
 
     public SunnyRideDto(SunnyRide childRide) {
         this.id = childRide.getId();
