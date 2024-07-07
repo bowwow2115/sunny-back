@@ -34,4 +34,14 @@ public class SunnyRide extends BaseEntity {
         this.comment = comment;
         this.time = time;
     }
+
+    public void addChildRide(SunnyChildRide sunnyChildRide) {
+        this.sunnyChildRideList.add(sunnyChildRide);
+        sunnyChildRide.setSunnyRide(this);
+    }
+
+    public void removeChildRide(SunnyChildRide sunnyChildRide) {
+        this.sunnyChildRideList.remove(sunnyChildRide);
+        sunnyChildRide.setSunnyRide(null);
+    }
 }

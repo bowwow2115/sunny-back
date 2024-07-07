@@ -32,20 +32,6 @@ public class Child extends Person{
     @OneToMany(mappedBy = "child", cascade = CascadeType.ALL, orphanRemoval = true)
     @Setter
     private List<Parents> parentList = new ArrayList<>();
-//    @Embedded
-//    @AttributeOverrides({
-//            @AttributeOverride(name = "name", column = @Column(name = "am_ride_name")),
-//            @AttributeOverride(name = "time", column = @Column(name = "am_ride_time")),
-//            @AttributeOverride(name = "comment", column = @Column(name = "am_ride_comment")),
-//    })
-//    private Ride amRide;
-//    @Embedded
-//    @AttributeOverrides({
-//            @AttributeOverride(name = "name", column = @Column(name = "pm_ride_name")),
-//            @AttributeOverride(name = "time", column = @Column(name = "pm_ride_time")),
-//            @AttributeOverride(name = "comment", column = @Column(name = "pm_ride_comment")),
-//    })
-//    private Ride pmRide;
     @OneToMany(mappedBy = "child", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SunnyChildRide> sunnyChildRideList = new ArrayList<>();
 
@@ -87,7 +73,7 @@ public class Child extends Person{
 
     public void removeRide(SunnyChildRide ride) {
         this.sunnyChildRideList.remove(ride);
-        ride.setChild(this);
+        ride.setChild(null);
     }
 
 }

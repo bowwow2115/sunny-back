@@ -2,8 +2,7 @@ package com.example.sunny.model.dto;
 
 import lombok.*;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
