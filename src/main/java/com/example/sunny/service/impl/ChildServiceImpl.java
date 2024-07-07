@@ -3,15 +3,15 @@ package com.example.sunny.service.impl;
 import com.example.sunny.config.error.BusinessException;
 import com.example.sunny.config.error.ErrorCode;
 import com.example.sunny.model.Child;
-import com.example.sunny.model.SunnyChildRide;
+import com.example.sunny.model.ChildRide;
 import com.example.sunny.model.SunnyRide;
 import com.example.sunny.model.dto.ChildDto;
 import com.example.sunny.model.dto.ParentsDto;
-import com.example.sunny.model.dto.SunnyChildRideDto;
+import com.example.sunny.model.dto.ChildRideDto;
 import com.example.sunny.model.dto.SunnyRideDto;
 import com.example.sunny.repository.ChildRepository;
 import com.example.sunny.repository.ParentsRepository;
-import com.example.sunny.repository.SunnyChildRideRepository;
+import com.example.sunny.repository.ChildRideRepository;
 import com.example.sunny.repository.SunnyRideRepository;
 import com.example.sunny.service.ChildService;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ public class ChildServiceImpl implements ChildService {
     private final ChildRepository childRepository;
     private final ParentsRepository parentsRepository;
     private final SunnyRideRepository sunnyRideRepository;
-    private final SunnyChildRideRepository sunnyChildRideRepository;
+    private final ChildRideRepository childRideRepository;
 
     @Override
     public ChildDto findByName(String name) {
@@ -69,20 +69,20 @@ public class ChildServiceImpl implements ChildService {
         if (object.getAmRide() != null) {
             amRide = sunnyRideRepository.findById(object.getAmRide().getSunnyRide().getId()).orElseThrow(
                     () -> new BusinessException(ErrorCode.INVALID_INPUT_VALUE, "선택한 차량이 존재하지 않습니다."));
-            SunnyChildRide sunnyChildRide = new SunnyChildRide();
-            sunnyChildRide.setSunnyRide(amRide);
-            sunnyChildRide.setTime(object.getAmRide().getTime());
-            sunnyChildRide.setComment(object.getAmRide().getComment());
-            child.addRide(sunnyChildRide);
+            ChildRide childRide = new ChildRide();
+            childRide.setSunnyRide(amRide);
+            childRide.setTime(object.getAmRide().getTime());
+            childRide.setComment(object.getAmRide().getComment());
+            child.addRide(childRide);
         }
         if (object.getPmRide() != null) {
             pmRide = sunnyRideRepository.findById(object.getPmRide().getSunnyRide().getId()).orElseThrow(
                     () -> new BusinessException(ErrorCode.INVALID_INPUT_VALUE, "선택한 차량이 존재하지 않습니다."));
-            SunnyChildRide sunnyChildRide = new SunnyChildRide();
-            sunnyChildRide.setSunnyRide(pmRide);
-            sunnyChildRide.setTime(object.getPmRide().getTime());
-            sunnyChildRide.setComment(object.getPmRide().getComment());
-            child.addRide(sunnyChildRide);
+            ChildRide childRide = new ChildRide();
+            childRide.setSunnyRide(pmRide);
+            childRide.setTime(object.getPmRide().getTime());
+            childRide.setComment(object.getPmRide().getComment());
+            child.addRide(childRide);
         }
 
         Child result = childRepository.save(child);
@@ -116,12 +116,12 @@ public class ChildServiceImpl implements ChildService {
             childDto.setParentList(result.getParentList().stream().map(ParentsDto::new)
                     .collect(Collectors.toList()));
 
-        if(result.getSunnyChildRideList() != null && result.getSunnyChildRideList().size() != 0) {
-            result.getSunnyChildRideList().stream()
+        if(result.getChildRideList() != null && result.getChildRideList().size() != 0) {
+            result.getChildRideList().stream()
                     .filter((item) -> item.getSunnyRide().isAm())
                     .findAny()
                     .ifPresent((item) -> {
-                        childDto.setAmRide(SunnyChildRideDto.builder()
+                        childDto.setAmRide(ChildRideDto.builder()
                                 .comment(item.getComment())
                                 .sunnyRide(new SunnyRideDto(item.getSunnyRide()))
                                 .time(item.getTime())
@@ -130,11 +130,11 @@ public class ChildServiceImpl implements ChildService {
                         );
                     });
 
-            result.getSunnyChildRideList().stream()
+            result.getChildRideList().stream()
                     .filter((item) -> !item.getSunnyRide().isAm())
                     .findAny()
                     .ifPresent((item) -> {
-                        childDto.setPmRide(SunnyChildRideDto.builder()
+                        childDto.setPmRide(ChildRideDto.builder()
                                 .comment(item.getComment())
                                 .sunnyRide(new SunnyRideDto(item.getSunnyRide()))
                                 .time(item.getTime())
