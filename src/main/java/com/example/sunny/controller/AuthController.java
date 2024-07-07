@@ -33,7 +33,6 @@ public class AuthController extends BasicController{
     @PostMapping("/jwt/refresh")
     public ResponseEntity<Map<String, Object>> refreshJwt(HttpServletRequest request,
                                           @RequestParam(value="refreshToken") String refreshToken) {
-
         if(refreshToken == null) throw new BusinessException(ErrorCode.INVALID_INPUT_VALUE, "invalid input - refreshJwt");
         String userId = null;
 //        String newRefreshToken = refreshToken;
