@@ -28,6 +28,7 @@ server:
   port: 8084
 
 jwt:
-  jwtAccessHours: 1
+#  TODO: 배포시 수정
+  jwtAccessHours: 120
   jwtRefreshDay: 7
   secret: c3VubnlUZXN0c3VubnlUZXN0c3VubnlUZXN0c3VubnlUZXN0c3VubnlUZXN0c3VubnlUZXN0c3VubnlUZXN0c3VubnlUZXN0c3VubnlUZXN0c3VubnlUZXN0c3VubnlUZXN0c3VubnlUZXN0c3VubnlUZXN0c3VubnlUZXN0c3VubnlUZXN0c3VubnlUZXN0
