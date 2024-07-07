@@ -33,7 +33,7 @@ public class Child extends Person{
     @Setter
     private List<Parents> parentList = new ArrayList<>();
     @OneToMany(mappedBy = "child", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<SunnyChildRide> sunnyChildRideList = new ArrayList<>();
+    private List<ChildRide> childRideList = new ArrayList<>();
 
     @Column(name = "status")
     private boolean status;
@@ -66,13 +66,13 @@ public class Child extends Person{
         parents.setChild(null);
     }
 
-    public void addRide(SunnyChildRide ride) {
-        this.sunnyChildRideList.add(ride);
+    public void addRide(ChildRide ride) {
+        this.childRideList.add(ride);
         ride.setChild(this);
     }
 
-    public void removeRide(SunnyChildRide ride) {
-        this.sunnyChildRideList.remove(ride);
+    public void removeRide(ChildRide ride) {
+        this.childRideList.remove(ride);
         ride.setChild(null);
     }
 

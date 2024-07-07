@@ -11,7 +11,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "sunny_children_ride")
-public class SunnyChildRide extends BaseEntity {
+public class ChildRide extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "child_id")
     @Setter
@@ -31,7 +31,7 @@ public class SunnyChildRide extends BaseEntity {
     private String time;
 
     @Builder
-    public SunnyChildRide(Long id, String createdBy, String modifiedBy, Child child, SunnyRide sunnyRide, String comment, String time) {
+    public ChildRide(Long id, String createdBy, String modifiedBy, Child child, SunnyRide sunnyRide, String comment, String time) {
         super(id, createdBy, modifiedBy);
         this.child = child;
         this.sunnyRide = sunnyRide;

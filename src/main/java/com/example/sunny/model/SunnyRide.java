@@ -24,7 +24,7 @@ public class SunnyRide extends BaseEntity {
     private String time;
 
     @OneToMany(mappedBy = "sunnyRide", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<SunnyChildRide> sunnyChildRideList = new ArrayList<>();
+    private List<ChildRide> childRideList = new ArrayList<>();
 
     @Builder
     public SunnyRide(Long id, String createdBy, String modifiedBy, String name, boolean isAm, String comment, String time) {
@@ -35,13 +35,13 @@ public class SunnyRide extends BaseEntity {
         this.time = time;
     }
 
-    public void addChildRide(SunnyChildRide sunnyChildRide) {
-        this.sunnyChildRideList.add(sunnyChildRide);
-        sunnyChildRide.setSunnyRide(this);
+    public void addChildRide(ChildRide childRide) {
+        this.childRideList.add(childRide);
+        childRide.setSunnyRide(this);
     }
 
-    public void removeChildRide(SunnyChildRide sunnyChildRide) {
-        this.sunnyChildRideList.remove(sunnyChildRide);
-        sunnyChildRide.setSunnyRide(null);
+    public void removeChildRide(ChildRide childRide) {
+        this.childRideList.remove(childRide);
+        childRide.setSunnyRide(null);
     }
 }
