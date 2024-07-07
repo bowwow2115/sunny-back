@@ -3,7 +3,6 @@ package com.example.sunny.service.impl;
 import com.example.sunny.config.error.BusinessException;
 import com.example.sunny.config.error.ErrorCode;
 import com.example.sunny.model.Child;
-import com.example.sunny.model.Parents;
 import com.example.sunny.model.SunnyChildRide;
 import com.example.sunny.model.SunnyRide;
 import com.example.sunny.model.dto.ChildDto;
@@ -19,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -61,11 +59,9 @@ public class ChildServiceImpl implements ChildService {
         Child child = object.toEntity();
         //부모정보 존재 확인 후 등록
         if(object.getParentList().size() != 0) {
-            List<Parents> parentsList = new ArrayList<>();
             for (ParentsDto parentsDto : object.getParentList()) {
-                parentsList.add(parentsDto.toEntity());
+                child.addParents(parentsDto.toEntity());
             }
-            child.setParentList(parentsList);
         }
         //등록된 차량인지 확인
         SunnyRide amRide = null;

@@ -2,14 +2,16 @@ package com.example.sunny.model.dto;
 
 import com.example.sunny.model.Child;
 import com.example.sunny.model.embedded.Address;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
@@ -20,11 +22,12 @@ public class ChildDto {
     private String className;
     private Address address;
     private LocalDate birthday;
-    private List<ParentsDto> parentList = new ArrayList<>();
     private boolean status;
+    private String name;
     private SunnyChildRideDto amRide;
     private SunnyChildRideDto pmRide;
-    private String name;
+    private List<ParentsDto> parentList = new ArrayList<>();
+
 
     public ChildDto(Child child) {
         this.id = child.getId();
@@ -35,36 +38,6 @@ public class ChildDto {
         this.address = child.getAddress();
         this.status = child.getStatus();
         this.name = child.getName();
-//
-//        //childRide 할당
-//        if(child.getSunnyChildRideList() != null && child.getSunnyChildRideList().size() != 0) {
-//            child.getSunnyChildRideList().stream()
-//                    .filter((item) -> item.getSunnyRide().isAm())
-//                    .findAny()
-//                    .ifPresent((item) -> {
-//                        this.amRide = SunnyChildRideDto.builder()
-//                                .comment(item.getComment())
-//                                .sunnyRide(new SunnyRideDto(item.getSunnyRide()))
-//                                .time(item.getTime())
-//                                .id(item.getId())
-//                                .build();
-//                    });
-//
-//            child.getSunnyChildRideList().stream()
-//                    .filter((item) -> !item.getSunnyRide().isAm())
-//                    .findAny()
-//                    .ifPresent((item) -> {
-//                        this.pmRide = SunnyChildRideDto.builder()
-//                                .comment(item.getComment())
-//                                .sunnyRide(new SunnyRideDto(item.getSunnyRide()))
-//                                .time(item.getTime())
-//                                .id(item.getId())
-//                                .build();
-//                    });
-//        }
-//        //parents 할당
-//        if(child.getParentList() != null && child.getParentList().size() != 0)
-//            this.parentList = child.getParentList().stream().map(ParentsDto::new).collect(Collectors.toList());
     }
 
     public Child toEntity() {
@@ -78,10 +51,7 @@ public class ChildDto {
                 .birthday(birthday)
                 .className(className)
                 .build();
-//        if(this.parentList.size() != 0)
-//            for(ParentsDto parentsDto : this.parentList) {
-//                child.addParents(parentsDto.toEntity());
-//            }
+
         return child;
     }
 
