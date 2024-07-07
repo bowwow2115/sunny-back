@@ -16,7 +16,7 @@ public class SunnyRideDto {
     private boolean isAm;
     private String comment;
     private String time;
-    private List<SunnyChildRideDto> sunnyChildRideList = new ArrayList<>();
+    private List<ChildRideDto> sunnyChildRideList = new ArrayList<>();
 
     public SunnyRideDto(SunnyRide childRide) {
         this.id = childRide.getId();

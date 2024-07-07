@@ -114,13 +114,13 @@ public class BootstrapData implements CommandLineRunner {
                 .parentList(parentsDtoList)
                 .build();
 
-        SunnyChildRideDto sunnyChildRideAm = SunnyChildRideDto.builder()
+        ChildRideDto sunnyChildRideAm = ChildRideDto.builder()
                 .time("09:00")
                 .comment("계단 옆")
                 .sunnyRide(amRide)
                 .build();
 
-        SunnyChildRideDto sunnyChildRidePm = SunnyChildRideDto.builder()
+        ChildRideDto sunnyChildRidePm = ChildRideDto.builder()
                 .time("16:00")
                 .comment("아파트 뒷문")
                 .sunnyRide(pmRide)
@@ -164,13 +164,13 @@ public class BootstrapData implements CommandLineRunner {
                 .parentList(parentsDtoList2)
                 .build();
 
-        SunnyChildRideDto sunnyChildRideAm2 = SunnyChildRideDto.builder()
+        ChildRideDto sunnyChildRideAm2 = ChildRideDto.builder()
                 .time("09:00")
                 .comment("계단 옆")
                 .sunnyRide(amRide)
                 .build();
 
-        SunnyChildRideDto sunnyChildRidePm2 = SunnyChildRideDto.builder()
+        ChildRideDto sunnyChildRidePm2 = ChildRideDto.builder()
                 .time("16:00")
                 .comment("아파트 뒷문")
                 .sunnyRide(pmRide)

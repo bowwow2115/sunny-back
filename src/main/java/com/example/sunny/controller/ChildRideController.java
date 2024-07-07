@@ -1,7 +1,7 @@
 package com.example.sunny.controller;
 
-import com.example.sunny.model.dto.SunnyChildRideDto;
-import com.example.sunny.service.SunnyChildRideService;
+import com.example.sunny.model.dto.ChildRideDto;
+import com.example.sunny.service.ChildRideService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -14,22 +14,22 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Slf4j
 public class ChildRideController extends BasicController {
-    private final SunnyChildRideService sunnyChildRideService;
+    private final ChildRideService childRideService;
 
     @PutMapping
-    public ResponseEntity<Map<String, Object>> updateChildRide(@RequestBody SunnyChildRideDto sunnyChildRideDto) {
-        return createResponse(sunnyChildRideService.update(sunnyChildRideDto));
+    public ResponseEntity<Map<String, Object>> updateChildRide(@RequestBody ChildRideDto childRideDto) {
+        return createResponse(childRideService.update(childRideDto));
     }
 
     @DeleteMapping
     public ResponseEntity<Map<String, Object>> deleteChildRideById(@RequestParam Long along) {
-        sunnyChildRideService.deleteById(along);
+        childRideService.deleteById(along);
         return createResponse();
     }
 
     @PostMapping
-    public ResponseEntity<Map<String, Object>> addChildRide(@RequestBody SunnyChildRideDto sunnyChildRideDto) {
-        return createResponse(sunnyChildRideService.create(sunnyChildRideDto));
+    public ResponseEntity<Map<String, Object>> addChildRide(@RequestBody ChildRideDto childRideDto) {
+        return createResponse(childRideService.create(childRideDto));
     }
 
 }

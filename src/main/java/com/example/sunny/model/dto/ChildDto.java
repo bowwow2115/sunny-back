@@ -24,8 +24,8 @@ public class ChildDto {
     private LocalDate birthday;
     private boolean status;
     private String name;
-    private SunnyChildRideDto amRide;
-    private SunnyChildRideDto pmRide;
+    private ChildRideDto amRide;
+    private ChildRideDto pmRide;
     private List<ParentsDto> parentList = new ArrayList<>();
 
 
