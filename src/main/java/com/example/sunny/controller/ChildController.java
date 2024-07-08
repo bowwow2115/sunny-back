@@ -14,7 +14,7 @@ import java.util.Map;
 public class ChildController extends BasicController {
     private final ChildService childService;
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<Map<String, Object>> getAllChildren() {
         return createResponse(childService.findAll());
     }
@@ -24,8 +24,8 @@ public class ChildController extends BasicController {
         return createResponse(childService.findByName(name));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> getChildById(@PathVariable("id") Long id) {
+    @GetMapping
+    public ResponseEntity<Map<String, Object>> getChildById(@RequestParam(value = "id") Long id) {
         return createResponse(childService.findById(id));
     }
 
