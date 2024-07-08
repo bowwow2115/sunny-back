@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -19,9 +18,10 @@ public class ParentsServiceImpl implements ParentsService {
 
     @Override
     public List<ParentsDto> findAll() {
-        return parentsRepository.findAll().stream()
-                .map(ParentsDto::new)
-                .collect(Collectors.toList());
+        return null;
+//        return parentsRepository.findAll().stream()
+//                .map(ParentsDto::new)
+//                .collect(Collectors.toList());
     }
 
     @Override
@@ -32,12 +32,12 @@ public class ParentsServiceImpl implements ParentsService {
 
     @Override
     public ParentsDto create(ParentsDto object) {
-        return new ParentsDto(object.toEntity());
+        return new ParentsDto(parentsRepository.save(object.toEntity()));
     }
 
     @Override
     public ParentsDto update(ParentsDto object) {
-        return new ParentsDto(object.toEntity());
+        return new ParentsDto(parentsRepository.save(object.toEntity()));
     }
 
     @Override
