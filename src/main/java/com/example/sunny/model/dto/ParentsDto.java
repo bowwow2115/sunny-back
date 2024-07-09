@@ -13,6 +13,7 @@ public class ParentsDto {
     private String name;
     private String telephone;
     private String relation;
+    private Long childId;
     public ParentsDto(Parents parents) {
         this.id = parents.getId();
         this.name = parents.getName();
