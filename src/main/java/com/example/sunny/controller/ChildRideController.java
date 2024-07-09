@@ -22,8 +22,8 @@ public class ChildRideController extends BasicController {
     }
 
     @DeleteMapping
-    public ResponseEntity<Map<String, Object>> deleteChildRideById(@RequestParam Long along) {
-        childRideService.deleteById(along);
+    public ResponseEntity<Map<String, Object>> deleteChildRideById(@RequestParam(value = "id") Long id) {
+        childRideService.deleteById(id);
         return createResponse();
     }
 

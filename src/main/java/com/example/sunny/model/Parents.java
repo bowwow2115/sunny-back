@@ -17,7 +17,7 @@ public class Parents extends Person{
     private String relation;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "child_id")
+    @JoinColumn(name = "child_id", updatable = false)
     @Setter
     private Child child;
 
@@ -27,5 +27,10 @@ public class Parents extends Person{
         this.telephone = telephone;
         this.relation = relation;
         this.child = child;
+    }
+
+    public void addChild(Child child) {
+        this.child = child;
+        child.addParents(this);
     }
 }
