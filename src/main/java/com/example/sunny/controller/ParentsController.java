@@ -24,5 +24,10 @@ public class ParentsController extends BasicController {
     public ResponseEntity<Map<String, Object>> updateParents(@RequestBody ParentsDto parentsDto) {
         return createResponse(parentsService.update(parentsDto));
     }
+    @DeleteMapping
+    public ResponseEntity<Map<String, Object>> deleteParents(@RequestParam(value = "id") Long id) {
+        parentsService.deleteById(id);
+        return createResponse();
+    }
 
 }
