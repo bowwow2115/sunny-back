@@ -16,7 +16,7 @@ import java.util.Map;
 public class RideController extends BasicController{
     private final SunnyRideService sunnyRideService;
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<Map<String, Object>> getRides() {
         return createResponse(sunnyRideService.findAll());
     }
