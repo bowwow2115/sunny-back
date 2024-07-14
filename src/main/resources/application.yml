@@ -23,7 +23,8 @@ spring:
       ddl-auto: create-drop
 
 server:
-  servlet:
+#  TODO: 배포시 수정
+    servlet:
     context-path: /sunny
   port: 8084
 

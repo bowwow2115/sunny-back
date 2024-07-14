@@ -8,8 +8,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        WebMvcConfigurer.super.addResourceHandlers(registry);
-        registry.addResourceHandler("/app/**").addResourceLocations("classpath:/static/")
-                .setCachePeriod(20);
+        registry
+                .addResourceHandler("/app/**")
+                .addResourceLocations("classpath:/static/")
+                .setCachePeriod(3600);
     }
+//    @Override
+//    public void addViewControllers(ViewControllerRegistry registry) {
+//        registry.addViewController("/app/**").setViewName("forward:/index.html");
+//    }
+
+
 }
