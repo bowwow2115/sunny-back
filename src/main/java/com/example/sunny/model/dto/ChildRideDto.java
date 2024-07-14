@@ -1,5 +1,6 @@
 package com.example.sunny.model.dto;
 
+import com.example.sunny.model.ChildRide;
 import lombok.*;
 
 @Data
@@ -13,4 +14,10 @@ public class ChildRideDto {
     private String time;
     private ChildDto child;
     private SunnyRideDto sunnyRide;
+
+    public ChildRideDto(ChildRide childRide) {
+        this.id = child.getId();
+        this.comment = childRide.getComment();
+        this.time = childRide.getTime();
+    }
 }

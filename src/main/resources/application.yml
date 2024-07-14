@@ -24,12 +24,12 @@ spring:
 
 server:
 #  TODO: 배포시 수정
-    servlet:
+  servlet:
     context-path: /sunny
   port: 8084
 
 jwt:
-#  TODO: 배포시 수정
+  #  TODO: 배포시 수정
   jwtAccessHours: 120
   jwtRefreshDay: 7
   secret: c3VubnlUZXN0c3VubnlUZXN0c3VubnlUZXN0c3VubnlUZXN0c3VubnlUZXN0c3VubnlUZXN0c3VubnlUZXN0c3VubnlUZXN0c3VubnlUZXN0c3VubnlUZXN0c3VubnlUZXN0c3VubnlUZXN0c3VubnlUZXN0c3VubnlUZXN0c3VubnlUZXN0c3VubnlUZXN0
