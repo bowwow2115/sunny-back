@@ -3,6 +3,8 @@ package com.example.sunny.service.impl;
 import com.example.sunny.config.error.BusinessException;
 import com.example.sunny.config.error.ErrorCode;
 import com.example.sunny.model.SunnyRide;
+import com.example.sunny.model.dto.ChildDto;
+import com.example.sunny.model.dto.ChildRideDto;
 import com.example.sunny.model.dto.SunnyRideDto;
 import com.example.sunny.repository.SunnyRideRepository;
 import com.example.sunny.service.SunnyRideService;
@@ -20,7 +22,10 @@ public class SunnyRideServiceImpl implements SunnyRideService {
     @Override
     public List<SunnyRideDto> findAll() {
         return childRideRepository.findAll().stream()
-                .map(SunnyRideDto::new)
+                .map((result)-> {
+                    SunnyRideDto sunnyRideDto = new SunnyRideDto(result);
+                    return addJoinData(sunnyRideDto, result);
+                })
                 .collect(Collectors.toList());
     }
 
@@ -48,5 +53,22 @@ public class SunnyRideServiceImpl implements SunnyRideService {
     @Override
     public void deleteById(Long aLong) {
         childRideRepository.deleteById(aLong);
+    }
+
+    private SunnyRideDto addJoinData(SunnyRideDto sunnyRideDto, SunnyRide result) {
+
+        if (result.getChildRideList() != null && result.getChildRideList().size() != 0) {
+            List<ChildRideDto> childRideDtoList = result.getChildRideList().stream()
+                    .map((item) -> ChildRideDto.builder()
+                            .id(item.getId())
+                            .comment(item.getComment())
+                            .time(item.getTime())
+                            .child(new ChildDto(item.getChild()))
+                            .build()
+                    )
+                    .collect(Collectors.toList());
+            sunnyRideDto.setSunnyChildRideList(childRideDtoList);
+        }
+        return sunnyRideDto;
     }
 }
