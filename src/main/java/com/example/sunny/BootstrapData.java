@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Component
 @RequiredArgsConstructor
@@ -25,6 +26,8 @@ public class BootstrapData implements CommandLineRunner {
     private final SunnyRideService sunnyRideService;
     private final SunnyClassServcie sunnyClassServcie;
     private final ChildService childService;
+
+    private Random random = new Random();
 
     @Override
     public void run(String... args) throws Exception {
@@ -40,27 +43,58 @@ public class BootstrapData implements CommandLineRunner {
 
         UserDto userDto = userService.create(user);
         if(userDto != null) log.info("유저생성");
+        
+        //오전차량 생성
+        List<SunnyRideDto> amRideList = new ArrayList<>();
 
         SunnyRideDto sunnyRideAm = SunnyRideDto.builder()
-                .comment("코멘트")
-                .name("아침 9시 코스")
+                .comment("비고사항: ~~~")
+                .name("사우동 방향 버스")
                 .time("09:00")
                 .isAm(true)
                 .build();
 
         SunnyRideDto amRide = sunnyRideService.create(sunnyRideAm);
         if(amRide != null) log.info("오전차량 생성");
+        amRideList.add(amRide);
 
+        sunnyRideAm = SunnyRideDto.builder()
+                .comment("비고사항: ~~~")
+                .name("인천방향 봉고")
+                .time("09:10")
+                .isAm(true)
+                .build();
+
+        amRide = sunnyRideService.create(sunnyRideAm);
+        if(amRide != null) log.info("오전차량 생성");
+        amRideList.add(amRide);
+        
+        //오후차량 생성
+        List<SunnyRideDto> pmRideList = new ArrayList<>();
+        
         SunnyRideDto sunnyRidePm = SunnyRideDto.builder()
-                .comment("코멘트")
-                .name("낮 4시 코스")
+                .comment("비고사항: ~~~")
+                .name("사우동 방향 버스")
                 .time("16:00")
                 .isAm(false)
                 .build();
 
         SunnyRideDto pmRide = sunnyRideService.create(sunnyRidePm);
         if(pmRide != null) log.info("오후차량 생성");
+        pmRideList.add(pmRide);
 
+        sunnyRidePm = SunnyRideDto.builder()
+                .comment("비고사항: ~~~")
+                .name("풍무동 방향 봉고")
+                .time("16:30")
+                .isAm(false)
+                .build();
+
+        pmRide = sunnyRideService.create(sunnyRidePm);
+        if(pmRide != null) log.info("오후차량 생성");
+        pmRideList.add(pmRide);
+
+        //반생성
         SunnyClassDto sunnyClassDto = SunnyClassDto.builder()
                 .name("열매반")
                 .build();
@@ -82,226 +116,169 @@ public class BootstrapData implements CommandLineRunner {
         SunnyClassDto sunnyClass3 = sunnyClassServcie.create(sunnyClassDto3);
         if(sunnyClass3 != null) log.info("반 생성");
 
-//        String[] childCodeList =
-//        for(int i = 0; i<)
-        Address address = new Address();
-        address.setAddress("서울시 종로구");
-        address.setDetailAddress("547");
-        address.setZipCode("21027");
+        // 초기화할 값들
 
-        List<ParentsDto> parentsDtoList = new ArrayList<>();
-        ParentsDto father = ParentsDto.builder()
-                .telephone("010-2222-2222")
-                .name("김뭐시기")
-                .relation("부")
-                .build();
-
-        ParentsDto mother = ParentsDto.builder()
-                .telephone("010-3333-3333")
-                .name("박뭐시기")
-                .relation("모")
-                .build();
-
-        parentsDtoList.add(father);
-        parentsDtoList.add(mother);
-
-        ChildDto childDto = ChildDto.builder()
-                .address(address)
-                .childCode("A00001")
-                .admissionDate(LocalDate.of(2022, 05, 01))
-                .birthday(LocalDate.of(2017, 02, 21))
-                .className(sunnyClass.getName())
-                .status(true)
-                .name("김아무개")
-                .parentList(parentsDtoList)
-                .build();
-
-        ChildRideDto sunnyChildRideAm = ChildRideDto.builder()
-                .time("09:00")
-                .comment("계단 옆")
-                .sunnyRide(amRide)
-                .build();
-
-        ChildRideDto sunnyChildRidePm = ChildRideDto.builder()
-                .time("16:00")
-                .comment("아파트 뒷문")
-                .sunnyRide(pmRide)
-                .build();
-
-        childDto.setAmRide(sunnyChildRideAm);
-        childDto.setPmRide(sunnyChildRidePm);
-
-        ChildDto child = childService.create(childDto);
-        if(child != null) log.info("원아생성");
-
-        Address address2 = new Address();
-        address2.setAddress("서울시 종로구 본동");
-        address2.setDetailAddress("한미아파트 103동 403호");
-        address2.setZipCode("10101");
-
-        List<ParentsDto> parentsDtoList2 = new ArrayList<>();
-        ParentsDto father2 = ParentsDto.builder()
-                .telephone("010-2222-2222")
-                .name("고아빠")
-                .relation("부")
-                .build();
-
-        ParentsDto mother2 = ParentsDto.builder()
-                .telephone("010-3333-3333")
-                .name("이엄마")
-                .relation("모")
-                .build();
-
-        parentsDtoList2.add(father2);
-        parentsDtoList2.add(mother2);
-
-        ChildDto childDto2 = ChildDto.builder()
-                .address(address)
-                .childCode("A00002")
-                .admissionDate(LocalDate.of(2024, 05, 01))
-                .birthday(LocalDate.of(2019, 03, 01))
-                .className(sunnyClass.getName())
-                .status(true)
-                .name("김어린이")
-                .parentList(parentsDtoList2)
-                .build();
-
-        ChildRideDto sunnyChildRideAm2 = ChildRideDto.builder()
-                .time("09:10")
-                .comment("하나슈퍼")
-                .sunnyRide(amRide)
-                .build();
-
-        ChildRideDto sunnyChildRidePm2 = ChildRideDto.builder()
-                .time("16:05")
-                .comment("산호아파트 뒤")
-                .sunnyRide(pmRide)
-                .build();
-
-        childDto2.setAmRide(sunnyChildRideAm2);
-        childDto2.setPmRide(sunnyChildRidePm2);
-
-        ChildDto child2 = childService.create(childDto2);
-        if(child2 != null) log.info("원아생성");
-
-        ChildDto childDto3 = ChildDto.builder()
-                .address(address)
-                .childCode("A00006")
-                .admissionDate(LocalDate.of(2024, 05, 01))
-                .birthday(LocalDate.of(2019, 03, 01))
-                .className(sunnyClass.getName())
-                .status(true)
-                .name("고어린이")
-                .parentList(parentsDtoList2)
-                .build();
-
-        ChildRideDto sunnyChildRideAm3 = ChildRideDto.builder()
-                .time("09:10")
-                .comment("세영초등학교")
-                .sunnyRide(amRide)
-                .build();
-
-        ChildRideDto sunnyChildRidePm3 = ChildRideDto.builder()
-                .time("16:05")
-                .comment("영화관 옆")
-                .sunnyRide(pmRide)
-                .build();
-
-        childDto3.setAmRide(sunnyChildRideAm3);
-        childDto3.setPmRide(sunnyChildRidePm3);
-
-        child2 = childService.create(childDto3);
-        if(child2 != null) log.info("원아생성");
-
-        //반복
-        childDto = ChildDto.builder()
-                .address(address)
-                .childCode("A00003")
-                .admissionDate(LocalDate.of(2024, 05, 01))
-                .birthday(LocalDate.of(2019, 03, 01))
-                .className(sunnyClass.getName())
-                .status(true)
-                .name("나어린이")
-                .parentList(parentsDtoList2)
-                .build();
-
-        sunnyChildRideAm = ChildRideDto.builder()
-                .time("09:10")
-                .comment("하나슈퍼")
-                .sunnyRide(amRide)
-                .build();
-
-        sunnyChildRidePm = ChildRideDto.builder()
-                .time("16:05")
-                .comment("산호아파트 뒤")
-                .sunnyRide(pmRide)
-                .build();
-
-        childDto.setAmRide(sunnyChildRideAm);
-        childDto.setPmRide(sunnyChildRidePm);
-
-        child = childService.create(childDto);
-        if(child != null) log.info("원아생성");
+        String[] classNames = {"꽃잎반", "열매반", "씨앗반"};
 
 
-        //반복
-        childDto = ChildDto.builder()
-                .address(address)
-                .childCode("A00004")
-                .admissionDate(LocalDate.of(2024, 05, 01))
-                .birthday(LocalDate.of(2019, 03, 01))
-                .className(sunnyClass.getName())
-                .status(true)
-                .name("하어린이")
-                .parentList(parentsDtoList2)
-                .build();
+        String[] lastNames = {"김", "박", "이", "최", "정", "강", "조", "윤", "장", "임", "남"};
+        String[] firstNames = {
+                "어린이1", "어린이2", "어린이3", "어린이4", "어린이5",
+                "어린이6", "어린이7", "어린이8", "어린이9", "어린이10",
+                "어린이11", "어린이12", "어린이13", "어린이14", "어린이15",
+                "어린이16", "어린이17", "어린이18", "어린이19", "어린이20",
+                "어린이21", "어린이22", "어린이23", "어린이24", "어린이25",
+                "어린이26", "어린이27", "어린이28", "어린이29", "어린이30"
+        };
+        String[] childCodes = {
+                "A00001", "A00002", "A00003", "A00004", "A00005",
+                "A00006", "A00007", "A00008", "A00009", "A00010",
+                "A00011", "A00012", "A00013", "A00014", "A00015",
+                "A00016", "A00017", "A00018", "A00019", "A00020",
+                "A00021", "A00022", "A00023", "A00024", "A00025",
+                "A00026", "A00027", "A00028", "A00029", "A00030"
+        };
+        String[] amRideTimes = {
+                "07:30", "07:40", "07:50", "08:00", "08:10",
+                "08:20", "08:30", "08:40", "08:50", "09:00",
+                "09:10", "09:20", "09:30", "07:35", "07:45",
+                "07:55", "08:05", "08:15", "08:25", "08:35",
+                "08:45", "08:55", "09:05", "09:15", "09:25",
+                "07:32", "07:42", "07:52", "08:02", "08:12"
+        };
+        String[] pmRideTimes = {
+                "16:00", "16:10", "16:20", "16:30", "16:40",
+                "16:50", "17:00", "17:10", "17:20", "17:30",
+                "17:40", "17:50", "18:00", "16:05", "16:15",
+                "16:25", "16:35", "16:45", "16:55", "17:05",
+                "17:15", "17:25", "17:35", "17:45", "17:55",
+                "16:02", "16:12", "16:22", "16:32", "16:42"
+        };
+        String[] amComments = {
+                "계단 옆", "정문 앞", "놀이터 옆", "후문", "매점 앞",
+                "교문 옆", "학교 앞", "은행 앞", "가게 앞", "편의점 옆",
+                "슈퍼마켓 앞", "약국 옆", "서점 앞", "카페 옆", "식당 앞",
+                "역 앞", "버스 정류장 옆", "택시 승강장 옆", "공원 옆", "도서관 앞",
+                "체육관 옆", "수영장 옆", "공연장 앞", "영화관 옆", "백화점 앞",
+                "아파트 앞", "빌라 앞", "주택 앞", "공원 정문", "학교 후문"
+        };
+        String[] pmComments = {
+                "아파트 뒷문", "가게 앞", "주차장 옆", "놀이터 옆", "후문",
+                "매점 앞", "교문 옆", "학교 앞", "은행 앞", "편의점 옆",
+                "슈퍼마켓 앞", "약국 옆", "서점 앞", "카페 옆", "식당 앞",
+                "역 앞", "버스 정류장 옆", "택시 승강장 옆", "공원 옆", "도서관 앞",
+                "체육관 옆", "수영장 옆", "공연장 앞", "영화관 옆", "백화점 앞",
+                "아파트 앞", "빌라 앞", "주택 앞", "공원 정문", "학교 후문"
+        };
+        String[] addresses = {
+                "서울시 종로구", "서울시 강남구", "서울시 서초구", "서울시 마포구", "서울시 은평구",
+                "서울시 동대문구", "서울시 성북구", "서울시 동작구", "서울시 관악구", "서울시 송파구",
+                "서울시 강동구", "서울시 강서구", "서울시 금천구", "서울시 양천구", "서울시 영등포구",
+                "서울시 중랑구", "서울시 구로구", "서울시 도봉구", "서울시 성동구", "서울시 광진구",
+                "서울시 서대문구", "서울시 종로구", "서울시 강남구", "서울시 서초구", "서울시 마포구",
+                "서울시 은평구", "서울시 동대문구", "서울시 성북구", "서울시 동작구", "서울시 관악구"
+        };
+        String[] detailAddresses = {
+                "무슨아파트 101동 102호", "무슨아파트 202동 203호", "0000번지 304동 305호", "아파트 1동 1호", "아파트 2동 2호",
+                "아파트 3동 3호", "아파트 4동 4호", "아파트 5동 5호", "아파트 6동 6호", "아파트 7동 7호",
+                "아파트 8동 8호", "아파트 9동 9호", "아파트 10동 10호", "아파트 11동 11호", "아파트 12동 12호",
+                "아파트 13동 13호", "아파트 14동 14호", "아파트 15동 15호", "아파트 16동 16호", "아파트 17동 17호",
+                "아파트 18동 18호", "아파트 19동 19호", "아파트 20동 20호", "아파트 21동 21호", "아파트 22동 22호",
+                "아파트 23동 23호", "아파트 24동 24호", "아파트 25동 25호", "아파트 26동 26호", "아파트 27동 27호"
+        };
+        String[] zipCodes = {
+                "21027", "12345", "67890", "10101", "20202",
+                "30303", "40404", "50505", "60606", "70707",
+                "80808", "90909", "10010", "11011", "12012",
+                "13013", "14014", "15015", "16016", "17017",
+                "18018", "19019", "20020", "21021", "22022",
+                "23023", "24024", "25025", "26026", "27027"
+        };
+        String className = "SunnyClass";
 
-        sunnyChildRideAm = ChildRideDto.builder()
-                .time("09:20")
-                .comment("세란문구")
-                .sunnyRide(amRide)
-                .build();
+        String[][] parentNames = {
+                {"김아버지1", "박어머니1"}, {"김아버지2", "박어머니2"}, {"김아버지3", "박어머니3"}, {"김아버지4", "박어머니4"}, {"김아버지5", "박어머니5"},
+                {"김아버지6", "박어머니6"}, {"김아버지7", "박어머니7"}, {"김아버지8", "박어머니8"}, {"김아버지9", "박어머니9"}, {"김아버지10", "박어머니10"},
+                {"김아버지11", "박어머니11"}, {"김아버지12", "박어머니12"}, {"김아버지13", "박어머니13"}, {"김아버지14", "박어머니14"}, {"김아버지15", "박어머니15"},
+                {"김아버지16", "박어머니16"}, {"김아버지17", "박어머니17"}, {"김아버지18", "박어머니18"}, {"김아버지19", "박어머니19"}, {"김아버지20", "박어머니20"},
+                {"김아버지21", "박어머니21"}, {"김아버지22", "박어머니22"}, {"김아버지23", "박어머니23"}, {"김아버지24", "박어머니24"}, {"김아버지25", "박어머니25"},
+                {"김아버지26", "박어머니26"}, {"김아버지27", "박어머니27"}, {"김아버지28", "박어머니28"}, {"김아버지29", "박어머니29"}, {"김아버지30", "박어머니30"}
+        };
+        String[][] parentTelephones = {
+                {"010-1111-1111", "010-2222-2222"}, {"010-3333-3333", "010-4444-4444"}, {"010-5555-5555", "010-6666-6666"}, {"010-7777-7777", "010-8888-8888"},
+                {"010-9999-9999", "010-0000-0000"}, {"010-1212-1212", "010-2323-2323"}, {"010-3434-3434", "010-4545-4545"}, {"010-5656-5656", "010-6767-6767"},
+                {"010-7878-7878", "010-8989-8989"}, {"010-9090-9090", "010-1010-1010"}, {"010-1112-1112", "010-2223-2223"}, {"010-3334-3334", "010-4445-4445"},
+                {"010-5556-5556", "010-6667-6667"}, {"010-7778-7778", "010-8889-8889"}, {"010-9990-9990", "010-0001-0001"}, {"010-1213-1213", "010-2324-2324"},
+                {"010-3435-3435", "010-4546-4546"}, {"010-5657-5657", "010-6768-6768"}, {"010-7879-7879", "010-8990-8990"}, {"010-9091-9091", "010-1011-1011"},
+                {"010-1113-1113", "010-2224-2224"}, {"010-3335-3335", "010-4446-4446"}, {"010-5557-5557", "010-6668-6668"}, {"010-7779-7779", "010-8880-8880"},
+                {"010-9991-9991", "010-0002-0002"}, {"010-1214-1214", "010-2325-2325"}, {"010-3436-3436", "010-4547-4547"}, {"010-5658-5658", "010-6769-6769"},
+                {"010-7880-7880", "010-8991-8991"}, {"010-9092-9092", "010-1012-1012"}
+        };
+        String[] parentRelations = {"부", "모"};
 
-        sunnyChildRidePm = ChildRideDto.builder()
-                .time("16:20")
-                .comment("골목 쳪")
-                .sunnyRide(pmRide)
-                .build();
+        for (int i = 0; i < firstNames.length; i++) {
+            // 성과 이름을 결합하여 이름 생성
+            String childName = lastNames[i % lastNames.length] + firstNames[i];
 
-        childDto.setAmRide(sunnyChildRideAm);
-        childDto.setPmRide(sunnyChildRidePm);
+            // Address 초기화
+            Address address = new Address();
+            address.setAddress(addresses[i]);
+            address.setDetailAddress(detailAddresses[i]);
+            address.setZipCode(zipCodes[i]);
 
-        child = childService.create(childDto);
-        if(child != null) log.info("원아생성");
+            // ParentsDto 초기화
+            List<ParentsDto> parentsDtoList = new ArrayList<>();
+            for (int j = 0; j < parentRelations.length; j++) {
+                ParentsDto parent = ParentsDto.builder()
+                        .telephone(parentTelephones[i][j])
+                        .name(parentNames[i][j])
+                        .relation(parentRelations[j])
+                        .build();
+                parentsDtoList.add(parent);
+            }
 
-        //반복
-        childDto = ChildDto.builder()
-                .address(address)
-                .childCode("A00005")
-                .admissionDate(LocalDate.of(2024, 05, 01))
-                .birthday(LocalDate.of(2019, 03, 01))
-                .className(sunnyClass.getName())
-                .status(true)
-                .name("남어린이")
-                .parentList(parentsDtoList2)
-                .build();
+            LocalDate admissionDate = generateRandomDate(2021, 2024);
+            LocalDate birthday = generateRandomDate(2017, 2020);
 
-        sunnyChildRideAm = ChildRideDto.builder()
-                .time("09:30")
-                .comment("골목 뒤")
-                .sunnyRide(amRide)
-                .build();
+            // ChildDto 초기화
+            ChildDto childDto = ChildDto.builder()
+                    .address(address)
+                    .childCode(childCodes[i])
+                    .admissionDate(admissionDate)
+                    .birthday(birthday)
+                    .className(classNames[i % classNames.length])
+                    .status(true)
+                    .name(childName)
+                    .parentList(parentsDtoList)
+                    .build();
 
-        sunnyChildRidePm = ChildRideDto.builder()
-                .time("16:35")
-                .comment("가현초등학교")
-                .sunnyRide(pmRide)
-                .build();
+            // ChildRideDto 초기화
+            ChildRideDto sunnyChildRideAm = ChildRideDto.builder()
+                    .time(amRideTimes[i])
+                    .comment(amComments[i])
+                    .sunnyRide(amRideList.get(i % amRideList.size()))
+                    .build();
 
-        childDto.setAmRide(sunnyChildRideAm);
-        childDto.setPmRide(sunnyChildRidePm);
+            ChildRideDto sunnyChildRidePm = ChildRideDto.builder()
+                    .time(pmRideTimes[i])
+                    .comment(pmComments[i])
+                    .sunnyRide(pmRideList.get(i % pmRideList.size()))
+                    .build();
 
-        child = childService.create(childDto);
-        if(child != null) log.info("원아생성");
+            // ChildDto에 승차 정보 설정
+            childDto.setAmRide(sunnyChildRideAm);
+            childDto.setPmRide(sunnyChildRidePm);
+
+            // ChildDto 생성 및 리스트에 추가
+            ChildDto child = childService.create(childDto);
+            if (child != null) log.info("원아생성: " + child.getName());
+        }
+
+    }
+
+    private LocalDate generateRandomDate(int startYear, int endYear) {
+        int year = random.nextInt(endYear - startYear + 1) + startYear;
+        int dayOfYear = random.nextInt(365) + 1;
+        return LocalDate.ofYearDay(year, dayOfYear);
     }
 }
