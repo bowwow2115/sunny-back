@@ -13,7 +13,7 @@ import java.util.List;
 @Entity
 @Table(name = "sunny_ride")
 public class SunnyRide extends BaseEntity {
-    @Column(name = "name", nullable = false, unique = true)
+    @Column(name = "name", nullable = false)
     private String name;
     @Column(name = "is_am", nullable = false)
     private boolean isAm;

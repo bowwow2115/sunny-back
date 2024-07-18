@@ -5,12 +5,14 @@ import com.example.sunny.config.error.ErrorCode;
 import com.example.sunny.model.SunnyRide;
 import com.example.sunny.model.dto.ChildDto;
 import com.example.sunny.model.dto.ChildRideDto;
+import com.example.sunny.model.dto.ParentsDto;
 import com.example.sunny.model.dto.SunnyRideDto;
 import com.example.sunny.repository.SunnyRideRepository;
 import com.example.sunny.service.SunnyRideService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -59,16 +61,25 @@ public class SunnyRideServiceImpl implements SunnyRideService {
 
         if (result.getChildRideList() != null && result.getChildRideList().size() != 0) {
             List<ChildRideDto> childRideDtoList = result.getChildRideList().stream()
-                    .map((item) -> ChildRideDto.builder()
-                            .id(item.getId())
-                            .comment(item.getComment())
-                            .time(item.getTime())
-                            .child(new ChildDto(item.getChild()))
-                            .build()
+                    .map((item) -> {
+                            ChildDto childDto = new ChildDto(item.getChild());
+                            childDto.setParentList(
+                                    item.getChild().getParentList().stream().map( (parents) ->
+                                            new ParentsDto(parents)
+                                    ).collect(Collectors.toList()));
+                             return ChildRideDto.builder()
+                                        .id(item.getId())
+                                        .comment(item.getComment())
+                                        .time(item.getTime())
+                                        .child(childDto)
+                                        .build();
+                            }
                     )
+                    .sorted(Comparator.comparing(ChildRideDto::getTime))
                     .collect(Collectors.toList());
             sunnyRideDto.setSunnyChildRideList(childRideDtoList);
         }
         return sunnyRideDto;
     }
+
 }
