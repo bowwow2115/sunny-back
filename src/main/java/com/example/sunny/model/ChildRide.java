@@ -18,24 +18,19 @@ public class ChildRide extends BaseEntity {
     private Child child;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ride_id")
+    @JoinColumn(name = "meeting_location_id")
     @Setter
-    private SunnyRide sunnyRide;
+    private MeetingLocation meetingLocation;
 
     @Column(name = "comment")
     @Setter
     private String comment;
 
-    @Column(name = "time")
-    @Setter
-    private String time;
-
     @Builder
-    public ChildRide(Long id, String createdBy, String modifiedBy, Child child, SunnyRide sunnyRide, String comment, String time) {
+    public ChildRide(Long id, String createdBy, String modifiedBy, Child child, MeetingLocation meetingLocation, String comment, String time) {
         super(id, createdBy, modifiedBy);
         this.child = child;
-        this.sunnyRide = sunnyRide;
+        this.meetingLocation = meetingLocation;
         this.comment = comment;
-        this.time = time;
     }
 }
