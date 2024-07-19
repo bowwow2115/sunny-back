@@ -130,14 +130,7 @@ public class BootstrapData implements CommandLineRunner {
                 "어린이21", "어린이22", "어린이23", "어린이24", "어린이25",
                 "어린이26", "어린이27", "어린이28", "어린이29", "어린이30"
         };
-        String[] childCodes = {
-                "A00001", "A00002", "A00003", "A00004", "A00005",
-                "A00006", "A00007", "A00008", "A00009", "A00010",
-                "A00011", "A00012", "A00013", "A00014", "A00015",
-                "A00016", "A00017", "A00018", "A00019", "A00020",
-                "A00021", "A00022", "A00023", "A00024", "A00025",
-                "A00026", "A00027", "A00028", "A00029", "A00030"
-        };
+
         String[] amRideTimes = {
                 "07:30", "07:40", "07:50", "08:00", "08:10",
                 "08:20", "08:30", "08:40", "08:50", "09:00",
@@ -243,7 +236,6 @@ public class BootstrapData implements CommandLineRunner {
             // ChildDto 초기화
             ChildDto childDto = ChildDto.builder()
                     .address(address)
-                    .childCode(childCodes[i])
                     .admissionDate(admissionDate)
                     .birthday(birthday)
                     .className(classNames[i % classNames.length])
