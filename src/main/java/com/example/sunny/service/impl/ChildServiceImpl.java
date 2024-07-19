@@ -4,15 +4,12 @@ import com.example.sunny.config.error.BusinessException;
 import com.example.sunny.config.error.ErrorCode;
 import com.example.sunny.model.Child;
 import com.example.sunny.model.ChildRide;
-import com.example.sunny.model.SunnyRide;
-import com.example.sunny.model.dto.ChildDto;
-import com.example.sunny.model.dto.ParentsDto;
-import com.example.sunny.model.dto.ChildRideDto;
-import com.example.sunny.model.dto.SunnyRideDto;
+import com.example.sunny.model.MeetingLocation;
+import com.example.sunny.model.dto.*;
 import com.example.sunny.repository.ChildRepository;
-import com.example.sunny.repository.ParentsRepository;
 import com.example.sunny.repository.ChildRideRepository;
-import com.example.sunny.repository.SunnyRideRepository;
+import com.example.sunny.repository.MeetingLoactionRepository;
+import com.example.sunny.repository.ParentsRepository;
 import com.example.sunny.service.ChildService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,8 +26,8 @@ import java.util.stream.Collectors;
 public class ChildServiceImpl implements ChildService {
     private final ChildRepository childRepository;
     private final ParentsRepository parentsRepository;
-    private final SunnyRideRepository sunnyRideRepository;
     private final ChildRideRepository childRideRepository;
+    private final MeetingLoactionRepository meetingLoactionRepository;
 
     @Override
     public ChildDto findByName(String name) {
@@ -84,23 +81,21 @@ public class ChildServiceImpl implements ChildService {
             }
         }
         //등록된 차량인지 확인
-        SunnyRide amRide = null;
-        SunnyRide pmRide = null;
+        MeetingLocation amRide = null;
+        MeetingLocation pmRide = null;
         if (object.getAmRide() != null) {
-            amRide = sunnyRideRepository.findById(object.getAmRide().getSunnyRide().getId()).orElseThrow(
+            amRide = meetingLoactionRepository.findById(object.getAmRide().getMeetingLocation().getId()).orElseThrow(
                     () -> new BusinessException(ErrorCode.INVALID_INPUT_VALUE, "선택한 차량이 존재하지 않습니다."));
             ChildRide childRide = new ChildRide();
-            childRide.setSunnyRide(amRide);
-            childRide.setTime(object.getAmRide().getTime());
+            childRide.setMeetingLocation(amRide);
             childRide.setComment(object.getAmRide().getComment());
             child.addRide(childRide);
         }
         if (object.getPmRide() != null) {
-            pmRide = sunnyRideRepository.findById(object.getPmRide().getSunnyRide().getId()).orElseThrow(
+            pmRide = meetingLoactionRepository.findById(object.getPmRide().getMeetingLocation().getId()).orElseThrow(
                     () -> new BusinessException(ErrorCode.INVALID_INPUT_VALUE, "선택한 차량이 존재하지 않습니다."));
             ChildRide childRide = new ChildRide();
-            childRide.setSunnyRide(pmRide);
-            childRide.setTime(object.getPmRide().getTime());
+            childRide.setMeetingLocation(pmRide);
             childRide.setComment(object.getPmRide().getComment());
             child.addRide(childRide);
         }
@@ -138,26 +133,28 @@ public class ChildServiceImpl implements ChildService {
 
         if(result.getChildRideList() != null && result.getChildRideList().size() != 0) {
             result.getChildRideList().stream()
-                    .filter((item) -> item.getSunnyRide().isAm())
+                    .filter((item) -> item.getMeetingLocation().getSunnyRide().isAm())
                     .findAny()
                     .ifPresent((item) -> {
+                        MeetingLocationDto meetingLocationDto = new MeetingLocationDto(item.getMeetingLocation());
+                        meetingLocationDto.setSunnyRide( new SunnyRideDto(item.getMeetingLocation().getSunnyRide()));
                         childDto.setAmRide(ChildRideDto.builder()
                                 .comment(item.getComment())
-                                .sunnyRide(new SunnyRideDto(item.getSunnyRide()))
-                                .time(item.getTime())
+                                .meetingLocation(meetingLocationDto)
                                 .id(item.getId())
                                 .build()
                         );
                     });
 
             result.getChildRideList().stream()
-                    .filter((item) -> !item.getSunnyRide().isAm())
+                    .filter((item) -> !item.getMeetingLocation().getSunnyRide().isAm())
                     .findAny()
                     .ifPresent((item) -> {
-                        childDto.setPmRide(ChildRideDto.builder()
+                        MeetingLocationDto meetingLocationDto = new MeetingLocationDto(item.getMeetingLocation());
+                        meetingLocationDto.setSunnyRide( new SunnyRideDto(item.getMeetingLocation().getSunnyRide()));
+                        childDto.setAmRide(ChildRideDto.builder()
                                 .comment(item.getComment())
-                                .sunnyRide(new SunnyRideDto(item.getSunnyRide()))
-                                .time(item.getTime())
+                                .meetingLocation(meetingLocationDto)
                                 .id(item.getId())
                                 .build()
                         );

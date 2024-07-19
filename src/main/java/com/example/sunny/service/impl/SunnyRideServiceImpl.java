@@ -3,16 +3,12 @@ package com.example.sunny.service.impl;
 import com.example.sunny.config.error.BusinessException;
 import com.example.sunny.config.error.ErrorCode;
 import com.example.sunny.model.SunnyRide;
-import com.example.sunny.model.dto.ChildDto;
-import com.example.sunny.model.dto.ChildRideDto;
-import com.example.sunny.model.dto.ParentsDto;
-import com.example.sunny.model.dto.SunnyRideDto;
+import com.example.sunny.model.dto.*;
 import com.example.sunny.repository.SunnyRideRepository;
 import com.example.sunny.service.SunnyRideService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -70,12 +66,12 @@ public class SunnyRideServiceImpl implements SunnyRideService {
                              return ChildRideDto.builder()
                                         .id(item.getId())
                                         .comment(item.getComment())
-                                        .time(item.getTime())
+                                        .meetingLocation(new MeetingLocationDto(item.getMeetingLocation()))
                                         .child(childDto)
                                         .build();
                             }
                     )
-                    .sorted(Comparator.comparing(ChildRideDto::getTime))
+//                    .sorted(Comparator.comparing(ChildRideDto::getMeetingLocation))
                     .collect(Collectors.toList());
             sunnyRideDto.setSunnyChildRideList(childRideDtoList);
         }

@@ -4,13 +4,13 @@ import com.example.sunny.config.error.BusinessException;
 import com.example.sunny.config.error.ErrorCode;
 import com.example.sunny.model.Child;
 import com.example.sunny.model.ChildRide;
-import com.example.sunny.model.SunnyRide;
+import com.example.sunny.model.MeetingLocation;
 import com.example.sunny.model.dto.ChildDto;
 import com.example.sunny.model.dto.ChildRideDto;
-import com.example.sunny.model.dto.SunnyRideDto;
+import com.example.sunny.model.dto.MeetingLocationDto;
 import com.example.sunny.repository.ChildRepository;
 import com.example.sunny.repository.ChildRideRepository;
-import com.example.sunny.repository.SunnyRideRepository;
+import com.example.sunny.repository.MeetingLoactionRepository;
 import com.example.sunny.service.ChildRideService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,8 +22,8 @@ import java.util.List;
 public class ChildRideServiceImpl implements ChildRideService {
     private final ChildRideRepository childRideRepository;
     private final ChildRepository childRepository;
-    private final SunnyRideRepository sunnyRideRepository;
-
+//    private final SunnyRideRepository sunnyRideRepository;
+    private final MeetingLoactionRepository meetingLoactionRepository;
     @Override
     public List<ChildRideDto> findAll() {
         return null;
@@ -39,23 +39,21 @@ public class ChildRideServiceImpl implements ChildRideService {
         Child child = childRepository.findById(object.getChild().getId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.ENTITY_NOT_FOUND, "생성할 원아의 정보가 존재하지 않습니다."));
 
-        SunnyRide sunnyRide = sunnyRideRepository.findById(object.getSunnyRide().getId())
+        MeetingLocation meetingLocation = meetingLoactionRepository.findById(object.getMeetingLocation().getId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.ENTITY_NOT_FOUND, "생성할 차량의 정보가 존재하지 않습니다."));
 
         ChildRide childRide = ChildRide.builder()
                 .child(child)
-                .sunnyRide(sunnyRide)
-                .time(object.getTime())
+                .meetingLocation(meetingLocation)
                 .comment(object.getComment())
                 .build();
 
         ChildRide result = childRideRepository.save(childRide);
 
         return ChildRideDto.builder()
-                .sunnyRide(new SunnyRideDto(result.getSunnyRide()))
+                .meetingLocation(new MeetingLocationDto(result.getMeetingLocation()))
                 .child(new ChildDto(result.getChild()))
                 .id(result.getId())
-                .time(result.getTime())
                 .comment(result.getComment())
                 .build();
     }
@@ -65,24 +63,22 @@ public class ChildRideServiceImpl implements ChildRideService {
         Child child = childRepository.findById(object.getChild().getId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.ENTITY_NOT_FOUND, "변경할 원아의 정보가 존재하지 않습니다."));
 
-        SunnyRide sunnyRide = sunnyRideRepository.findById(object.getSunnyRide().getId())
-                .orElseThrow(() -> new BusinessException(ErrorCode.ENTITY_NOT_FOUND, "변경할 차량의 정보가 존재하지 않습니다."));
+        MeetingLocation meetingLocation = meetingLoactionRepository.findById(object.getMeetingLocation().getId())
+                .orElseThrow(() -> new BusinessException(ErrorCode.ENTITY_NOT_FOUND, "생성할 차량의 정보가 존재하지 않습니다."));
 
         ChildRide childRide = ChildRide.builder()
                 .id(object.getId())
                 .child(child)
-                .sunnyRide(sunnyRide)
-                .time(object.getTime())
+                .meetingLocation(meetingLocation)
                 .comment(object.getComment())
                 .build();
 
         ChildRide result = childRideRepository.save(childRide);
 
         return ChildRideDto.builder()
-                .sunnyRide(new SunnyRideDto(result.getSunnyRide()))
+                .meetingLocation(new MeetingLocationDto(result.getMeetingLocation()))
                 .child(new ChildDto(result.getChild()))
                 .id(result.getId())
-                .time(result.getTime())
                 .comment(result.getComment())
                 .build();
     }
