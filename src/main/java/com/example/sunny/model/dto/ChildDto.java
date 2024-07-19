@@ -17,7 +17,6 @@ import java.util.List;
 @NoArgsConstructor
 public class ChildDto {
     private Long id;
-    private String childCode;
     private LocalDate admissionDate;
     private String className;
     private Address address;
@@ -32,7 +31,6 @@ public class ChildDto {
     public ChildDto(Child child) {
         this.id = child.getId();
         this.birthday = child.getBirthday();
-        this.childCode = child.getChildCode();
         this.admissionDate = child.getAdmissionDate();
         this.className = child.getClassName();
         this.address = child.getAddress();
@@ -47,7 +45,6 @@ public class ChildDto {
                 .status(status)
                 .admissionDate(admissionDate)
                 .address(address)
-                .childCode(childCode)
                 .birthday(birthday)
                 .className(className)
                 .build();
