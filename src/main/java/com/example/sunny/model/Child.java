@@ -17,8 +17,6 @@ import java.util.List;
 @Entity
 @Table(name = "sunny_children")
 public class Child extends Person{
-    @Column(name = "child_code",unique = true, nullable = false)
-    private String childCode;
     @Column(name = "admission_date", nullable = false)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate admissionDate;
@@ -44,9 +42,8 @@ public class Child extends Person{
 
     //빌더 설정 시 parentsList는 add, remove 메소드로 관리하기 때문에 제외
     @Builder
-    public Child(Long id, String createdBy, String modifiedBy, String name, String childCode, LocalDate admissionDate, LocalDate birthday, String className, Address address, boolean status) {
+    public Child(Long id, String createdBy, String modifiedBy, String name, LocalDate admissionDate, LocalDate birthday, String className, Address address, boolean status) {
         super(id, createdBy, modifiedBy, name);
-        this.childCode = childCode;
         this.admissionDate = admissionDate;
         this.birthday = birthday;
         this.className = className;
