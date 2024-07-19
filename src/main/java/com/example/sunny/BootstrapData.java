@@ -1,12 +1,11 @@
 package com.example.sunny;
 
 import com.example.sunny.code.SunnyCode;
+import com.example.sunny.model.MeetingLocation;
 import com.example.sunny.model.dto.*;
 import com.example.sunny.model.embedded.Address;
-import com.example.sunny.service.ChildService;
-import com.example.sunny.service.SunnyClassServcie;
-import com.example.sunny.service.SunnyRideService;
-import com.example.sunny.service.UserService;
+import com.example.sunny.repository.MeetingLoactionRepository;
+import com.example.sunny.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
@@ -26,95 +25,14 @@ public class BootstrapData implements CommandLineRunner {
     private final SunnyRideService sunnyRideService;
     private final SunnyClassServcie sunnyClassServcie;
     private final ChildService childService;
+    private final MeetingLoactionService meetingLoactionService;
 
     private Random random = new Random();
 
+
+
     @Override
     public void run(String... args) throws Exception {
-        UserDto user = UserDto.builder()
-                .password("test")
-                .userId("test")
-                .userName("관리자")
-                .role(SunnyCode.ROLE_GENERAL_ADMIN)
-                .status(true)
-                .email("test@test.com")
-                .telephone("010-1234-1234")
-                .build();
-
-        UserDto userDto = userService.create(user);
-        if(userDto != null) log.info("유저생성");
-        
-        //오전차량 생성
-        List<SunnyRideDto> amRideList = new ArrayList<>();
-
-        SunnyRideDto sunnyRideAm = SunnyRideDto.builder()
-                .comment("비고사항: ~~~")
-                .name("사우동 방향 버스")
-                .time("09:00")
-                .isAm(true)
-                .build();
-
-        SunnyRideDto amRide = sunnyRideService.create(sunnyRideAm);
-        if(amRide != null) log.info("오전차량 생성");
-        amRideList.add(amRide);
-
-        sunnyRideAm = SunnyRideDto.builder()
-                .comment("비고사항: ~~~")
-                .name("인천방향 봉고")
-                .time("09:10")
-                .isAm(true)
-                .build();
-
-        amRide = sunnyRideService.create(sunnyRideAm);
-        if(amRide != null) log.info("오전차량 생성");
-        amRideList.add(amRide);
-        
-        //오후차량 생성
-        List<SunnyRideDto> pmRideList = new ArrayList<>();
-        
-        SunnyRideDto sunnyRidePm = SunnyRideDto.builder()
-                .comment("비고사항: ~~~")
-                .name("사우동 방향 버스")
-                .time("16:00")
-                .isAm(false)
-                .build();
-
-        SunnyRideDto pmRide = sunnyRideService.create(sunnyRidePm);
-        if(pmRide != null) log.info("오후차량 생성");
-        pmRideList.add(pmRide);
-
-        sunnyRidePm = SunnyRideDto.builder()
-                .comment("비고사항: ~~~")
-                .name("풍무동 방향 봉고")
-                .time("16:30")
-                .isAm(false)
-                .build();
-
-        pmRide = sunnyRideService.create(sunnyRidePm);
-        if(pmRide != null) log.info("오후차량 생성");
-        pmRideList.add(pmRide);
-
-        //반생성
-        SunnyClassDto sunnyClassDto = SunnyClassDto.builder()
-                .name("열매반")
-                .build();
-
-        SunnyClassDto sunnyClass = sunnyClassServcie.create(sunnyClassDto);
-        if(sunnyClass != null) log.info("반 생성");
-
-        SunnyClassDto sunnyClassDto2 = SunnyClassDto.builder()
-                .name("씨앗반")
-                .build();
-
-        SunnyClassDto sunnyClass2 = sunnyClassServcie.create(sunnyClassDto2);
-        if(sunnyClass2 != null) log.info("반 생성");
-
-        SunnyClassDto sunnyClassDto3 = SunnyClassDto.builder()
-                .name("꽃잎반")
-                .build();
-
-        SunnyClassDto sunnyClass3 = sunnyClassServcie.create(sunnyClassDto3);
-        if(sunnyClass3 != null) log.info("반 생성");
 
         // 초기화할 값들
 
@@ -187,7 +105,19 @@ public class BootstrapData implements CommandLineRunner {
                 "18018", "19019", "20020", "21021", "22022",
                 "23023", "24024", "25025", "26026", "27027"
         };
-        String className = "SunnyClass";
+
+        String[] koreanPlaces = {
+                "서울특별시 강남구 대치고등학교",
+                "서울특별시 서초구 서초고등학교",
+                "서울특별시 용산구 용산고등학교",
+                "서울특별시 마포구 마포고등학교",
+                "서울특별시 중구 서울역",
+                "서울특별시 강남구 강남역",
+                "서울특별시 동대문구 청량리역",
+                "서울특별시 강서구 화곡고등학교",
+                "서울특별시 노원구 중계고등학교",
+                "서울특별시 송파구 잠실역"
+        };
 
         String[][] parentNames = {
                 {"김아버지1", "박어머니1"}, {"김아버지2", "박어머니2"}, {"김아버지3", "박어머니3"}, {"김아버지4", "박어머니4"}, {"김아버지5", "박어머니5"},
@@ -208,6 +138,107 @@ public class BootstrapData implements CommandLineRunner {
                 {"010-7880-7880", "010-8991-8991"}, {"010-9092-9092", "010-1012-1012"}
         };
         String[] parentRelations = {"부", "모"};
+
+
+        UserDto user = UserDto.builder()
+                .password("test")
+                .userId("test")
+                .userName("관리자")
+                .role(SunnyCode.ROLE_GENERAL_ADMIN)
+                .status(true)
+                .email("test@test.com")
+                .telephone("010-1234-1234")
+                .build();
+
+        UserDto userDto = userService.create(user);
+        if(userDto != null) log.info("유저생성");
+        
+        //오전차량 생성
+        List<SunnyRideDto> amRideList = new ArrayList<>();
+
+        SunnyRideDto sunnyRideAm = SunnyRideDto.builder()
+                .comment("비고사항: ~~~")
+                .name("사우동 방향 버스")
+                .time("09:00")
+                .isAm(true)
+                .build();
+
+        SunnyRideDto amRide = sunnyRideService.create(sunnyRideAm);
+        if(amRide != null) log.info("오전차량 생성");
+        amRideList.add(amRide);
+
+        sunnyRideAm = SunnyRideDto.builder()
+                .comment("비고사항: ~~~")
+                .name("인천방향 봉고")
+                .time("09:10")
+                .isAm(true)
+                .build();
+
+        amRide = sunnyRideService.create(sunnyRideAm);
+        if(amRide != null) log.info("오전차량 생성");
+        amRideList.add(amRide);
+        
+        //오후차량 생성
+        List<SunnyRideDto> pmRideList = new ArrayList<>();
+        
+        SunnyRideDto sunnyRidePm = SunnyRideDto.builder()
+                .comment("비고사항: ~~~")
+                .name("사우동 방향 버스")
+                .time("16:00")
+                .isAm(false)
+                .build();
+
+        SunnyRideDto pmRide = sunnyRideService.create(sunnyRidePm);
+        if(pmRide != null) log.info("오후차량 생성");
+        pmRideList.add(pmRide);
+
+        sunnyRidePm = SunnyRideDto.builder()
+                .comment("비고사항: ~~~")
+                .name("풍무동 방향 봉고")
+                .time("16:30")
+                .isAm(false)
+                .build();
+
+        pmRide = sunnyRideService.create(sunnyRidePm);
+        if(pmRide != null) log.info("오후차량 생성");
+        pmRideList.add(pmRide);
+
+        List<MeetingLocationDto> amMeetingLocationList = new ArrayList<>();
+        List<MeetingLocationDto> pmMeetingLocationList = new ArrayList<>();
+        //집결장소 생성
+        for(int i=0; i<= koreanPlaces.length/2; i++) {
+            MeetingLocationDto meetingLocationDto = MeetingLocationDto.builder()
+                    .time(amRideTimes[i])
+                    .name(koreanPlaces[i])
+                    .sunnyRide(amRideList.get(i % amRideList.size()))
+                    .build();
+            amMeetingLocationList.add(meetingLoactionService.create(meetingLocationDto));
+//            if(i % 2 == 1)
+        }
+
+        //반생성
+        SunnyClassDto sunnyClassDto = SunnyClassDto.builder()
+                .name("열매반")
+                .build();
+
+        SunnyClassDto sunnyClass = sunnyClassServcie.create(sunnyClassDto);
+        if(sunnyClass != null) log.info("반 생성");
+
+        SunnyClassDto sunnyClassDto2 = SunnyClassDto.builder()
+                .name("씨앗반")
+                .build();
+
+        SunnyClassDto sunnyClass2 = sunnyClassServcie.create(sunnyClassDto2);
+        if(sunnyClass2 != null) log.info("반 생성");
+
+        SunnyClassDto sunnyClassDto3 = SunnyClassDto.builder()
+                .name("꽃잎반")
+                .build();
+
+        SunnyClassDto sunnyClass3 = sunnyClassServcie.create(sunnyClassDto3);
+        if(sunnyClass3 != null) log.info("반 생성");
+
+
 
         for (int i = 0; i < firstNames.length; i++) {
             // 성과 이름을 결합하여 이름 생성
@@ -246,8 +277,9 @@ public class BootstrapData implements CommandLineRunner {
 
             // ChildRideDto 초기화
             ChildRideDto sunnyChildRideAm = ChildRideDto.builder()
-                    .time(amRideTimes[i])
+//                    .time(amRideTimes[i])
                     .comment(amComments[i])
+                    .meetingLocation()
                     .sunnyRide(amRideList.get(i % amRideList.size()))
                     .build();
 

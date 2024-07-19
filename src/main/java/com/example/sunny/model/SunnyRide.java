@@ -3,6 +3,7 @@ package com.example.sunny.model;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -24,7 +25,8 @@ public class SunnyRide extends BaseEntity {
     private String time;
 
     @OneToMany(mappedBy = "sunnyRide", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ChildRide> childRideList = new ArrayList<>();
+    @Setter
+    private List<MeetingLocation> meetingLocationList = new ArrayList<>();
 
     @Builder
     public SunnyRide(Long id, String createdBy, String modifiedBy, String name, boolean isAm, String comment, String time) {
@@ -35,13 +37,13 @@ public class SunnyRide extends BaseEntity {
         this.time = time;
     }
 
-    public void addChildRide(ChildRide childRide) {
-        this.childRideList.add(childRide);
-        childRide.setSunnyRide(this);
+    public void addMeetingLocation(MeetingLocation meetingLocation) {
+        this.meetingLocationList.add(meetingLocation);
+        meetingLocation.setSunnyRide(this);
     }
 
-    public void removeChildRide(ChildRide childRide) {
-        this.childRideList.remove(childRide);
-        childRide.setSunnyRide(null);
+    public void removeMeetingLoaction(MeetingLocation meetingLocation) {
+        this.meetingLocationList.remove(meetingLocation);
+        meetingLocation.setSunnyRide(null);
     }
 }
