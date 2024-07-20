@@ -17,8 +17,8 @@ public class MeetingLocationDto {
     private Long id;
     private String name;
     private String time;
-    private Long sunnyRideId;
-    private List<ChildRideDto> sunnyChildRideList = new ArrayList<>();
+    private SunnyRideDto sunnyRide;
+    private List<ChildRideDto> childRideList = new ArrayList<>();
 
     public MeetingLocationDto(MeetingLocation meetingLocation) {
         this.id = meetingLocation.getId();

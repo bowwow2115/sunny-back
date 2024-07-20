@@ -32,7 +32,7 @@ public class MeetingLocationServiceImpl implements MeetingLoactionService {
     @Override
     public MeetingLocationDto create(MeetingLocationDto object) {
         MeetingLocation meetingLocation = object.toEntity();
-        SunnyRide sunnyRide = sunnyRideRepository.findById(object.getSunnyRideId())
+        SunnyRide sunnyRide = sunnyRideRepository.findById(object.getSunnyRide().getId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.ENTITY_NOT_FOUND, "등록하려는 차량의 정보가 존재하지 않습니다."));
         meetingLocation.addSunnyRide(sunnyRide);
         return new MeetingLocationDto(meetingLoactionRepository.save(meetingLocation));
