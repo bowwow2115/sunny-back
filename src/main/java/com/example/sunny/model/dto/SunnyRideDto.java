@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @Builder
@@ -16,6 +18,7 @@ public class SunnyRideDto {
     private boolean isAm;
     private String comment;
     private String time;
+    private List<MeetingLocationDto> meetingLocationDtoList;
     public SunnyRideDto(SunnyRide childRide) {
         this.id = childRide.getId();
         this.name = childRide.getName();

@@ -1,10 +1,8 @@
 package com.example.sunny;
 
 import com.example.sunny.code.SunnyCode;
-import com.example.sunny.model.MeetingLocation;
 import com.example.sunny.model.dto.*;
 import com.example.sunny.model.embedded.Address;
-import com.example.sunny.repository.MeetingLoactionRepository;
 import com.example.sunny.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -206,14 +204,22 @@ public class BootstrapData implements CommandLineRunner {
         List<MeetingLocationDto> amMeetingLocationList = new ArrayList<>();
         List<MeetingLocationDto> pmMeetingLocationList = new ArrayList<>();
         //집결장소 생성
-        for(int i=0; i<= koreanPlaces.length/2; i++) {
-            MeetingLocationDto meetingLocationDto = MeetingLocationDto.builder()
-                    .time(amRideTimes[i])
-                    .name(koreanPlaces[i])
-                    .sunnyRide(amRideList.get(i % amRideList.size()))
-                    .build();
-            amMeetingLocationList.add(meetingLoactionService.create(meetingLocationDto));
-//            if(i % 2 == 1)
+        for(int i=0; i< koreanPlaces.length; i++) {
+            if(i%2 == 1) {
+                MeetingLocationDto meetingLocationDto = MeetingLocationDto.builder()
+                        .time(amRideTimes[i])
+                        .name(koreanPlaces[i])
+                        .sunnyRide(amRideList.get(i % amRideList.size()))
+                        .build();
+                amMeetingLocationList.add(meetingLoactionService.create(meetingLocationDto));
+            } else {
+                MeetingLocationDto meetingLocationDto = MeetingLocationDto.builder()
+                        .time(pmRideTimes[i])
+                        .name(koreanPlaces[i])
+                        .sunnyRide(pmRideList.get(i % pmRideList.size()))
+                        .build();
+                pmMeetingLocationList.add(meetingLoactionService.create(meetingLocationDto));
+            }
         }
 
         //반생성
@@ -279,14 +285,12 @@ public class BootstrapData implements CommandLineRunner {
             ChildRideDto sunnyChildRideAm = ChildRideDto.builder()
 //                    .time(amRideTimes[i])
                     .comment(amComments[i])
-                    .meetingLocation()
-                    .sunnyRide(amRideList.get(i % amRideList.size()))
+                    .meetingLocation(amMeetingLocationList.get(i % amMeetingLocationList.size()))
                     .build();
 
             ChildRideDto sunnyChildRidePm = ChildRideDto.builder()
-                    .time(pmRideTimes[i])
                     .comment(pmComments[i])
-                    .sunnyRide(pmRideList.get(i % pmRideList.size()))
+                    .meetingLocation(pmMeetingLocationList.get(i % pmMeetingLocationList.size()))
                     .build();
 
             // ChildDto에 승차 정보 설정
