@@ -1,7 +1,5 @@
 package com.example.sunny.controller;
 
-import com.example.sunny.config.error.BusinessException;
-import com.example.sunny.config.error.ErrorCode;
 import com.example.sunny.model.dto.ChildDto;
 import com.example.sunny.model.dto.ChildRideDto;
 import com.example.sunny.service.ChildRideService;
@@ -36,11 +34,11 @@ public class ChildRideController extends BasicController {
     public ResponseEntity<Map<String, Object>> addChildRide(@RequestBody ChildRideDto childRideDto) {
         ChildDto childDto = childService.findById(childRideDto.getChild().getId());
         //차량정보 존재확인
-        if(childDto.getAmRide() != null && childRideDto.getSunnyRide() != null) {
-            if(childRideDto.getSunnyRide().isAm()) throw new BusinessException(ErrorCode.DATAALREDAYEXISTS, "차량정보가 이미 등록되어있습니다.");
-        } else if(childDto.getPmRide() != null && childRideDto.getSunnyRide() != null) {
-            if(!childRideDto.getSunnyRide().isAm()) throw new BusinessException(ErrorCode.DATAALREDAYEXISTS, "차량정보가 이미 등록되어있습니다.");
-        }
+//        if(childDto.getAmRide() != null && childRideDto.getMeetingLocation() != null) {
+//            if(childRideDto.getMeetingLocation().getSunnyRide().isAm()) throw new BusinessException(ErrorCode.DATAALREDAYEXISTS, "차량정보가 이미 등록되어있습니다.");
+//        } else if(childDto.getPmRide() != null && childRideDto.getSunnyRide() != null) {
+//            if(!childRideDto.getSunnyRide().isAm()) throw new BusinessException(ErrorCode.DATAALREDAYEXISTS, "차량정보가 이미 등록되어있습니다.");
+//        }
         return createResponse(childRideService.create(childRideDto));
     }
 

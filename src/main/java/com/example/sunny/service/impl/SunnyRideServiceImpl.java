@@ -9,6 +9,7 @@ import com.example.sunny.service.SunnyRideService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,25 +56,29 @@ public class SunnyRideServiceImpl implements SunnyRideService {
 
     private SunnyRideDto addJoinData(SunnyRideDto sunnyRideDto, SunnyRide result) {
 
-        if (result.getChildRideList() != null && result.getChildRideList().size() != 0) {
-            List<ChildRideDto> childRideDtoList = result.getChildRideList().stream()
+        if (result.getMeetingLocationList() != null && result.getMeetingLocationList().size() != 0) {
+            List<MeetingLocationDto> meetingLocationDtoList = result.getMeetingLocationList().stream()
                     .map((item) -> {
-                            ChildDto childDto = new ChildDto(item.getChild());
-                            childDto.setParentList(
-                                    item.getChild().getParentList().stream().map( (parents) ->
-                                            new ParentsDto(parents)
-                                    ).collect(Collectors.toList()));
-                             return ChildRideDto.builder()
-                                        .id(item.getId())
-                                        .comment(item.getComment())
-                                        .meetingLocation(new MeetingLocationDto(item.getMeetingLocation()))
-                                        .child(childDto)
-                                        .build();
-                            }
-                    )
-//                    .sorted(Comparator.comparing(ChildRideDto::getMeetingLocation))
+                        MeetingLocationDto meetingLocationDto = new MeetingLocationDto(item);
+                        //MeetingLocaiotn(집결지)에 원아리스트 매핑
+                        List<ChildRideDto> childRideDtoList = item.getChildRideList().stream()
+                                .map((childRide) -> {
+                                    ChildRideDto childRideDto = new ChildRideDto(childRide);
+                                    ChildDto childDto = new ChildDto(childRide.getChild());
+                                    //Child에 ParentsList 매핑
+                                    childDto.setParentList(childRide.getChild().getParentList().stream()
+                                            .map((parents -> new ParentsDto(parents)))
+                                            .collect(Collectors.toList()));
+                                    childRideDto.setChild(childDto);
+                                    return childRideDto;
+                                })
+                                .collect(Collectors.toList());
+                        meetingLocationDto.setChildRideList(childRideDtoList);
+                        return meetingLocationDto;
+                    })
+                    .sorted(Comparator.comparing(MeetingLocationDto::getTime))
                     .collect(Collectors.toList());
-            sunnyRideDto.setSunnyChildRideList(childRideDtoList);
+            sunnyRideDto.setMeetingLocationDtoList(meetingLocationDtoList);
         }
         return sunnyRideDto;
     }

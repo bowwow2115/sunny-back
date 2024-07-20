@@ -24,7 +24,7 @@ public class SunnyRide extends BaseEntity {
     @Column(name = "time")
     private String time;
 
-    @OneToMany(mappedBy = "sunnyRide", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "sunnyRide", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @Setter
     private List<MeetingLocation> meetingLocationList = new ArrayList<>();
 
