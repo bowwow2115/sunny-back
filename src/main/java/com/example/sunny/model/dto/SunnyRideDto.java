@@ -18,7 +18,7 @@ public class SunnyRideDto {
     private boolean isAm;
     private String comment;
     private String time;
-    private List<MeetingLocationDto> meetingLocationDtoList;
+    private List<MeetingLocationDto> meetingLocationList;
     public SunnyRideDto(SunnyRide childRide) {
         this.id = childRide.getId();
         this.name = childRide.getName();

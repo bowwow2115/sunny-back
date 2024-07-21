@@ -78,7 +78,7 @@ public class SunnyRideServiceImpl implements SunnyRideService {
                     })
                     .sorted(Comparator.comparing(MeetingLocationDto::getTime))
                     .collect(Collectors.toList());
-            sunnyRideDto.setMeetingLocationDtoList(meetingLocationDtoList);
+            sunnyRideDto.setMeetingLocationList(meetingLocationDtoList);
         }
         return sunnyRideDto;
     }
