@@ -23,8 +23,7 @@ public class ChildDto {
     private LocalDate birthday;
     private boolean status;
     private String name;
-    private ChildRideDto amRide;
-    private ChildRideDto pmRide;
+    private List<ChildRideDto> rideList = new ArrayList<>();
     private List<ParentsDto> parentList = new ArrayList<>();
 
 

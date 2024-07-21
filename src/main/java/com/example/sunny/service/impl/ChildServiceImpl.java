@@ -15,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,16 +39,19 @@ public class ChildServiceImpl implements ChildService {
     public Map getUnRidedChildren() {
         List<ChildDto> childList = this.findAll();
         Map resultMap = new HashMap();
-        List<ChildDto> amChildList = new ArrayList<>();
-        List<ChildDto> pmChildList = new ArrayList<>();
-
-        childList.forEach((item) -> {
-            if(item.getAmRide()==null) amChildList.add(item);
-            if(item.getPmRide()==null) pmChildList.add(item);
-        });
-
-        resultMap.put("amChildList", amChildList);
-        resultMap.put("pmChildList", pmChildList);
+//        List<ChildDto> amChildList = new ArrayList<>();
+//        List<ChildDto> pmChildList = new ArrayList<>();
+//
+//        childList.forEach((item) -> {
+//            item.getRideList().stream().forEach((item) -> {
+//                if()item.getMeetingLocation().getSunnyRide().isAm()
+//            })
+//            if(item.getAmRide()==null) amChildList.add(item);
+//            if(item.getPmRide()==null) pmChildList.add(item);
+//        });
+//
+//        resultMap.put("amChildList", amChildList);
+//        resultMap.put("pmChildList", pmChildList);
         return resultMap;
     }
 
@@ -83,22 +85,16 @@ public class ChildServiceImpl implements ChildService {
         //등록된 차량인지 확인
         MeetingLocation amRide = null;
         MeetingLocation pmRide = null;
-        if (object.getAmRide() != null) {
-            amRide = meetingLoactionRepository.findById(object.getAmRide().getMeetingLocation().getId()).orElseThrow(
-                    () -> new BusinessException(ErrorCode.INVALID_INPUT_VALUE, "선택한 차량이 존재하지 않습니다."));
-            ChildRide childRide = new ChildRide();
-            childRide.setMeetingLocation(amRide);
-            childRide.setComment(object.getAmRide().getComment());
-            child.addRide(childRide);
-        }
-        if (object.getPmRide() != null) {
-            pmRide = meetingLoactionRepository.findById(object.getPmRide().getMeetingLocation().getId()).orElseThrow(
-                    () -> new BusinessException(ErrorCode.INVALID_INPUT_VALUE, "선택한 차량이 존재하지 않습니다."));
-            ChildRide childRide = new ChildRide();
-            childRide.setMeetingLocation(pmRide);
-            childRide.setComment(object.getPmRide().getComment());
-            child.addRide(childRide);
-        }
+        object.getRideList().stream()
+                .forEach((item) -> {
+                    MeetingLocation meetingLocation = meetingLoactionRepository.findById(item.getMeetingLocation().getId()).orElseThrow(
+                            () -> new BusinessException(ErrorCode.INVALID_INPUT_VALUE, "선택한 차량이 존재하지 않습니다."));
+                    ChildRide childRide = new ChildRide();
+                            childRide.setMeetingLocation(meetingLocation);
+                            childRide.setComment(item.getComment());
+                            child.addRide(childRide);
+                        }
+                );
 
         Child result = childRepository.save(child);
         ChildDto childDto = new ChildDto(result);
@@ -133,32 +129,14 @@ public class ChildServiceImpl implements ChildService {
 
         if(result.getChildRideList() != null && result.getChildRideList().size() != 0) {
             result.getChildRideList().stream()
-                    .filter((item) -> item.getMeetingLocation().getSunnyRide().isAm())
-                    .findAny()
-                    .ifPresent((item) -> {
-                        MeetingLocationDto meetingLocationDto = new MeetingLocationDto(item.getMeetingLocation());
-                        meetingLocationDto.setSunnyRide( new SunnyRideDto(item.getMeetingLocation().getSunnyRide()));
-                        childDto.setAmRide(ChildRideDto.builder()
-                                .comment(item.getComment())
-                                .meetingLocation(meetingLocationDto)
-                                .id(item.getId())
-                                .build()
-                        );
-                    });
-
-            result.getChildRideList().stream()
-                    .filter((item) -> !item.getMeetingLocation().getSunnyRide().isAm())
-                    .findAny()
-                    .ifPresent((item) -> {
-                        MeetingLocationDto meetingLocationDto = new MeetingLocationDto(item.getMeetingLocation());
-                        meetingLocationDto.setSunnyRide( new SunnyRideDto(item.getMeetingLocation().getSunnyRide()));
-                        childDto.setAmRide(ChildRideDto.builder()
-                                .comment(item.getComment())
-                                .meetingLocation(meetingLocationDto)
-                                .id(item.getId())
-                                .build()
-                        );
-                    });
+                        .map((item) -> {
+                            MeetingLocationDto meetingLocationDto = new MeetingLocationDto(item.getMeetingLocation());
+                            meetingLocationDto.setSunnyRide(new SunnyRideDto(item.getMeetingLocation().getSunnyRide()));
+                            ChildRideDto childRideDto = new ChildRideDto(item);
+                            childRideDto.setMeetingLocation(meetingLocationDto);
+                            return childRideDto;
+                        })
+                        .collect(Collectors.toList());
         }
         return childDto;
     }

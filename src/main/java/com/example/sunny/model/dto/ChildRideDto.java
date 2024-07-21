@@ -18,7 +18,7 @@ public class ChildRideDto {
     private MeetingLocationDto meetingLocation;
 
     public ChildRideDto(ChildRide childRide) {
-        this.id = child.getId();
+        this.id = childRide.getId();
         this.comment = childRide.getComment();
     }
 }
