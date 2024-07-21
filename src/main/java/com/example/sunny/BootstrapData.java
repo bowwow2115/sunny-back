@@ -63,22 +63,6 @@ public class BootstrapData implements CommandLineRunner {
                 "17:15", "17:25", "17:35", "17:45", "17:55",
                 "16:02", "16:12", "16:22", "16:32", "16:42"
         };
-        String[] amComments = {
-                "계단 옆", "정문 앞", "놀이터 옆", "후문", "매점 앞",
-                "교문 옆", "학교 앞", "은행 앞", "가게 앞", "편의점 옆",
-                "슈퍼마켓 앞", "약국 옆", "서점 앞", "카페 옆", "식당 앞",
-                "역 앞", "버스 정류장 옆", "택시 승강장 옆", "공원 옆", "도서관 앞",
-                "체육관 옆", "수영장 옆", "공연장 앞", "영화관 옆", "백화점 앞",
-                "아파트 앞", "빌라 앞", "주택 앞", "공원 정문", "학교 후문"
-        };
-        String[] pmComments = {
-                "아파트 뒷문", "가게 앞", "주차장 옆", "놀이터 옆", "후문",
-                "매점 앞", "교문 옆", "학교 앞", "은행 앞", "편의점 옆",
-                "슈퍼마켓 앞", "약국 옆", "서점 앞", "카페 옆", "식당 앞",
-                "역 앞", "버스 정류장 옆", "택시 승강장 옆", "공원 옆", "도서관 앞",
-                "체육관 옆", "수영장 옆", "공연장 앞", "영화관 옆", "백화점 앞",
-                "아파트 앞", "빌라 앞", "주택 앞", "공원 정문", "학교 후문"
-        };
         String[] addresses = {
                 "서울시 종로구", "서울시 강남구", "서울시 서초구", "서울시 마포구", "서울시 은평구",
                 "서울시 동대문구", "서울시 성북구", "서울시 동작구", "서울시 관악구", "서울시 송파구",
@@ -284,24 +268,22 @@ public class BootstrapData implements CommandLineRunner {
                     .status(true)
                     .name(childName)
                     .parentList(parentsDtoList)
-                    .rideList(new ArrayList<>())
+                    .childRideList(new ArrayList<>())
                     .build();
 
             // ChildRideDto 초기화
             ChildRideDto sunnyChildRideAm = ChildRideDto.builder()
 //                    .time(amRideTimes[i])
-                    .comment(amComments[i])
                     .meetingLocation(amMeetingLocationList.get(i % amMeetingLocationList.size()))
                     .build();
 
             ChildRideDto sunnyChildRidePm = ChildRideDto.builder()
-                    .comment(pmComments[i])
                     .meetingLocation(pmMeetingLocationList.get(i % pmMeetingLocationList.size()))
                     .build();
 
             // ChildDto에 승차 정보 설정
-            childDto.getRideList().add(sunnyChildRideAm);
-            childDto.getRideList().add(sunnyChildRidePm);
+            childDto.getChildRideList().add(sunnyChildRideAm);
+            childDto.getChildRideList().add(sunnyChildRidePm);
 
             // ChildDto 생성 및 리스트에 추가
             ChildDto child = childService.create(childDto);
