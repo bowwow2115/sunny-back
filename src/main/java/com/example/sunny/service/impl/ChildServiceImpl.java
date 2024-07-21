@@ -83,18 +83,17 @@ public class ChildServiceImpl implements ChildService {
             }
         }
         //등록된 차량인지 확인
-        MeetingLocation amRide = null;
-        MeetingLocation pmRide = null;
-        object.getRideList().stream()
-                .forEach((item) -> {
-                    MeetingLocation meetingLocation = meetingLoactionRepository.findById(item.getMeetingLocation().getId()).orElseThrow(
-                            () -> new BusinessException(ErrorCode.INVALID_INPUT_VALUE, "선택한 차량이 존재하지 않습니다."));
-                    ChildRide childRide = new ChildRide();
-                            childRide.setMeetingLocation(meetingLocation);
-                            childRide.setComment(item.getComment());
-                            child.addRide(childRide);
-                        }
-                );
+        if(object.getChildRideList() != null)
+            object.getChildRideList().stream()
+                    .forEach((item) -> {
+                        MeetingLocation meetingLocation = meetingLoactionRepository.findById(item.getMeetingLocation().getId()).orElseThrow(
+                                () -> new BusinessException(ErrorCode.INVALID_INPUT_VALUE, "선택한 차량이 존재하지 않습니다."));
+                        ChildRide childRide = new ChildRide();
+                                childRide.setMeetingLocation(meetingLocation);
+                                childRide.setComment(item.getComment());
+                                child.addRide(childRide);
+                            }
+                    );
 
         Child result = childRepository.save(child);
         ChildDto childDto = new ChildDto(result);
@@ -128,15 +127,16 @@ public class ChildServiceImpl implements ChildService {
                     .collect(Collectors.toList()));
 
         if(result.getChildRideList() != null && result.getChildRideList().size() != 0) {
-            result.getChildRideList().stream()
-                        .map((item) -> {
-                            MeetingLocationDto meetingLocationDto = new MeetingLocationDto(item.getMeetingLocation());
-                            meetingLocationDto.setSunnyRide(new SunnyRideDto(item.getMeetingLocation().getSunnyRide()));
-                            ChildRideDto childRideDto = new ChildRideDto(item);
-                            childRideDto.setMeetingLocation(meetingLocationDto);
-                            return childRideDto;
-                        })
-                        .collect(Collectors.toList());
+            List<ChildRideDto> childRideDtoList = result.getChildRideList().stream()
+                    .map((item) -> {
+                        MeetingLocationDto meetingLocationDto = new MeetingLocationDto(item.getMeetingLocation());
+                        meetingLocationDto.setSunnyRide(new SunnyRideDto(item.getMeetingLocation().getSunnyRide()));
+                        ChildRideDto childRideDto = new ChildRideDto(item);
+                        childRideDto.setMeetingLocation(meetingLocationDto);
+                        return childRideDto;
+                    })
+                    .collect(Collectors.toList());
+            childDto.setChildRideList(childRideDtoList);
         }
         return childDto;
     }
