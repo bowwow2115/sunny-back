@@ -209,16 +209,21 @@ public class BootstrapData implements CommandLineRunner {
                 MeetingLocationDto meetingLocationDto = MeetingLocationDto.builder()
                         .time(amRideTimes[i])
                         .name(koreanPlaces[i])
-                        .sunnyRide(amRideList.get(i % amRideList.size()))
+                        .sunnyRide(amRideList.get(random.nextInt(amRideList.size())))
                         .build();
-                amMeetingLocationList.add(meetingLoactionService.create(meetingLocationDto));
+                MeetingLocationDto result = meetingLoactionService.create(meetingLocationDto);
+                if(result != null) log.info("오전 집결장소 생성");
+                amMeetingLocationList.add(result);
             } else {
                 MeetingLocationDto meetingLocationDto = MeetingLocationDto.builder()
                         .time(pmRideTimes[i])
                         .name(koreanPlaces[i])
-                        .sunnyRide(pmRideList.get(i % pmRideList.size()))
+                        .sunnyRide(pmRideList.get(random.nextInt(pmRideList.size())))
                         .build();
-                pmMeetingLocationList.add(meetingLoactionService.create(meetingLocationDto));
+                MeetingLocationDto result = meetingLoactionService.create(meetingLocationDto);
+                if(result != null) log.info("오후 집결장소 생성");
+
+                pmMeetingLocationList.add(result);
             }
         }
 
@@ -279,6 +284,7 @@ public class BootstrapData implements CommandLineRunner {
                     .status(true)
                     .name(childName)
                     .parentList(parentsDtoList)
+                    .rideList(new ArrayList<>())
                     .build();
 
             // ChildRideDto 초기화
@@ -294,8 +300,8 @@ public class BootstrapData implements CommandLineRunner {
                     .build();
 
             // ChildDto에 승차 정보 설정
-            childDto.setAmRide(sunnyChildRideAm);
-            childDto.setPmRide(sunnyChildRidePm);
+            childDto.getRideList().add(sunnyChildRideAm);
+            childDto.getRideList().add(sunnyChildRidePm);
 
             // ChildDto 생성 및 리스트에 추가
             ChildDto child = childService.create(childDto);
