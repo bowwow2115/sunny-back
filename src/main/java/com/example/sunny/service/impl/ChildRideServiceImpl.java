@@ -8,6 +8,7 @@ import com.example.sunny.model.MeetingLocation;
 import com.example.sunny.model.dto.ChildDto;
 import com.example.sunny.model.dto.ChildRideDto;
 import com.example.sunny.model.dto.MeetingLocationDto;
+import com.example.sunny.model.dto.SunnyRideDto;
 import com.example.sunny.repository.ChildRepository;
 import com.example.sunny.repository.ChildRideRepository;
 import com.example.sunny.repository.MeetingLoactionRepository;
@@ -50,8 +51,14 @@ public class ChildRideServiceImpl implements ChildRideService {
 
         ChildRide result = childRideRepository.save(childRide);
 
+        //MeetingLoaction 하위 SunnyRide 정보 추가 매핑
+        MeetingLocationDto meetingLocationDto = new MeetingLocationDto(result.getMeetingLocation());
+        SunnyRideDto sunnyRideDto = new SunnyRideDto(result.getMeetingLocation().getSunnyRide());
+        meetingLocationDto.setSunnyRide( sunnyRideDto);
+
+
         return ChildRideDto.builder()
-                .meetingLocation(new MeetingLocationDto(result.getMeetingLocation()))
+                .meetingLocation(meetingLocationDto)
                 .child(new ChildDto(result.getChild()))
                 .id(result.getId())
                 .comment(result.getComment())
@@ -75,8 +82,13 @@ public class ChildRideServiceImpl implements ChildRideService {
 
         ChildRide result = childRideRepository.save(childRide);
 
+        //MeetingLoaction 하위 SunnyRide 정보 추가 매핑
+        MeetingLocationDto meetingLocationDto = new MeetingLocationDto(result.getMeetingLocation());
+        SunnyRideDto sunnyRideDto = new SunnyRideDto(result.getMeetingLocation().getSunnyRide());
+        meetingLocationDto.setSunnyRide( sunnyRideDto);
+
         return ChildRideDto.builder()
-                .meetingLocation(new MeetingLocationDto(result.getMeetingLocation()))
+                .meetingLocation(meetingLocationDto)
                 .child(new ChildDto(result.getChild()))
                 .id(result.getId())
                 .comment(result.getComment())
