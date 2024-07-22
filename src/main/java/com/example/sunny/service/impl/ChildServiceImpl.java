@@ -129,8 +129,18 @@ public class ChildServiceImpl implements ChildService {
         if(result.getChildRideList() != null && result.getChildRideList().size() != 0) {
             List<ChildRideDto> childRideDtoList = result.getChildRideList().stream()
                     .map((item) -> {
+                        //
                         MeetingLocationDto meetingLocationDto = new MeetingLocationDto(item.getMeetingLocation());
-                        meetingLocationDto.setSunnyRide(new SunnyRideDto(item.getMeetingLocation().getSunnyRide()));
+                        
+                        //result에서 하위 값들 꺼낸 후 입력
+                        SunnyRideDto sunnyRideDto = new SunnyRideDto(item.getMeetingLocation().getSunnyRide());
+                        List<MeetingLocation> meetingLocationList = item.getMeetingLocation().getSunnyRide().getMeetingLocationList();
+                        List<MeetingLocationDto> meetingLocationDtoList = meetingLocationList.stream()
+                                .map((meetingLocation) -> new MeetingLocationDto(meetingLocation))
+                                .collect(Collectors.toList());
+                        sunnyRideDto.setMeetingLocationList(meetingLocationDtoList);
+                        
+                        meetingLocationDto.setSunnyRide(sunnyRideDto);
                         ChildRideDto childRideDto = new ChildRideDto(item);
                         childRideDto.setMeetingLocation(meetingLocationDto);
                         return childRideDto;
