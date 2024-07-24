@@ -24,6 +24,7 @@ public class MeetingLocation extends BaseEntity{
     private SunnyRide sunnyRide;
 
     @OneToMany(mappedBy = "meetingLocation", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Setter
     private List<ChildRide> childRideList = new ArrayList<>();
 
     @Builder

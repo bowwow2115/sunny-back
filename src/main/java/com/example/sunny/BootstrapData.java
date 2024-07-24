@@ -89,16 +89,26 @@ public class BootstrapData implements CommandLineRunner {
         };
 
         String[] koreanPlaces = {
-                "서울특별시 강남구 대치고등학교",
-                "서울특별시 서초구 서초고등학교",
-                "서울특별시 용산구 용산고등학교",
-                "서울특별시 마포구 마포고등학교",
-                "서울특별시 중구 서울역",
-                "서울특별시 강남구 강남역",
-                "서울특별시 동대문구 청량리역",
-                "서울특별시 강서구 화곡고등학교",
-                "서울특별시 노원구 중계고등학교",
-                "서울특별시 송파구 잠실역"
+                "김포공항",
+                "롯데몰 김포공항점",
+                "방화근린공원",
+                "화곡본동 주민센터",
+                "마곡나루역",
+                "등촌역",
+                "가양역",
+                "발산역",
+                "우장산역",
+                "화곡역",
+                "강서구청",
+                "화곡동 시장",
+                "염창동 한강공원",
+                "등촌동 주민센터",
+                "가양1동 주민센터",
+                "공항동 주민센터",
+                "염창중학교",
+                "방화동 롯데시네마",
+                "가양도서관",
+                "마곡중학교"
         };
 
         String[][] parentNames = {
@@ -140,7 +150,7 @@ public class BootstrapData implements CommandLineRunner {
 
         SunnyRideDto sunnyRideAm = SunnyRideDto.builder()
                 .comment("비고사항: ~~~")
-                .name("사우동 방향 버스")
+                .name("김포 방향 버스")
                 .time("09:00")
                 .isAm(true)
                 .build();
@@ -151,7 +161,7 @@ public class BootstrapData implements CommandLineRunner {
 
         sunnyRideAm = SunnyRideDto.builder()
                 .comment("비고사항: ~~~")
-                .name("인천방향 봉고")
+                .name("서울 방향 봉고")
                 .time("09:10")
                 .isAm(true)
                 .build();
@@ -165,7 +175,7 @@ public class BootstrapData implements CommandLineRunner {
         
         SunnyRideDto sunnyRidePm = SunnyRideDto.builder()
                 .comment("비고사항: ~~~")
-                .name("사우동 방향 버스")
+                .name("서울 방향 버스")
                 .time("16:00")
                 .isAm(false)
                 .build();
@@ -176,7 +186,7 @@ public class BootstrapData implements CommandLineRunner {
 
         sunnyRidePm = SunnyRideDto.builder()
                 .comment("비고사항: ~~~")
-                .name("풍무동 방향 봉고")
+                .name("김포 방향 봉고")
                 .time("16:30")
                 .isAm(false)
                 .build();
