@@ -40,7 +40,8 @@ public class MeetingLocationServiceImpl implements MeetingLoactionService {
 
     @Override
     public MeetingLocationDto update(MeetingLocationDto object) {
-        return null;
+        MeetingLocation meetingLocation = object.toEntity();
+        return new MeetingLocationDto(meetingLoactionRepository.save(meetingLocation));
     }
 
     @Override
