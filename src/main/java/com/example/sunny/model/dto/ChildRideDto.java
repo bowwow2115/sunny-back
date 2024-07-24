@@ -21,4 +21,11 @@ public class ChildRideDto {
         this.id = childRide.getId();
         this.comment = childRide.getComment();
     }
+
+    public ChildRide toEntity() {
+        return ChildRide.builder()
+                .id(id)
+                .comment(comment)
+                .build();
+    }
 }
