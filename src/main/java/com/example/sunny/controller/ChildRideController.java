@@ -1,6 +1,5 @@
 package com.example.sunny.controller;
 
-import com.example.sunny.model.dto.ChildDto;
 import com.example.sunny.model.dto.ChildRideDto;
 import com.example.sunny.service.ChildRideService;
 import com.example.sunny.service.ChildService;
@@ -9,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -32,14 +33,14 @@ public class ChildRideController extends BasicController {
 
     @PostMapping
     public ResponseEntity<Map<String, Object>> addChildRide(@RequestBody ChildRideDto childRideDto) {
-        ChildDto childDto = childService.findById(childRideDto.getChild().getId());
-        //차량정보 존재확인
-//        if(childDto.getAmRide() != null && childRideDto.getMeetingLocation() != null) {
-//            if(childRideDto.getMeetingLocation().getSunnyRide().isAm()) throw new BusinessException(ErrorCode.DATAALREDAYEXISTS, "차량정보가 이미 등록되어있습니다.");
-//        } else if(childDto.getPmRide() != null && childRideDto.getSunnyRide() != null) {
-//            if(!childRideDto.getSunnyRide().isAm()) throw new BusinessException(ErrorCode.DATAALREDAYEXISTS, "차량정보가 이미 등록되어있습니다.");
-//        }
         return createResponse(childRideService.create(childRideDto));
     }
 
+    @PostMapping("/list")
+    public ResponseEntity<Map<String, Object>> addChildRideList(@RequestBody List<ChildRideDto> childRideDtoList) {
+        List<ChildRideDto> resultList = new ArrayList<>();
+        for (ChildRideDto childRideDto : childRideDtoList)
+            resultList.add(childRideService.create(childRideDto));
+        return createResponse(resultList);
+    }
 }
