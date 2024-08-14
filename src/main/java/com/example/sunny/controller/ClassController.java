@@ -27,8 +27,8 @@ public class ClassController extends BasicController {
     }
 
     @DeleteMapping
-    public  ResponseEntity<Map<String, Object>> deelteClass(@RequestBody SunnyClassDto sunnyClass) {
-        sunnyClassServcie.delete(sunnyClass);
+    public  ResponseEntity<Map<String, Object>> deleteClass(@RequestParam(value = "id") Long id) {
+        sunnyClassServcie.deleteById(id);
         return createResponse();
     }
 
