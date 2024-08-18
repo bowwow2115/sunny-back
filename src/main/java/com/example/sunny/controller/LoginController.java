@@ -4,10 +4,8 @@ import com.example.sunny.config.error.BusinessException;
 import com.example.sunny.config.error.ErrorCode;
 import com.example.sunny.config.jwt.JwtTokenUtil;
 import com.example.sunny.model.User;
-import com.example.sunny.model.dto.UserDto;
 import com.example.sunny.service.AuthUserDetailsService;
 import com.example.sunny.service.UserService;
-import com.example.sunny.util.StringUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -72,12 +70,12 @@ public class LoginController extends BasicController {
         return createResponse(result);
     }
 
-    @PostMapping("/user")
-    public ResponseEntity<Map<String, Object>> addUser(@RequestBody UserDto userDto) {
-        if(StringUtil.isEmpty(userDto.getUserId()) || StringUtil.isEmpty(userDto.getPassword()) || StringUtil.isEmpty(userDto.getUserName())
-                || StringUtil.isEmpty(userDto.getTelephone()) || StringUtil.isEmpty(userDto.getEmail()))
-            throw new BusinessException(ErrorCode.INVALID_INPUT_VALUE);
-        return createResponse(userService.create(userDto));
-    }
+//    @PostMapping("/user")
+//    public ResponseEntity<Map<String, Object>> addUser(@RequestBody UserDto userDto) {
+//        if(StringUtil.isEmpty(userDto.getUserId()) || StringUtil.isEmpty(userDto.getPassword()) || StringUtil.isEmpty(userDto.getUserName())
+//                || StringUtil.isEmpty(userDto.getTelephone()) || StringUtil.isEmpty(userDto.getEmail()))
+//            throw new BusinessException(ErrorCode.INVALID_INPUT_VALUE);
+//        return createResponse(userService.create(userDto));
+//    }
 
 }

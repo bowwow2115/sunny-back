@@ -54,6 +54,6 @@ public class MeetingLocationServiceImpl implements MeetingLoactionService {
 
     @Override
     public void deleteById(Long aLong) {
-
+        meetingLoactionRepository.deleteById(aLong);
     }
 }
