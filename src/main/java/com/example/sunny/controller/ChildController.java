@@ -43,4 +43,10 @@ public class ChildController extends BasicController {
     public ResponseEntity<Map<String, Object>> editChild(@RequestBody ChildDto child) {
         return addChild(child);
     }
+
+    @DeleteMapping
+    public ResponseEntity<Map<String, Object>> deleteChild(@RequestParam Long id) {
+        childService.deleteById(id);
+        return createResponse();
+    }
 }
