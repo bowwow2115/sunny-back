@@ -28,7 +28,7 @@ public class RideController extends BasicController{
 
     @PutMapping
     public ResponseEntity<Map<String, Object>> updateRide(@RequestBody SunnyRideDto sunnyRideDto) {
-        return createResponse(sunnyRideService.create(sunnyRideDto));
+        return createResponse(sunnyRideService.update(sunnyRideDto));
     }
 
     @DeleteMapping
