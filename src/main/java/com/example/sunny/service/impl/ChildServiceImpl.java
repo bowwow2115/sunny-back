@@ -86,7 +86,10 @@ public class ChildServiceImpl implements ChildService {
         Child child = object.toEntity();
         child.setParentList(origin.getParentList());
         child.setChildRideList(origin.getChildRideList());
-        return new ChildDto(childRepository.save(child));
+
+        Child result = childRepository.save(child);
+        ChildDto childDto = new ChildDto(result);
+        return addJoinData(childDto, result);
     }
 
     @Override
