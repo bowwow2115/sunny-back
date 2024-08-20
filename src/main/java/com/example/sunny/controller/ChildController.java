@@ -24,11 +24,6 @@ public class ChildController extends BasicController {
         return createResponse(childService.findByName(name));
     }
 
-    @GetMapping("/unRided")
-    public ResponseEntity<Map<String, Object>> getUnRidedChildren() {
-        return createResponse(childService.getUnRidedChildren());
-    }
-
     @GetMapping
     public ResponseEntity<Map<String, Object>> getChildById(@RequestParam(value = "id") Long id) {
         return createResponse(childService.findById(id));

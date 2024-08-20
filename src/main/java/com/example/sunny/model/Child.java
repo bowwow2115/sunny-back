@@ -31,6 +31,7 @@ public class Child extends Person{
     @Setter
     private List<Parents> parentList = new ArrayList<>();
     @OneToMany(mappedBy = "child", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Setter
     private List<ChildRide> childRideList = new ArrayList<>();
 
     @Column(name = "status")

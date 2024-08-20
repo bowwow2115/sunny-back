@@ -16,11 +16,11 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class SunnyRideServiceImpl implements SunnyRideService {
-    private final SunnyRideRepository childRideRepository;
+    private final SunnyRideRepository sunnyRideRepository;
 
     @Override
     public List<SunnyRideDto> findAll() {
-        return childRideRepository.findAll().stream()
+        return sunnyRideRepository.findAll().stream()
                 .map((result)-> {
                     SunnyRideDto sunnyRideDto = new SunnyRideDto(result);
                     return addJoinData(sunnyRideDto, result);
@@ -30,28 +30,32 @@ public class SunnyRideServiceImpl implements SunnyRideService {
 
     @Override
     public SunnyRideDto findById(Long aLong) {
-        SunnyRide childRide = childRideRepository.findById(aLong).orElseThrow(() -> new BusinessException(ErrorCode.ENTITY_NOT_FOUND));
+        SunnyRide childRide = sunnyRideRepository.findById(aLong).orElseThrow(() -> new BusinessException(ErrorCode.ENTITY_NOT_FOUND));
         return new SunnyRideDto(childRide);
     }
 
     @Override
     public SunnyRideDto create(SunnyRideDto object) {
-        return new SunnyRideDto(childRideRepository.save(object.toEntity()));
+        return new SunnyRideDto(sunnyRideRepository.save(object.toEntity()));
     }
 
     @Override
     public SunnyRideDto update(SunnyRideDto object) {
-        return new SunnyRideDto(childRideRepository.save(object.toEntity()));
+        SunnyRide origin = sunnyRideRepository.findById(object.getId())
+                .orElseThrow(() -> new BusinessException(ErrorCode.ENTITY_NOT_FOUND, "수정하려는 차량의 정보가 존재하지 않습니다."));
+        SunnyRide sunnyRide = object.toEntity();
+        sunnyRide.setMeetingLocationList(origin.getMeetingLocationList());
+        return new SunnyRideDto(sunnyRideRepository.save(sunnyRide));
     }
 
     @Override
     public void delete(SunnyRideDto object) {
-        childRideRepository.delete(object.toEntity());
+        sunnyRideRepository.delete(object.toEntity());
     }
 
     @Override
     public void deleteById(Long aLong) {
-        childRideRepository.deleteById(aLong);
+        sunnyRideRepository.deleteById(aLong);
     }
 
     private SunnyRideDto addJoinData(SunnyRideDto sunnyRideDto, SunnyRide result) {
