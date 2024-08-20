@@ -15,9 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,26 +31,6 @@ public class ChildServiceImpl implements ChildService {
         Child result = childRepository.findByname(name);
         ChildDto childDto = new ChildDto(result);
         return addJoinData(childDto, result);
-    }
-
-    @Override
-    public Map getUnRidedChildren() {
-        List<ChildDto> childList = this.findAll();
-        Map resultMap = new HashMap();
-//        List<ChildDto> amChildList = new ArrayList<>();
-//        List<ChildDto> pmChildList = new ArrayList<>();
-//
-//        childList.forEach((item) -> {
-//            item.getRideList().stream().forEach((item) -> {
-//                if()item.getMeetingLocation().getSunnyRide().isAm()
-//            })
-//            if(item.getAmRide()==null) amChildList.add(item);
-//            if(item.getPmRide()==null) pmChildList.add(item);
-//        });
-//
-//        resultMap.put("amChildList", amChildList);
-//        resultMap.put("pmChildList", pmChildList);
-        return resultMap;
     }
 
     @Override
@@ -102,7 +80,12 @@ public class ChildServiceImpl implements ChildService {
 
     @Override
     public ChildDto update(ChildDto object) {
+        Child origin = childRepository.findById(object.getId())
+                .orElseThrow(() -> new BusinessException(ErrorCode.ENTITY_NOT_FOUND, "수정하려는 원아의 정보가 존재하지 않습니다."));
+
         Child child = object.toEntity();
+        child.setParentList(origin.getParentList());
+        child.setChildRideList(origin.getChildRideList());
         return new ChildDto(childRepository.save(child));
     }
 
