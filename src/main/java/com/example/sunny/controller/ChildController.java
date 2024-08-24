@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.Map;
 
 @RestController
@@ -43,5 +44,11 @@ public class ChildController extends BasicController {
     public ResponseEntity<Map<String, Object>> deleteChild(@RequestParam Long id) {
         childService.deleteById(id);
         return createResponse();
+    }
+
+    @GetMapping("/birth")
+    public ResponseEntity<Map<String, Object>> getBirthMonthChlid() {
+        int currentMonth = LocalDate.now().getMonthValue();
+        return createResponse(childService.findChildWithBirthMonth(currentMonth));
     }
 }
