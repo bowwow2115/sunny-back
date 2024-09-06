@@ -3,6 +3,7 @@ package com.example.sunny.controller;
 import com.example.sunny.config.error.BusinessException;
 import com.example.sunny.config.error.ErrorCode;
 import com.example.sunny.config.jwt.JwtTokenUtil;
+import com.example.sunny.model.dto.JwtDto;
 import com.example.sunny.service.AuthUserDetailsService;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -32,14 +33,11 @@ public class AuthController extends BasicController{
 
     @PostMapping("/jwt/refresh")
     public ResponseEntity<Map<String, Object>> refreshJwt(HttpServletRequest request,
-                                          @RequestParam(value="refreshToken") String refreshToken) {
-        if(refreshToken == null) throw new BusinessException(ErrorCode.INVALID_INPUT_VALUE, "invalid input - refreshJwt");
+                                          @RequestBody JwtDto jwtDto) {
+        if(jwtDto.getRefreshToken() == null) throw new BusinessException(ErrorCode.INVALID_INPUT_VALUE, "invalid input - refreshJwt");
         String userId = null;
-//        String newRefreshToken = refreshToken;
-//        String userIp=request.getRemoteAddr();
-//        boolean isExpired = false;
         try {
-            userId = jwtTokenUtil.getUsernameFromToken(refreshToken);
+            userId = jwtTokenUtil.getUsernameFromToken(jwtDto.getRefreshToken());
         } catch (IllegalArgumentException e) {
             log.info("Unable to get JWT Token");
         } catch (SignatureException | MalformedJwtException e) {
@@ -50,6 +48,7 @@ public class AuthController extends BasicController{
         }
         UserDetails userDetails = authUserDetailsService.loadUserByUsername(userId);
         String accessToken = jwtTokenUtil.generateToken(userDetails);
+        String refreshToken = jwtTokenUtil.generateRefreshToken(userDetails);
 
         List<HashMap<String, Object>> resultList= new ArrayList<HashMap<String,Object>>();
         HashMap <String,Object> result =new HashMap<>();

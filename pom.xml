@@ -76,9 +76,18 @@
 
         <dependency>
             <groupId>com.querydsl</groupId>
+            <artifactId>querydsl-core</artifactId>
+            <version>5.0.0</version>
+        </dependency>
+
+        <!-- QueryDSL JPA 의존성 -->
+        <dependency>
+            <groupId>com.querydsl</groupId>
             <artifactId>querydsl-jpa</artifactId>
             <version>5.0.0</version>
         </dependency>
+
+        <!-- QueryDSL APT 플러그인 (소스 코드 생성) -->
         <dependency>
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-apt</artifactId>
