@@ -17,6 +17,7 @@ public class MeetingLocationDto {
     private Long id;
     private String name;
     private String time;
+    private String comment;
     private SunnyRideDto sunnyRide;
     private List<ChildRideDto> childRideList = new ArrayList<>();
 
@@ -24,6 +25,7 @@ public class MeetingLocationDto {
         this.id = meetingLocation.getId();
         this.name = meetingLocation.getName();
         this.time = meetingLocation.getTime();
+        this.comment = meetingLocation.getComment();
     }
 
     public MeetingLocation toEntity() {
@@ -31,6 +33,7 @@ public class MeetingLocationDto {
                 .id(this.id)
                 .name(this.name)
                 .time(this.time)
+                .comment(this.comment)
                 .build();
     }
 }
