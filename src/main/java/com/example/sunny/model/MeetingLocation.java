@@ -18,6 +18,9 @@ public class MeetingLocation extends BaseEntity{
     @Column(name = "time")
     private String time;
 
+    @Column(name = "comment")
+    private String comment;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ride_id", updatable = false)
     @Setter
@@ -28,10 +31,11 @@ public class MeetingLocation extends BaseEntity{
     private List<ChildRide> childRideList = new ArrayList<>();
 
     @Builder
-    public MeetingLocation(Long id, String createdBy, String modifiedBy, String name, String time, SunnyRide sunnyRide) {
+    public MeetingLocation(Long id, String createdBy, String modifiedBy, String name, String time, String comment, SunnyRide sunnyRide) {
         super(id, createdBy, modifiedBy);
         this.name = name;
         this.time = time;
+        this.comment = comment;
         this.sunnyRide = sunnyRide;
     }
 
