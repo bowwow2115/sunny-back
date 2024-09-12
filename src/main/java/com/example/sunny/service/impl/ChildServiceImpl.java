@@ -68,6 +68,16 @@ public class ChildServiceImpl implements ChildService {
     }
 
     @Override
+    public List<ChildDto> checkChild(ChildDto object) {
+        return childRepository.checkChild(object.toEntity()).stream()
+                .map((result) -> {
+                    ChildDto childDto = new ChildDto(result);
+                    return addJoinData(childDto, result);
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<ChildDto> findAll() {
         return childRepository.findAll().stream()
                 .map((result)-> {

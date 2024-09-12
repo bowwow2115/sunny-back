@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface ChildRepositoryCustom {
     List<Child> findChildWithBirthMonth(int month);
+
+    List<Child> checkChild(Child child);
 }
