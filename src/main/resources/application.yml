@@ -20,6 +20,7 @@ spring:
         default_schema: sunny
     show-sql: true
     hibernate:
+      #  TODO: 배포시 수정
       ddl-auto: create-drop
 
 server:
