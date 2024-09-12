@@ -16,10 +16,20 @@ public class ChildRepositoryCustomImpl implements ChildRepositoryCustom {
 
     @Override
     public List<Child> findChildWithBirthMonth(int month) {
-        QChild child = QChild.child;
+        QChild qChild = QChild.child;
         return queryFactory
-                .selectFrom(child)
-                .where(child.birthday.month().eq(month))
+                .selectFrom(qChild)
+                .where(qChild.birthday.month().eq(month))
+                .fetch();
+    }
+
+    @Override
+    public List<Child> checkChild(Child child) {
+        QChild qChild = QChild.child;
+        return queryFactory
+                .selectFrom(qChild)
+                .where(qChild.className.eq(child.getClassName()))
+                .where(qChild.name.eq(child.getName()))
                 .fetch();
     }
 }

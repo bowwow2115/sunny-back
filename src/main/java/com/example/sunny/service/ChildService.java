@@ -11,4 +11,6 @@ public interface ChildService extends CrudService<ChildDto, Long> {
     Map getUnRidedChildren();
 
     List<ChildDto> findChildWithBirthMonth(int month);
+
+    List<ChildDto> checkChild(ChildDto childDto);
 }
