@@ -149,7 +149,7 @@ public class BootstrapData implements CommandLineRunner {
         List<SunnyRideDto> amRideList = new ArrayList<>();
 
         SunnyRideDto sunnyRideAm = SunnyRideDto.builder()
-                .comment("비고사항: ~~~")
+                .comment("~~~")
                 .name("김포 방향 버스")
                 .time("09:00")
                 .isAm(true)
@@ -160,7 +160,7 @@ public class BootstrapData implements CommandLineRunner {
         amRideList.add(amRide);
 
         sunnyRideAm = SunnyRideDto.builder()
-                .comment("비고사항: ~~~")
+                .comment("~~~")
                 .name("서울 방향 봉고")
                 .time("09:10")
                 .isAm(true)
@@ -174,7 +174,7 @@ public class BootstrapData implements CommandLineRunner {
         List<SunnyRideDto> pmRideList = new ArrayList<>();
         
         SunnyRideDto sunnyRidePm = SunnyRideDto.builder()
-                .comment("비고사항: ~~~")
+                .comment("~~~")
                 .name("서울 방향 버스")
                 .time("16:00")
                 .isAm(false)
@@ -185,7 +185,7 @@ public class BootstrapData implements CommandLineRunner {
         pmRideList.add(pmRide);
 
         sunnyRidePm = SunnyRideDto.builder()
-                .comment("비고사항: ~~~")
+                .comment("~~~")
                 .name("김포 방향 봉고")
                 .time("16:30")
                 .isAm(false)
@@ -204,6 +204,7 @@ public class BootstrapData implements CommandLineRunner {
                         .time(amRideTimes[i])
                         .name(koreanPlaces[i])
                         .sunnyRide(amRideList.get(random.nextInt(amRideList.size())))
+                        .comment("~~~")
                         .build();
                 MeetingLocationDto result = meetingLoactionService.create(meetingLocationDto);
                 if(result != null) log.info("오전 집결장소 생성");
@@ -213,6 +214,7 @@ public class BootstrapData implements CommandLineRunner {
                         .time(pmRideTimes[i])
                         .name(koreanPlaces[i])
                         .sunnyRide(pmRideList.get(random.nextInt(pmRideList.size())))
+                        .comment("~~~~")
                         .build();
                 MeetingLocationDto result = meetingLoactionService.create(meetingLocationDto);
                 if(result != null) log.info("오후 집결장소 생성");
@@ -275,7 +277,7 @@ public class BootstrapData implements CommandLineRunner {
                     .admissionDate(admissionDate)
                     .birthday(birthday)
                     .className(classNames[i % classNames.length])
-                    .status(true)
+                    .status("재원")
                     .name(childName)
                     .parentList(parentsDtoList)
                     .childRideList(new ArrayList<>())

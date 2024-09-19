@@ -1,7 +1,5 @@
 package com.example.sunny.controller;
 
-import com.example.sunny.config.error.BusinessException;
-import com.example.sunny.config.error.ErrorCode;
 import com.example.sunny.model.dto.ChildDto;
 import com.example.sunny.service.ChildService;
 import lombok.RequiredArgsConstructor;
@@ -33,8 +31,8 @@ public class ChildController extends BasicController {
                                                           @RequestParam(value = "className") String className) {
         ChildDto childDto = ChildDto.builder().name(name).className(className).build();
         List<ChildDto> childDtoList = childService.checkChild(childDto);
-//        if(childDtoList.size() > 0) return createResponseNotOk(HttpStatus.CONFLICT, ErrorCode.DATAALREDAYEXISTS);
-        if(childDtoList.size() > 0) throw new BusinessException(ErrorCode.DATAALREDAYEXISTS, "해당 원아가 이미 존재합니다.");
+//        if(childDtoList.size() > 0) throw new BusinessException(ErrorCode.DATAALREDAYEXISTS, "해당 원아가 이미 존재합니다.");
+        if(childDtoList.size() > 0) return createResponse(childDtoList);
         else return createResponse();
     }
 

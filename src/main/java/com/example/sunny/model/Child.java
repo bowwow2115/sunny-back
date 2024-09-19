@@ -35,15 +35,15 @@ public class Child extends Person{
     private List<ChildRide> childRideList = new ArrayList<>();
 
     @Column(name = "status")
-    private boolean status;
+    private String status;
 
-    public boolean getStatus() {
+    public String getStatus() {
         return status;
     }
 
     //빌더 설정 시 parentsList는 add, remove 메소드로 관리하기 때문에 제외
     @Builder
-    public Child(Long id, String createdBy, String modifiedBy, String name, LocalDate admissionDate, LocalDate birthday, String className, Address address, boolean status) {
+    public Child(Long id, String createdBy, String modifiedBy, String name, LocalDate admissionDate, LocalDate birthday, String className, Address address, String status) {
         super(id, createdBy, modifiedBy, name);
         this.admissionDate = admissionDate;
         this.birthday = birthday;
