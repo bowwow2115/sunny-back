@@ -21,7 +21,7 @@ public class ChildDto {
     private String className;
     private Address address;
     private LocalDate birthday;
-    private boolean status;
+    private String status;
     private String name;
     private List<ChildRideDto> childRideList = new ArrayList<>();
     private List<ParentsDto> parentList = new ArrayList<>();
