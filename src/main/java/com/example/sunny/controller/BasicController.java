@@ -1,7 +1,6 @@
 package com.example.sunny.controller;
 
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.HashMap;
@@ -25,14 +24,14 @@ public abstract class BasicController {
         response.put("code", "0");
         return ResponseEntity.ok(response);
     }
-    protected ResponseEntity<Map<String, Object>> createResponseNotOk(HttpStatus httpStatus) {
-        return ResponseEntity.status(httpStatus).build();
-    }
-
-    protected ResponseEntity<Map<String, Object>> createResponseNotOk(HttpStatus httpStatus, Object data) {
-        Map<String, Object> response = new HashMap<>();
-        response.put("code", String.valueOf(httpStatus.value()));
-        response.put("data", data);
-        return ResponseEntity.status(httpStatus).body(response);
-    }
+//    protected ResponseEntity<Map<String, Object>> createResponseNotOk(HttpStatus httpStatus) {
+//        return ResponseEntity.status(httpStatus).build();
+//    }
+//
+//    protected ResponseEntity<Map<String, Object>> createResponseNotOk(HttpStatus httpStatus, Object data) {
+//        Map<String, Object> response = new HashMap<>();
+//        response.put("code", String.valueOf(httpStatus.value()));
+//        response.put("data", data);
+//        return ResponseEntity.status(httpStatus).body(response);
+//    }
 }
