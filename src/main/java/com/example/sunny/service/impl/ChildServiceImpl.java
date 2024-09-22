@@ -125,6 +125,10 @@ public class ChildServiceImpl implements ChildService {
     @Override
     public ChildDto update(ChildDto object) {
         Child child = object.toEntity();
+        Child origin = childRepository.findById(object.getId())
+                .orElseThrow(() -> new BusinessException(ErrorCode.INVALID_INPUT_VALUE, "업데이트할 원아가 존재하지 않습니다."));
+        child.setChildRideList(origin.getChildRideList());
+        child.setParentList(origin.getParentList());
         return new ChildDto(childRepository.save(child));
     }
 
