@@ -48,7 +48,7 @@ public class ChildController extends BasicController {
 
     @PutMapping
     public ResponseEntity<Map<String, Object>> editChild(@RequestBody ChildDto child) {
-        return addChild(child);
+        return createResponse(childService.update(child));
     }
 
     @DeleteMapping
