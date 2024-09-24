@@ -1,14 +1,14 @@
 package com.example.sunny.model.embedded;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Embeddable;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 @Embeddable
 public class Address {
     private String zipCode;
