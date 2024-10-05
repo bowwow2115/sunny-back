@@ -62,4 +62,9 @@ public class ChildController extends BasicController {
         int currentMonth = LocalDate.now().getMonthValue();
         return createResponse(childService.findChildWithBirthMonth(currentMonth));
     }
+
+    @GetMapping("/all/attending")
+    public ResponseEntity<Map<String, Object>> getAttendingChildren() {
+        return createResponse(childService.getAttendingChildren());
+    }
 }
