@@ -1,6 +1,7 @@
 package com.example.sunny;
 
 import com.example.sunny.code.SunnyCode;
+import com.example.sunny.model.User;
 import com.example.sunny.model.dto.*;
 import com.example.sunny.model.embedded.Address;
 import com.example.sunny.service.*;
@@ -31,6 +32,25 @@ public class BootstrapData implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+
+        User admin = userService.findUserByUserId("admin");
+        if(admin == null) {
+            UserDto user = UserDto.builder()
+                    .password("admin")
+                    .userId("admin")
+                    .userName("관리자")
+                    .role(SunnyCode.ROLE_GENERAL_ADMIN)
+                    .status(true)
+                    .email("")
+                    .telephone("")
+                    .build();
+
+            UserDto userDto = userService.create(user);
+            if(userDto != null) log.info("어드민 생성");
+        }
+
+
+
 
         // 초기화할 값들
 
@@ -132,19 +152,8 @@ public class BootstrapData implements CommandLineRunner {
         String[] parentRelations = {"부", "모"};
 
 
-        UserDto user = UserDto.builder()
-                .password("test")
-                .userId("test")
-                .userName("관리자")
-                .role(SunnyCode.ROLE_GENERAL_ADMIN)
-                .status(true)
-                .email("test@test.com")
-                .telephone("010-1234-1234")
-                .build();
 
-        UserDto userDto = userService.create(user);
-        if(userDto != null) log.info("유저생성");
-        
+
         //오전차량 생성
         List<SunnyRideDto> amRideList = new ArrayList<>();
 
@@ -169,10 +178,10 @@ public class BootstrapData implements CommandLineRunner {
         amRide = sunnyRideService.create(sunnyRideAm);
         if(amRide != null) log.info("오전차량 생성");
         amRideList.add(amRide);
-        
+
         //오후차량 생성
         List<SunnyRideDto> pmRideList = new ArrayList<>();
-        
+
         SunnyRideDto sunnyRidePm = SunnyRideDto.builder()
                 .comment("~~~")
                 .name("서울 방향 버스")
