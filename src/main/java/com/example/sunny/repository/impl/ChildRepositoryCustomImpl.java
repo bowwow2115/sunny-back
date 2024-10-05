@@ -1,5 +1,6 @@
 package com.example.sunny.repository.impl;
 
+import com.example.sunny.code.SunnyCode;
 import com.example.sunny.model.Child;
 import com.example.sunny.model.QChild;
 import com.example.sunny.repository.ChildRepositoryCustom;
@@ -20,6 +21,7 @@ public class ChildRepositoryCustomImpl implements ChildRepositoryCustom {
         return queryFactory
                 .selectFrom(qChild)
                 .where(qChild.birthday.month().eq(month))
+                .where(qChild.status.eq(SunnyCode.CHILD_STATUS_ATTENDING))
                 .fetch();
     }
 
@@ -30,6 +32,15 @@ public class ChildRepositoryCustomImpl implements ChildRepositoryCustom {
                 .selectFrom(qChild)
                 .where(qChild.className.eq(child.getClassName()))
                 .where(qChild.name.eq(child.getName()))
+                .fetch();
+    }
+
+    @Override
+    public List<Child> getAttendingChildren() {
+        QChild qChild = QChild.child;
+        return queryFactory
+                .selectFrom(qChild)
+                .where(qChild.status.eq(SunnyCode.CHILD_STATUS_ATTENDING))
                 .fetch();
     }
 }

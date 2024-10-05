@@ -7,15 +7,12 @@ import com.example.sunny.model.ChildRide;
 import com.example.sunny.model.MeetingLocation;
 import com.example.sunny.model.dto.*;
 import com.example.sunny.repository.ChildRepository;
-import com.example.sunny.repository.ChildRideRepository;
 import com.example.sunny.repository.MeetingLoactionRepository;
-import com.example.sunny.repository.ParentsRepository;
 import com.example.sunny.service.ChildService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,8 +22,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ChildServiceImpl implements ChildService {
     private final ChildRepository childRepository;
-    private final ParentsRepository parentsRepository;
-    private final ChildRideRepository childRideRepository;
     private final MeetingLoactionRepository meetingLoactionRepository;
 
     @Override
@@ -58,19 +53,28 @@ public class ChildServiceImpl implements ChildService {
 
     @Override
     public List<ChildDto> findChildWithBirthMonth(int month) {
-        List<Child> resultList = childRepository.findChildWithBirthMonth(month);
-        List<ChildDto> rtnList = new ArrayList<>();
-        for(Child child : resultList) {
-            ChildDto childDto = new ChildDto(child);
-            rtnList.add(addJoinData(childDto, child));
-        }
-        return rtnList;
+        return childRepository.findChildWithBirthMonth(month).stream()
+                .map((result) -> {
+                    ChildDto childDto = new ChildDto(result);
+                    return addJoinData(childDto, result);
+                })
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<ChildDto> checkChild(ChildDto object) {
         return childRepository.checkChild(object.toEntity()).stream()
                 .map((result) -> {
+                    ChildDto childDto = new ChildDto(result);
+                    return addJoinData(childDto, result);
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ChildDto> getAttendingChildren() {
+        return childRepository.getAttendingChildren().stream()
+                .map((result)-> {
                     ChildDto childDto = new ChildDto(result);
                     return addJoinData(childDto, result);
                 })
