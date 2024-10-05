@@ -13,4 +13,6 @@ public interface ChildService extends CrudService<ChildDto, Long> {
     List<ChildDto> findChildWithBirthMonth(int month);
 
     List<ChildDto> checkChild(ChildDto childDto);
+
+    List<ChildDto> getAttendingChildren();
 }
