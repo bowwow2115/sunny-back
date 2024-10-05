@@ -62,11 +62,20 @@ public class AuthController extends BasicController{
     public ResponseEntity<Map<String, Object>> validation(@RequestParam(value="sid") String sid) {
         if(sid == null) throw new BusinessException(ErrorCode.INVALID_INPUT_VALUE, "invalid input - sid");
 //        boolean isExpired=false;
-//        String userId="";
+        String userId="";
         try {
-            jwtTokenUtil.getUsernameFromToken(sid);
+            userId = jwtTokenUtil.getUsernameFromToken(sid);
         }catch( ExpiredJwtException e) { // 토큰 만료?
             throw new BusinessException(ErrorCode.EXPIRED_TOKEN);
+        }
+        Object extractRole = jwtTokenUtil.extractRole(sid);
+        List<Map<String, String>> rtnList = new ArrayList<>();
+        if (extractRole instanceof List) {
+            rtnList = (List) extractRole;
+            Map<String, String> map = new HashMap<>();
+            map.put("userId", userId);
+            rtnList.add(map);
+            return createResponse(rtnList);
         }
         return createResponse(jwtTokenUtil.extractRole(sid));
     }
