@@ -16,18 +16,18 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-        format_sql: true
+#        format_sql: true
         default_schema: sunny
-    show-sql: true
+#    show-sql: true
     hibernate:
       #  TODO: 배포시 수정
-      ddl-auto: create-drop
+      ddl-auto: validate
 
 server:
 #  TODO: 배포시 수정
   servlet:
     context-path: /sunny
-  port: 8084
+  port: 8080
 
 jwt:
   #  TODO: 배포시 수정
