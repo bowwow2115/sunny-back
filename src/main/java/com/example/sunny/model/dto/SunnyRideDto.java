@@ -33,6 +33,7 @@ public class SunnyRideDto {
                 .name(name)
                 .isAm(isAm)
                 .comment(comment)
+                .time(time)
                 .build();
     }
 
