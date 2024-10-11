@@ -1,5 +1,8 @@
 package com.example.sunny.controller;
 
+import com.example.sunny.code.SunnyCode;
+import com.example.sunny.config.error.BusinessException;
+import com.example.sunny.config.error.ErrorCode;
 import com.example.sunny.model.dto.UserDto;
 import com.example.sunny.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -31,8 +34,14 @@ public class UserController extends BasicController {
     }
 
     @PutMapping
-    public ResponseEntity<Map<String, Object>> updateUser(@RequestBody UserDto userDto) {
-        return createResponse(userService.create(userDto));
+    public ResponseEntity<Map<String, Object>> updateUser(@RequestBody UserDto userDto, @AuthenticationPrincipal UserDetails userDetails) {
+
+        if(userDetails.getUsername().equals(userDto.getUserId()) ||
+                userDetails.getAuthorities().contains(SunnyCode.ROLE_GENERAL_ADMIN)) {
+            return createResponse(userService.update(userDto));
+        } else {
+            throw new BusinessException(ErrorCode.EXCEPTION);
+        }
     }
 
     @DeleteMapping
