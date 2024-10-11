@@ -1,5 +1,6 @@
 package com.example.sunny.service.impl;
 
+import com.example.sunny.code.SunnyCode;
 import com.example.sunny.config.error.BusinessException;
 import com.example.sunny.config.error.ErrorCode;
 import com.example.sunny.model.User;
@@ -50,8 +51,8 @@ public class UserServiceImpl implements UserService {
                             .status(false)
                             .password(passwordEncoder.encode(object.getPassword()))
 //                            TODO: 배포 시 변경해야함
-                            .role(object.getRole())
-//                            .role(SunnyCode.ROLE_GENERAL_USER)
+//                            .role(object.getRole())
+                            .role(SunnyCode.ROLE_GENERAL_USER)
                             .build()
             );
         } catch (ConstraintViolationException e) {
@@ -64,16 +65,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto update(UserDto object) {
-        return new UserDto(userRepository.save(
-                User.builder()
-                        .telephone(object.getTelephone())
-                        .email(object.getEmail())
-                        .id(object.getId())
-                        .name(object.getUserName())
-                        .status(object.isStatus())
-                        .password(passwordEncoder.encode(object.getPassword()))
-                        .build()
-        ));
+        User origin = userRepository.findById(object.getId())
+                .orElseThrow(() -> new BusinessException(ErrorCode.INVALID_INPUT_VALUE, "업데이트할 유저가 존재하지 않습니다."));
+
+        if(!object.getPassword().isBlank()) origin.setPassword(passwordEncoder.encode(object.getPassword()));
+
+        origin.setStatus(object.isStatus());
+        origin.setEmail(object.getEmail());
+        origin.setTelephone(object.getTelephone());
+
+        if(origin.getRole().equals(SunnyCode.ROLE_GENERAL_ADMIN)) origin.setRole(object.getRole());
+
+        return new UserDto(userRepository.save(origin));
     }
 
     @Override

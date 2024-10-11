@@ -3,6 +3,7 @@ package com.example.sunny.model;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.Column;
@@ -10,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @Entity
 @Table(name = "sunny_user")

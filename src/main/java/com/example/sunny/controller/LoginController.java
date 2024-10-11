@@ -36,8 +36,6 @@ public class LoginController extends BasicController {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUserId(), user.getPassword()));
             UserDetails userDetails = authUserDetailsService.loadUserByUsername(user.getUserId());
 
-            //TODO: 비밀번호 잘못입력 카운트 초기화
-
             String token = jwtTokenUtil.generateToken(userDetails);
             String refreshToken = jwtTokenUtil.generateRefreshToken(userDetails);
 
