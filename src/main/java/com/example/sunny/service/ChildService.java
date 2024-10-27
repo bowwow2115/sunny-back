@@ -15,4 +15,5 @@ public interface ChildService extends CrudService<ChildDto, Long> {
     List<ChildDto> checkChild(ChildDto childDto);
 
     List<ChildDto> getAttendingChildren();
+    List<ChildDto> updateChildrenClass(List<ChildDto> childrenList, String className);
 }

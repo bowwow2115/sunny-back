@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,6 +80,24 @@ public class ChildServiceImpl implements ChildService {
                     return addJoinData(childDto, result);
                 })
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public List<ChildDto> updateChildrenClass(List<ChildDto> childrenList, String className) {
+        List<Child> childList = new ArrayList<>();
+        childrenList.forEach((child) -> {
+            childList.add(childRepository.findById(child.getId()).orElseThrow(
+                    () -> new BusinessException(ErrorCode.ENTITY_NOT_FOUND, "해당 원아의 정보가 존재하지 않습니다.")));
+        });
+        List<ChildDto> childDtoList = new ArrayList<>();
+        childList.forEach((child) -> {
+            child.setClassName(className);
+            childRepository.save(child);
+            childDtoList.add(addJoinData(new ChildDto(child), child));
+        });
+
+        return childDtoList;
     }
 
     @Override
