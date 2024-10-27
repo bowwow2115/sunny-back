@@ -67,4 +67,10 @@ public class ChildController extends BasicController {
     public ResponseEntity<Map<String, Object>> getAttendingChildren() {
         return createResponse(childService.getAttendingChildren());
     }
+
+    @PutMapping("/all/class")
+    public ResponseEntity<Map<String, Object>> updateChildrenClass(@RequestBody List<ChildDto> childDtoList,
+                                                                   @RequestParam(value = "className") String className) {
+        return createResponse(childService.updateChildrenClass(childDtoList, className));
+    }
 }

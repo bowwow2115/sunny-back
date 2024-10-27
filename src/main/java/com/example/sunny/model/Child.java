@@ -24,6 +24,7 @@ public class Child extends Person{
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthday;
     @Column(name = "class_name")
+    @Setter
     private String className;
     @Embedded
     private Address address;
