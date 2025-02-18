@@ -3,6 +3,7 @@ package com.example.sunny;
 import com.example.sunny.code.SunnyCode;
 import com.example.sunny.model.Child;
 import com.example.sunny.model.dto.ChildDto;
+import com.example.sunny.model.embedded.Address;
 import com.example.sunny.repository.ChildRepository;
 import com.example.sunny.repository.MeetingLoactionRepository;
 import com.example.sunny.service.impl.ChildServiceImpl;
@@ -10,7 +11,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -20,14 +23,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
+@Transactional
 public class ChildServiceTest {
     @Mock
-    private ChildRepository childRepository;
+    private ChildRepository mockChildRepository;
     @Mock
-    private MeetingLoactionRepository meetingLoactionRepository;
+    private MeetingLoactionRepository mockMeetingLoactionRepository;
 
     @InjectMocks
-    private ChildServiceImpl childService;
+    private ChildServiceImpl mockChildService;
+
+    @Autowired
+    private ChildRepository childRepository;
 
     @Test
     public void findByNameTest() {
@@ -36,9 +43,9 @@ public class ChildServiceTest {
                 .name("박승훈")
                 .build();
 
-        Mockito.when(childRepository.findByname("박승훈")).thenReturn(mockChild);
+        Mockito.when(mockChildRepository.findByname("박승훈")).thenReturn(mockChild);
 
-        ChildDto result = childService.findByName("박승훈");
+        ChildDto result = mockChildService.findByName("박승훈");
 
         assertNotNull(result);
         assertEquals("박승훈", result.getName());
@@ -66,8 +73,34 @@ public class ChildServiceTest {
 
         List<Child> resultList = Arrays.asList(firstChild, secondChild);
 
-        Mockito.when(childRepository.findChildWithBirthMonth(3)).thenReturn(resultList);
+        Mockito.when(mockChildRepository.findChildWithBirthMonth(3)).thenReturn(resultList);
 
-//        child
+        List<Child> result = mockChildRepository.findChildWithBirthMonth(3);
+
+        assertNotNull(result);
+        assertEquals(1L, result.get(0).getId());
     }
+
+    @Test
+    public void checkChild() {
+        Child findingChild = saveChild();
+        List<Child> children = childRepository.checkChild(findingChild);
+
+        assertNotNull(children);
+        assertEquals("박승훈", children.get(0).getName());
+        assertEquals("새싹반", children.get(0).getClassName());
+    }
+
+    private Child saveChild() {
+        return childRepository.save(Child.builder()
+                .id(1L)
+                .address(Address.builder().address("사우동").detailAddress("산호아파트").zipCode("11111").build())
+                .name("박승훈")
+                .birthday(LocalDate.of(2023, 5, 24))
+                .status("재원")
+                .admissionDate(LocalDate.of(2024, 3, 2))
+                .className("새싹반")
+                .build());
+    }
+
 }

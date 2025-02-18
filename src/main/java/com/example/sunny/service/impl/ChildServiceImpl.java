@@ -14,9 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,26 +28,6 @@ public class ChildServiceImpl implements ChildService {
         Child result = childRepository.findByname(name);
         ChildDto childDto = new ChildDto(result);
         return addJoinData(childDto, result);
-    }
-
-    @Override
-    public Map getUnRidedChildren() {
-        List<ChildDto> childList = this.findAll();
-        Map resultMap = new HashMap();
-//        List<ChildDto> amChildList = new ArrayList<>();
-//        List<ChildDto> pmChildList = new ArrayList<>();
-//
-//        childList.forEach((item) -> {
-//            item.getRideList().stream().forEach((item) -> {
-//                if()item.getMeetingLocation().getSunnyRide().isAm()
-//            })
-//            if(item.getAmRide()==null) amChildList.add(item);
-//            if(item.getPmRide()==null) pmChildList.add(item);
-//        });
-//
-//        resultMap.put("amChildList", amChildList);
-//        resultMap.put("pmChildList", pmChildList);
-        return resultMap;
     }
 
     @Override
