@@ -64,10 +64,9 @@ public class ChildServiceImpl implements ChildService {
     @Transactional
     public List<ChildDto> updateChildrenClass(List<ChildDto> childrenList, String className) {
         List<Child> childList = new ArrayList<>();
-        childrenList.forEach((child) -> {
-            childList.add(childRepository.findById(child.getId()).orElseThrow(
-                    () -> new BusinessException(ErrorCode.ENTITY_NOT_FOUND, "해당 원아의 정보가 존재하지 않습니다.")));
-        });
+        childrenList.forEach((child) ->
+                childList.add(childRepository.findById(child.getId()).orElseThrow(
+                    () -> new BusinessException(ErrorCode.ENTITY_NOT_FOUND, "해당 원아의 정보가 존재하지 않습니다."))));
         List<ChildDto> childDtoList = new ArrayList<>();
         childList.forEach((child) -> {
             child.setClassName(className);
