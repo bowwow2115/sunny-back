@@ -25,7 +25,7 @@ public class ChildServiceImpl implements ChildService {
 
     @Override
     public ChildDto findByName(String name) {
-        Child result = childRepository.findByname(name);
+        Child result = childRepository.findByName(name);
         ChildDto childDto = new ChildDto(result);
         return addJoinData(childDto, result);
     }
