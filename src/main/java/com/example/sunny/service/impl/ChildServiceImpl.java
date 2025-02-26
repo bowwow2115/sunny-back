@@ -69,7 +69,7 @@ public class ChildServiceImpl implements ChildService {
                     () -> new BusinessException(ErrorCode.ENTITY_NOT_FOUND, "해당 원아의 정보가 존재하지 않습니다."))));
         List<ChildDto> childDtoList = new ArrayList<>();
         childList.forEach((child) -> {
-            child.setClassName(className);
+            child.updateClassName(className);
             childRepository.save(child);
             childDtoList.add(addJoinData(new ChildDto(child), child));
         });
@@ -111,11 +111,10 @@ public class ChildServiceImpl implements ChildService {
                         MeetingLocation meetingLocation = meetingLoactionRepository.findById(item.getMeetingLocation().getId()).orElseThrow(
                                 () -> new BusinessException(ErrorCode.INVALID_INPUT_VALUE, "선택한 차량이 존재하지 않습니다."));
                         ChildRide childRide = new ChildRide();
-                                childRide.setMeetingLocation(meetingLocation);
-                                childRide.setComment(item.getComment());
+                                childRide.updateMeetingLocation(meetingLocation);
+                                childRide.updateComment(item.getComment());
                                 child.addRide(childRide);
-                            }
-                    );
+                            });
 
         Child result = childRepository.save(child);
         ChildDto childDto = new ChildDto(result);
@@ -127,8 +126,8 @@ public class ChildServiceImpl implements ChildService {
         Child child = object.toEntity();
         Child origin = childRepository.findById(object.getId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.INVALID_INPUT_VALUE, "업데이트할 원아가 존재하지 않습니다."));
-        child.setChildRideList(origin.getChildRideList());
-        child.setParentList(origin.getParentList());
+        child.updateChildRideList(origin.getChildRideList());
+        child.updateParentList(origin.getParentList());
         return new ChildDto(childRepository.save(child));
     }
 
@@ -136,7 +135,7 @@ public class ChildServiceImpl implements ChildService {
     public void delete(ChildDto object) {
         Child child = object.toEntity();
         if (object.getParentList().size()!=0)
-            child.setParentList(object.getParentList().stream()
+            child.updateParentList(object.getParentList().stream()
                 .map(ParentsDto::toEntity).collect(Collectors.toList()));
 
         childRepository.delete(child);

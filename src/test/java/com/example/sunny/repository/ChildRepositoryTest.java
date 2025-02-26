@@ -9,7 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -98,7 +97,9 @@ public class ChildRepositoryTest {
                 .className("새싹반")
                 .build());
 
-        oldChild.setClassName("꽃잎반");
+
+
+//        oldChild.setClassName("꽃잎반");
 
         Child newChild = childRepository.save(oldChild);
 
@@ -137,9 +138,6 @@ public class ChildRepositoryTest {
                 .sunnyRide(sunnyRidePm)
                 .comment("~~~")
                 .build());
-        
-        //원아와 승하차장소 매핑테이블에 원아를 통해 인서트
-        List<ChildRide> childRideList = new ArrayList<>();
 
         ChildRide childRideAm = ChildRide.builder()
                 .meetingLocation(meetingLocationAm)
@@ -149,22 +147,13 @@ public class ChildRepositoryTest {
                 .meetingLocation(meetingLocationPm)
                 .build();
 
-        childRideList.add(childRideAm);
-        childRideList.add(childRidePm);
-        
-        //부모 원아를 통해 인서트
-        List<Parents> parentsList = new ArrayList<>();
-
         Parents parents = Parents.builder()
                 .telephone("010-1234-1234")
                 .name("박어린이 아빠")
                 .relation("부")
                 .build();
 
-        parentsList.add(parents);
-
-        Child inputChild = Child.builder()
-                .id(1L)
+        Child input = Child.builder()
                 .name("박어린이")
                 .birthday(LocalDate.of(2023, 5, 24))
                 .status(SunnyCode.CHILD_STATUS_ATTENDING)
@@ -172,18 +161,25 @@ public class ChildRepositoryTest {
                 .className("새싹반")
                 .build();
 
-        inputChild.setParentList(parentsList);
-        inputChild.setChildRideList(childRideList);
+        input.addParents(parents);
+        input.addRide(childRideAm);
+        input.addRide(childRidePm);
+
         //원아 생성
-        Child result = childRepository.save(inputChild);
+        Child result = childRepository.save(input);
 
         //부모 확인
-        assertThat(result.getParentList().get(0)).isNotNull();
+        assertThat(result.getParentList())
+                .contains(parents);
         //차량 확인
-        assertThat(result.getChildRideList().get(0)).isNotNull();
-
-//        assertThat(result.get)
-
+        assertThat(result.getChildRideList())
+                .containsExactlyInAnyOrder(childRideAm, childRidePm);
+        //승하차 장소 확인
+        assertThat(result.getChildRideList())
+                .extracting(ChildRide::getMeetingLocation)
+                .containsExactlyInAnyOrder(meetingLocationAm, meetingLocationPm);
+        //원아 확인
+        assertThat(result).isEqualTo(input);
     }
 
     private List<Child> createRandomChildren(int count) {

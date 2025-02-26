@@ -9,16 +9,19 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "sunny_parents")
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 public class Parents extends Person{
     @Column(name = "telephone")
+    @EqualsAndHashCode.Include
     private String telephone;
 
     @Column(name = "relation")
+    @EqualsAndHashCode.Include
     private String relation;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "child_id", updatable = false)
-    @Setter
+    @EqualsAndHashCode.Include
     private Child child;
 
     @Builder
@@ -32,5 +35,9 @@ public class Parents extends Person{
     public void addChild(Child child) {
         this.child = child;
         child.addParents(this);
+    }
+
+    public void updateChild(Child child) {
+        this.child = child;
     }
 }

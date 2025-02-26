@@ -1,9 +1,6 @@
 package com.example.sunny.model;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -13,15 +10,20 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "sunny_ride")
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 public class SunnyRide extends BaseEntity {
     @Column(name = "name", nullable = false)
+    @EqualsAndHashCode.Include
     private String name;
     @Column(name = "is_am", nullable = false)
+    @EqualsAndHashCode.Include
     private boolean isAm;
     @Column(name = "comment")
+    @EqualsAndHashCode.Include
     private String comment;
 
     @Column(name = "time")
+    @EqualsAndHashCode.Include
     private String time;
 
     @OneToMany(mappedBy = "sunnyRide", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
@@ -39,11 +41,11 @@ public class SunnyRide extends BaseEntity {
 
     public void addMeetingLocation(MeetingLocation meetingLocation) {
         this.meetingLocationList.add(meetingLocation);
-        meetingLocation.setSunnyRide(this);
+        meetingLocation.updateSunnyRide(this);
     }
 
     public void removeMeetingLoaction(MeetingLocation meetingLocation) {
         this.meetingLocationList.remove(meetingLocation);
-        meetingLocation.setSunnyRide(null);
+        meetingLocation.updateSunnyRide(null);
     }
 }
