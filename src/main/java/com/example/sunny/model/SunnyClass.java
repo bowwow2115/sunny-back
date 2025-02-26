@@ -1,6 +1,7 @@
 package com.example.sunny.model;
 
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,8 +14,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Entity
 @Table(name = "sunny_class")
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 public class SunnyClass extends BaseEntity{
     @Column(name = "name")
+    @EqualsAndHashCode.Include
     private String name;
 
     @Builder

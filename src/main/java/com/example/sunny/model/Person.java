@@ -1,6 +1,7 @@
 package com.example.sunny.model;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +12,7 @@ import javax.persistence.MappedSuperclass;
 @AllArgsConstructor
 @NoArgsConstructor
 @MappedSuperclass
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 public class Person extends BaseEntity {
 
     public Person(Long id, String createdBy, String modifiedBy, String name) {
@@ -19,6 +21,7 @@ public class Person extends BaseEntity {
     }
 
     @Column(name = "name")
+    @EqualsAndHashCode.Include
     private String name;
 
 }
