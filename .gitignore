@@ -3,7 +3,7 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-src/main/resources/static
+src/main/resources/**
 logs/
 
 ### STS ###
@@ -33,3 +33,9 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Gradle
+.gradle/
+build/
+out/
+bin/
