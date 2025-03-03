@@ -9,5 +9,9 @@ public interface ChildRepositoryCustom {
 
     List<Child> checkChild(Child child);
 
-    List<Child> getAttendingChildren();
+    List<Child> findAttendingChildren();
+
+    List<Child> findAllWithRide();
+
+    List<Child> findAllWithParents();
 }
