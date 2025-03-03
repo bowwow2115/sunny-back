@@ -11,9 +11,29 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "sunny_children")
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
+//@NamedEntityGraphs(
+//        @NamedEntityGraph(
+//        name = "Child.withAll",
+//        attributeNodes = {
+//                @NamedAttributeNode(value = "childRideList", subgraph = "childRideGraph"),
+//                @NamedAttributeNode(value = "parentList"),},
+//        subgraphs = {
+//                @NamedSubgraph(
+//                        name = "childRideGraph",
+//                        attributeNodes = {
+//                                @NamedAttributeNode(value = "meetingLocation", subgraph = "meetingLocationGraph")
+//                        }),
+//                @NamedSubgraph(
+//                        name = "meetingLocationGraph",
+//                        attributeNodes = {
+//                                @NamedAttributeNode("sunnyRide")
+//                        }),
+//        })
+//)
 public class Child extends Person{
     @Column(name = "admission_date", nullable = false)
     @DateTimeFormat(pattern = "yyyy-MM-dd")

@@ -43,16 +43,13 @@ public class ChildServiceImpl implements ChildService {
     @Override
     public List<ChildDto> checkChild(ChildDto object) {
         return childRepository.checkChild(object.toEntity()).stream()
-                .map((result) -> {
-                    ChildDto childDto = new ChildDto(result);
-                    return addJoinData(childDto, result);
-                })
+                .map(result -> new ChildDto(result))
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<ChildDto> getAttendingChildren() {
-        return childRepository.getAttendingChildren().stream()
+        return childRepository.findAttendingChildren().stream()
                 .map((result)-> {
                     ChildDto childDto = new ChildDto(result);
                     return addJoinData(childDto, result);
@@ -70,16 +67,15 @@ public class ChildServiceImpl implements ChildService {
         List<ChildDto> childDtoList = new ArrayList<>();
         childList.forEach((child) -> {
             child.updateClassName(className);
-            childRepository.save(child);
-            childDtoList.add(addJoinData(new ChildDto(child), child));
+            Child result = childRepository.save(child);
+            childDtoList.add(addJoinData(new ChildDto(child), result));
         });
-
         return childDtoList;
     }
 
     @Override
     public List<ChildDto> findAll() {
-        return childRepository.findAll().stream()
+        return childRepository.findAllWithParents().stream()
                 .map((result)-> {
                     ChildDto childDto = new ChildDto(result);
                     return addJoinData(childDto, result);
@@ -134,10 +130,6 @@ public class ChildServiceImpl implements ChildService {
     @Override
     public void delete(ChildDto object) {
         Child child = object.toEntity();
-        if (object.getParentList().size()!=0)
-            child.updateParentList(object.getParentList().stream()
-                .map(ParentsDto::toEntity).collect(Collectors.toList()));
-
         childRepository.delete(child);
     }
 
