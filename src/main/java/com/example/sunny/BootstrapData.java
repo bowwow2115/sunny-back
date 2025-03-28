@@ -48,6 +48,7 @@ public class BootstrapData implements CommandLineRunner {
             UserDto userDto = userService.create(user);
             if(userDto != null) log.info("어드민 생성");
         }
+//        makeTestData(10);
     }
 
 

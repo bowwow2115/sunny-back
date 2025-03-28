@@ -48,9 +48,10 @@ public class Child extends Person{
     private String className;
     @Embedded
     private Address address;
-    @OneToMany(mappedBy = "child", cascade = CascadeType.ALL, orphanRemoval = true)
+
+    @OneToMany(mappedBy = "child", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Parents> parentList = new ArrayList<>();
-    @OneToMany(mappedBy = "child", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "child", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<ChildRide> childRideList = new ArrayList<>();
 
     @Column(name = "status")

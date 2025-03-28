@@ -52,49 +52,21 @@ public class ChildRepositoryCustomImpl implements ChildRepositoryCustom {
     @Override
     public List<Child> findAllWithRide() {
         QChild qChild = QChild.child;
-//        return queryFactory
-//                .select(Projections.fields(Child.class,
-//                        qChild.id,
-//                        qChild.name,
-//                        qChild.className,
-//                        qChild.birthday,
-//                        qChild.status,
-//                        qChild.address,
-//                        qChild.admissionDate))
-//                .from(qChild)
-//                .leftJoin(qChild.childRideList, QChildRide.childRide).fetchJoin()
-//                .leftJoin(QChildRide.childRide.meetingLocation, QMeetingLocation.meetingLocation).fetchJoin()
-//                .leftJoin(QMeetingLocation.meetingLocation.sunnyRide, QSunnyRide.sunnyRide).fetchJoin()
-//                .fetch();
-        return null;
+        return queryFactory
+                .selectFrom(qChild)
+                .leftJoin(qChild.childRideList, QChildRide.childRide).fetchJoin()
+                .leftJoin(QChildRide.childRide.meetingLocation, QMeetingLocation.meetingLocation).fetchJoin()
+                .leftJoin(QMeetingLocation.meetingLocation.sunnyRide, QSunnyRide.sunnyRide).fetchJoin()
+                .fetch();
     }
 
     @Override
     public List<Child> findAllWithParents() {
-//        QChild qChild = QChild.child;
-//        return queryFactory
-//                .select(Projections.fields(Child.class,
-//                        qChild.id,
-//                        qChild.name,
-//                        qChild.className,
-//                        qChild.birthday,
-//                        qChild.status,
-//                        qChild.address,
-//                        qChild.admissionDate
-////                        JPAExpressions
-////                                .select(Projections.fields(Parents.class,
-////                                        QParents.parents.name,
-////                                        QParents.parents.id,
-////                                        QParents.parents.telephone,
-////                                        QParents.parents.relation))
-////                                .from(QParents.parents)
-////                                .where(QParents.parents.child.eq(QChild.child)) // ✅ 서브쿼리 사용
-//                        ))
-//                .from(qChild)
-//                .leftJoin(qChild.parentList, QParents.parents)
-//                .fetch();
-        return null;
+        QChild qChild = QChild.child;
+        return queryFactory
+                .selectFrom(qChild)
+                .leftJoin(qChild.parentList, QParents.parents).fetchJoin()
+                .fetch();
     }
-
 
 }

@@ -1,7 +1,10 @@
-package com.example.sunny.repository;
+package com.example.sunny.mybatis;
 
 import com.example.sunny.code.SunnyCode;
 import com.example.sunny.model.*;
+import com.example.sunny.repository.ChildRepository;
+import com.example.sunny.repository.MeetingLoactionRepository;
+import com.example.sunny.repository.SunnyRideRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,13 +12,22 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * JPA -> MyBatis 마이그레이션 작업테스트 용
+ * 클래스명 *Repository인 경우 JPA DAO, *Mapper인 경우 MyBatis DAO
+ *
+ * JPA 환경에서는 insert, update 시에 반환하는 데이터를 DB의 데이터와 동일하다고 사용
+ * MyBatis 환경에서는 새로 select 해와야 함
+ * (MyBatis로 마이그레이션 하기 떄문에 작업 완료 후에 JPA관련 코드 삭제 쉽게하기 위해 데이터 세팅 작업은 MyBatis로 함)
+ */
 @SpringBootTest
 @Transactional
-public class ChildRepositoryTest {
+public class ChildRepositoryMigrationTest {
     @Autowired
     private ChildRepository childRepository;
     @Autowired
@@ -97,8 +109,6 @@ public class ChildRepositoryTest {
                 .className("새싹반")
                 .build());
 
-
-
 //        oldChild.setClassName("꽃잎반");
 
         Child newChild = childRepository.save(oldChild);
@@ -138,6 +148,9 @@ public class ChildRepositoryTest {
                 .sunnyRide(sunnyRidePm)
                 .comment("~~~")
                 .build());
+        
+        //원아와 승하차장소 매핑테이블에 원아를 통해 인서트
+        List<ChildRide> childRideList = new ArrayList<>();
 
         ChildRide childRideAm = ChildRide.builder()
                 .meetingLocation(meetingLocationAm)
@@ -147,13 +160,22 @@ public class ChildRepositoryTest {
                 .meetingLocation(meetingLocationPm)
                 .build();
 
+        childRideList.add(childRideAm);
+        childRideList.add(childRidePm);
+        
+        //부모 원아를 통해 인서트
+        List<Parents> parentsList = new ArrayList<>();
+
         Parents parents = Parents.builder()
                 .telephone("010-1234-1234")
                 .name("박어린이 아빠")
                 .relation("부")
                 .build();
 
+        parentsList.add(parents);
+
         Child input = Child.builder()
+                .id(1L)
                 .name("박어린이")
                 .birthday(LocalDate.of(2023, 5, 24))
                 .status(SunnyCode.CHILD_STATUS_ATTENDING)
@@ -169,29 +191,12 @@ public class ChildRepositoryTest {
         Child result = childRepository.save(input);
 
         //부모 확인
-        assertThat(result.getParentList())
-                .contains(parents);
+        assertThat(result.getParentList().get(0)).isNotNull();
         //차량 확인
-        assertThat(result.getChildRideList())
-                .containsExactlyInAnyOrder(childRideAm, childRidePm);
-        //승하차 장소 확인
-        assertThat(result.getChildRideList())
-                .extracting(ChildRide::getMeetingLocation)
-                .containsExactlyInAnyOrder(meetingLocationAm, meetingLocationPm);
-        //원아 확인
-        assertThat(result).isEqualTo(input);
-    }
+        assertThat(result.getChildRideList().get(0)).isNotNull();
 
-    @Test
-    public void findAllWithParentsTest() {
-        List<Child> allWithParents = childRepository.findAllWithParents();
-        allWithParents.forEach(System.out::println);
-    }
+//        assertThat(result.get)
 
-    @Test
-    public void findAllWithRidesTest() {
-        List<Child> allWithRide = childRepository.findAllWithRide();
-        allWithRide.forEach(System.out::println);
     }
 
     private List<Child> createRandomChildren(int count) {

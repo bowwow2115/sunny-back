@@ -26,7 +26,7 @@ public class SunnyRide extends BaseEntity {
     @EqualsAndHashCode.Include
     private String time;
 
-    @OneToMany(mappedBy = "sunnyRide", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "sunnyRide", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @Setter
     private List<MeetingLocation> meetingLocationList = new ArrayList<>();
 

@@ -27,16 +27,13 @@ public class ChildServiceImpl implements ChildService {
     public ChildDto findByName(String name) {
         Child result = childRepository.findByName(name);
         ChildDto childDto = new ChildDto(result);
-        return addJoinData(childDto, result);
+        return addChildRide(childDto, result);
     }
 
     @Override
     public List<ChildDto> findChildWithBirthMonth(int month) {
         return childRepository.findChildWithBirthMonth(month).stream()
-                .map((result) -> {
-                    ChildDto childDto = new ChildDto(result);
-                    return addJoinData(childDto, result);
-                })
+                .map((result) -> new ChildDto(result))
                 .collect(Collectors.toList());
     }
 
@@ -50,10 +47,7 @@ public class ChildServiceImpl implements ChildService {
     @Override
     public List<ChildDto> getAttendingChildren() {
         return childRepository.findAttendingChildren().stream()
-                .map((result)-> {
-                    ChildDto childDto = new ChildDto(result);
-                    return addJoinData(childDto, result);
-                })
+                .map((result)-> new ChildDto(result))
                 .collect(Collectors.toList());
     }
 
@@ -76,6 +70,16 @@ public class ChildServiceImpl implements ChildService {
     @Override
     public List<ChildDto> findAll() {
         return childRepository.findAllWithParents().stream()
+                .map((result)-> {
+                    ChildDto childDto = new ChildDto(result);
+                    return addParents(childDto, result);
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ChildDto> findAllWithRide() {
+        return childRepository.findAllWithRide().stream()
                 .map((result)-> {
                     ChildDto childDto = new ChildDto(result);
                     return addJoinData(childDto, result);
@@ -138,11 +142,14 @@ public class ChildServiceImpl implements ChildService {
         childRepository.deleteById(aLong);
     }
 
-    private ChildDto addJoinData(ChildDto childDto, Child result) {
+    private ChildDto addParents(ChildDto childDto, Child result) {
         if(result.getParentList() != null && result.getParentList().size() != 0)
             childDto.setParentList(result.getParentList().stream().map(ParentsDto::new)
                     .collect(Collectors.toList()));
+        return childDto;
+    }
 
+    private ChildDto addChildRide(ChildDto childDto, Child result) {
         if(result.getChildRideList() != null && result.getChildRideList().size() != 0) {
             List<ChildRideDto> childRideDtoList = result.getChildRideList().stream()
                     .map((item) -> {
@@ -166,6 +173,11 @@ public class ChildServiceImpl implements ChildService {
             childDto.setChildRideList(childRideDtoList);
         }
         return childDto;
+    }
+
+    private ChildDto addJoinData(ChildDto childDto, Child result) {
+        ChildDto addParentsResult = addParents(childDto, result);
+        return addChildRide(addParentsResult, result);
     }
 
 }
