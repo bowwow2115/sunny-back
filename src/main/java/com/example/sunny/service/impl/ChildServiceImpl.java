@@ -126,8 +126,8 @@ public class ChildServiceImpl implements ChildService {
         Child child = object.toEntity();
         Child origin = childRepository.findById(object.getId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.INVALID_INPUT_VALUE, "업데이트할 원아가 존재하지 않습니다."));
-        child.updateChildRideList(origin.getChildRideList());
-        child.updateParentList(origin.getParentList());
+        child.updateChildRideList(origin.getChildRides());
+        child.updateParentList(origin.getParents());
         return new ChildDto(childRepository.save(child));
     }
 
@@ -143,15 +143,15 @@ public class ChildServiceImpl implements ChildService {
     }
 
     private ChildDto addParents(ChildDto childDto, Child result) {
-        if(result.getParentList() != null && result.getParentList().size() != 0)
-            childDto.setParentList(result.getParentList().stream().map(ParentsDto::new)
+        if(result.getParents() != null && result.getParents().size() != 0)
+            childDto.setParentList(result.getParents().stream().map(ParentsDto::new)
                     .collect(Collectors.toList()));
         return childDto;
     }
 
     private ChildDto addChildRide(ChildDto childDto, Child result) {
-        if(result.getChildRideList() != null && result.getChildRideList().size() != 0) {
-            List<ChildRideDto> childRideDtoList = result.getChildRideList().stream()
+        if(result.getChildRides() != null && result.getChildRides().size() != 0) {
+            List<ChildRideDto> childRideDtoList = result.getChildRides().stream()
                     .map((item) -> {
                         //
                         MeetingLocationDto meetingLocationDto = new MeetingLocationDto(item.getMeetingLocation());

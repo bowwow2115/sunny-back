@@ -44,7 +44,7 @@ public class ChildRepositoryCustomImpl implements ChildRepositoryCustom {
     public List<Child> findAttendingChildren() {
         QChild qChild = QChild.child;
         return queryFactory
-                .select(Projections.fields(Child.class, qChild.id, qChild.name, qChild.className))
+                .select(Projections.fields(Child.class, qChild.id, qChild.name, qChild.className, qChild.status))
                 .from(qChild)
                 .where(qChild.status.eq(SunnyCode.CHILD_STATUS_ATTENDING))
                 .fetch();
@@ -54,7 +54,8 @@ public class ChildRepositoryCustomImpl implements ChildRepositoryCustom {
         QChild qChild = QChild.child;
         return queryFactory
                 .selectFrom(qChild)
-                .leftJoin(qChild.childRideList, QChildRide.childRide).fetchJoin()
+                .distinct()
+                .leftJoin(qChild.childRides, QChildRide.childRide).fetchJoin()
                 .leftJoin(QChildRide.childRide.meetingLocation, QMeetingLocation.meetingLocation).fetchJoin()
                 .leftJoin(QMeetingLocation.meetingLocation.sunnyRide, QSunnyRide.sunnyRide).fetchJoin()
                 .fetch();
@@ -65,7 +66,8 @@ public class ChildRepositoryCustomImpl implements ChildRepositoryCustom {
         QChild qChild = QChild.child;
         return queryFactory
                 .selectFrom(qChild)
-                .leftJoin(qChild.parentList, QParents.parents).fetchJoin()
+                .distinct()
+                .leftJoin(qChild.parents, QParents.parents).fetchJoin()
                 .fetch();
     }
 

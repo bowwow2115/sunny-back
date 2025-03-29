@@ -70,7 +70,7 @@ public class SunnyRideServiceImpl implements SunnyRideService {
                                     ChildRideDto childRideDto = new ChildRideDto(childRide);
                                     ChildDto childDto = new ChildDto(childRide.getChild());
                                     //Child에 ParentsList 매핑
-                                    childDto.setParentList(childRide.getChild().getParentList().stream()
+                                    childDto.setParentList(childRide.getChild().getParents().stream()
                                             .map((parents -> new ParentsDto(parents)))
                                             .collect(Collectors.toList()));
                                     childRideDto.setChild(childDto);

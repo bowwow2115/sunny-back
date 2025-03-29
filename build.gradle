@@ -40,6 +40,16 @@ dependencies {
     implementation 'org.apache.poi:poi-ooxml:5.2.2'
 }
 
+// QueryDSL 빌드 옵션 (선택) ~
+def querydslSrcDir = 'src/main/generated'
+clean {
+    delete file(querydslSrcDir)
+}
+
+tasks.withType(JavaCompile) {
+    options.generatedSourceOutputDirectory = file(querydslSrcDir)
+}
+
 tasks.named('test') {
     useJUnitPlatform()
 }
@@ -55,13 +65,4 @@ sourceSets {
 
 compileJava {
     options.annotationProcessorPath = configurations.annotationProcessor
-}
-
-// QueryDSL 빌드 옵션 (선택) ~
-def querydslSrcDir = 'src/main/generated'
-clean {
-    delete file(querydslSrcDir)
-}
-tasks.withType(JavaCompile) {
-    options.generatedSourceOutputDirectory = file(querydslSrcDir)
 }

@@ -1,5 +1,6 @@
 package com.example.sunny.repository;
 
+import com.example.sunny.BootstrapData;
 import com.example.sunny.code.SunnyCode;
 import com.example.sunny.model.*;
 import org.junit.jupiter.api.DisplayName;
@@ -22,6 +23,8 @@ public class ChildRepositoryTest {
     private SunnyRideRepository sunnyRideRepository;
     @Autowired
     private MeetingLoactionRepository meetingLoactionRepository;
+    @Autowired
+    private BootstrapData bootstrapData;
     
     @Test
     @DisplayName("원아 중복 테스트")
@@ -169,13 +172,13 @@ public class ChildRepositoryTest {
         Child result = childRepository.save(input);
 
         //부모 확인
-        assertThat(result.getParentList())
+        assertThat(result.getParents())
                 .contains(parents);
         //차량 확인
-        assertThat(result.getChildRideList())
+        assertThat(result.getChildRides())
                 .containsExactlyInAnyOrder(childRideAm, childRidePm);
         //승하차 장소 확인
-        assertThat(result.getChildRideList())
+        assertThat(result.getChildRides())
                 .extracting(ChildRide::getMeetingLocation)
                 .containsExactlyInAnyOrder(meetingLocationAm, meetingLocationPm);
         //원아 확인
@@ -184,18 +187,24 @@ public class ChildRepositoryTest {
 
     @Test
     public void findAllWithParentsTest() {
+        //원아 모든 정보 포함해서 등록
+        bootstrapData.makeTestData(3);
+
+        //전체 원아 조회와 부모와 함께 조회 시의 수 비교
+        List<Child> all = childRepository.findAll();
         List<Child> allWithParents = childRepository.findAllWithParents();
-        allWithParents.forEach(System.out::println);
+        assertThat(all.size()).isEqualTo(allWithParents.size());
     }
 
     @Test
     public void findAllWithRidesTest() {
+        //원아 모든 정보 포함해서 등록
+        bootstrapData.makeTestData(3);
+
+        //전체 원아 조회와 차량과 함께 조회 시의 수 비교
+        List<Child> all = childRepository.findAll();
         List<Child> allWithRide = childRepository.findAllWithRide();
-        allWithRide.forEach(System.out::println);
-    }
+        assertThat(all.size()).isEqualTo(allWithRide.size());
 
-    private List<Child> createRandomChildren(int count) {
-        return null;
     }
-
 }
