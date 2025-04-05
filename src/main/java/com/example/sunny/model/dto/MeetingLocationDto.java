@@ -19,7 +19,7 @@ public class MeetingLocationDto {
     private String time;
     private String comment;
     private SunnyRideDto sunnyRide;
-    private List<ChildRideDto> childRideList = new ArrayList<>();
+    private List<ChilMeetingLocationDto> childRideList = new ArrayList<>();
 
     public MeetingLocationDto(MeetingLocation meetingLocation) {
         this.id = meetingLocation.getId();

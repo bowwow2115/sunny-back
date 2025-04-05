@@ -142,11 +142,11 @@ public class ChildRepositoryTest {
                 .comment("~~~")
                 .build());
 
-        ChildRide childRideAm = ChildRide.builder()
+        ChildMeetingLocation childMeetingLocationAm = ChildMeetingLocation.builder()
                 .meetingLocation(meetingLocationAm)
                 .build();
 
-        ChildRide childRidePm = ChildRide.builder()
+        ChildMeetingLocation childMeetingLocationPm = ChildMeetingLocation.builder()
                 .meetingLocation(meetingLocationPm)
                 .build();
 
@@ -165,8 +165,8 @@ public class ChildRepositoryTest {
                 .build();
 
         input.addParents(parents);
-        input.addRide(childRideAm);
-        input.addRide(childRidePm);
+        input.addRide(childMeetingLocationAm);
+        input.addRide(childMeetingLocationPm);
 
         //원아 생성
         Child result = childRepository.save(input);
@@ -175,11 +175,11 @@ public class ChildRepositoryTest {
         assertThat(result.getParents())
                 .contains(parents);
         //차량 확인
-        assertThat(result.getChildRides())
-                .containsExactlyInAnyOrder(childRideAm, childRidePm);
+        assertThat(result.getChildMeetingLocations())
+                .containsExactlyInAnyOrder(childMeetingLocationAm, childMeetingLocationPm);
         //승하차 장소 확인
-        assertThat(result.getChildRides())
-                .extracting(ChildRide::getMeetingLocation)
+        assertThat(result.getChildMeetingLocations())
+                .extracting(ChildMeetingLocation::getMeetingLocation)
                 .containsExactlyInAnyOrder(meetingLocationAm, meetingLocationPm);
         //원아 확인
         assertThat(result).isEqualTo(input);

@@ -1,6 +1,6 @@
 package com.example.sunny.controller;
 
-import com.example.sunny.model.dto.ChildRideDto;
+import com.example.sunny.model.dto.ChilMeetingLocationDto;
 import com.example.sunny.service.ChildRideService;
 import com.example.sunny.service.ChildService;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +21,8 @@ public class ChildRideController extends BasicController {
     private final ChildService childService;
 
     @PutMapping
-    public ResponseEntity<Map<String, Object>> updateChildRide(@RequestBody ChildRideDto childRideDto) {
-        return createResponse(childRideService.update(childRideDto));
+    public ResponseEntity<Map<String, Object>> updateChildRide(@RequestBody ChilMeetingLocationDto chilMeetingLocationDto) {
+        return createResponse(childRideService.update(chilMeetingLocationDto));
     }
 
     @DeleteMapping
@@ -32,15 +32,15 @@ public class ChildRideController extends BasicController {
     }
 
     @PostMapping
-    public ResponseEntity<Map<String, Object>> addChildRide(@RequestBody ChildRideDto childRideDto) {
-        return createResponse(childRideService.create(childRideDto));
+    public ResponseEntity<Map<String, Object>> addChildRide(@RequestBody ChilMeetingLocationDto chilMeetingLocationDto) {
+        return createResponse(childRideService.create(chilMeetingLocationDto));
     }
 
     @PostMapping("/list")
-    public ResponseEntity<Map<String, Object>> addChildRideList(@RequestBody List<ChildRideDto> childRideDtoList) {
-        List<ChildRideDto> resultList = new ArrayList<>();
-        for (ChildRideDto childRideDto : childRideDtoList)
-            resultList.add(childRideService.create(childRideDto));
+    public ResponseEntity<Map<String, Object>> addChildRideList(@RequestBody List<ChilMeetingLocationDto> chilMeetingLocationDtoList) {
+        List<ChilMeetingLocationDto> resultList = new ArrayList<>();
+        for (ChilMeetingLocationDto chilMeetingLocationDto : chilMeetingLocationDtoList)
+            resultList.add(childRideService.create(chilMeetingLocationDto));
         return createResponse(resultList);
     }
 }

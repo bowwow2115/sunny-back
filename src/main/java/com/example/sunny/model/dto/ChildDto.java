@@ -23,7 +23,7 @@ public class ChildDto {
     private LocalDate birthday;
     private String status;
     private String name;
-    private List<ChildRideDto> childRideList = new ArrayList<>();
+    private List<ChilMeetingLocationDto> childRideList = new ArrayList<>();
     private List<ParentsDto> parentList = new ArrayList<>();
 
 

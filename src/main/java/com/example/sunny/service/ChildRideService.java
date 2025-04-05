@@ -1,6 +1,6 @@
 package com.example.sunny.service;
 
-import com.example.sunny.model.dto.ChildRideDto;
+import com.example.sunny.model.dto.ChilMeetingLocationDto;
 
-public interface ChildRideService extends CrudService<ChildRideDto, Long> {
+public interface ChildRideService extends CrudService<ChilMeetingLocationDto, Long> {
 }

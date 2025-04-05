@@ -65,19 +65,19 @@ public class SunnyRideServiceImpl implements SunnyRideService {
                     .map((item) -> {
                         MeetingLocationDto meetingLocationDto = new MeetingLocationDto(item);
                         //MeetingLocaiotn(집결지)에 원아리스트 매핑
-                        List<ChildRideDto> childRideDtoList = item.getChildRideList().stream()
+                        List<ChilMeetingLocationDto> chilMeetingLocationDtoList = item.getChildMeetingLocationList().stream()
                                 .map((childRide) -> {
-                                    ChildRideDto childRideDto = new ChildRideDto(childRide);
+                                    ChilMeetingLocationDto chilMeetingLocationDto = new ChilMeetingLocationDto(childRide);
                                     ChildDto childDto = new ChildDto(childRide.getChild());
                                     //Child에 ParentsList 매핑
                                     childDto.setParentList(childRide.getChild().getParents().stream()
                                             .map((parents -> new ParentsDto(parents)))
                                             .collect(Collectors.toList()));
-                                    childRideDto.setChild(childDto);
-                                    return childRideDto;
+                                    chilMeetingLocationDto.setChild(childDto);
+                                    return chilMeetingLocationDto;
                                 })
                                 .collect(Collectors.toList());
-                        meetingLocationDto.setChildRideList(childRideDtoList);
+                        meetingLocationDto.setChildRideList(chilMeetingLocationDtoList);
                         return meetingLocationDto;
                     })
                     .sorted(Comparator.comparing(MeetingLocationDto::getTime))

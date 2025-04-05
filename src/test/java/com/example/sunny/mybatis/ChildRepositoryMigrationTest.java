@@ -150,18 +150,18 @@ public class ChildRepositoryMigrationTest {
                 .build());
         
         //원아와 승하차장소 매핑테이블에 원아를 통해 인서트
-        List<ChildRide> childRideList = new ArrayList<>();
+        List<ChildMeetingLocation> childMeetingLocationList = new ArrayList<>();
 
-        ChildRide childRideAm = ChildRide.builder()
+        ChildMeetingLocation childMeetingLocationAm = ChildMeetingLocation.builder()
                 .meetingLocation(meetingLocationAm)
                 .build();
 
-        ChildRide childRidePm = ChildRide.builder()
+        ChildMeetingLocation childMeetingLocationPm = ChildMeetingLocation.builder()
                 .meetingLocation(meetingLocationPm)
                 .build();
 
-        childRideList.add(childRideAm);
-        childRideList.add(childRidePm);
+        childMeetingLocationList.add(childMeetingLocationAm);
+        childMeetingLocationList.add(childMeetingLocationPm);
         
         //부모 원아를 통해 인서트
         List<Parents> parentsList = new ArrayList<>();
@@ -184,16 +184,16 @@ public class ChildRepositoryMigrationTest {
                 .build();
 
         input.addParents(parents);
-        input.addRide(childRideAm);
-        input.addRide(childRidePm);
+        input.addRide(childMeetingLocationAm);
+        input.addRide(childMeetingLocationPm);
 
         //원아 생성
         Child result = childRepository.save(input);
 
         //부모 확인
-        assertThat(result.getParentList().get(0)).isNotNull();
+        assertThat(result.getParents().get(0)).isNotNull();
         //차량 확인
-        assertThat(result.getChildRideList().get(0)).isNotNull();
+        assertThat(result.getChildMeetingLocations().get(0)).isNotNull();
 
 //        assertThat(result.get)
 

@@ -55,8 +55,8 @@ public class ChildRepositoryCustomImpl implements ChildRepositoryCustom {
         return queryFactory
                 .selectFrom(qChild)
                 .distinct()
-                .leftJoin(qChild.childRides, QChildRide.childRide).fetchJoin()
-                .leftJoin(QChildRide.childRide.meetingLocation, QMeetingLocation.meetingLocation).fetchJoin()
+                .leftJoin(qChild.childMeetingLocations, QChildMeetingLocation.childMeetingLocation).fetchJoin()
+                .leftJoin(QChildMeetingLocation.childMeetingLocation.meetingLocation, QMeetingLocation.meetingLocation).fetchJoin()
                 .leftJoin(QMeetingLocation.meetingLocation.sunnyRide, QSunnyRide.sunnyRide).fetchJoin()
                 .fetch();
     }

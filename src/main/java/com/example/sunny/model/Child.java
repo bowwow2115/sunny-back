@@ -49,10 +49,10 @@ public class Child extends Person{
     @Embedded
     private Address address;
 
-    @OneToMany(mappedBy = "child", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "child", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Parents> parents = new ArrayList<>();
     @OneToMany(mappedBy = "child", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<ChildRide> childRides = new ArrayList<>();
+    private List<ChildMeetingLocation> childMeetingLocations = new ArrayList<>();
 
     @Column(name = "status")
     @EqualsAndHashCode.Include
@@ -73,8 +73,8 @@ public class Child extends Person{
         this.className = className;
     }
 
-    public void updateChildRideList(List<ChildRide> childRideList) {
-        this.childRides = childRideList;
+    public void updateChildRideList(List<ChildMeetingLocation> childMeetingLocationList) {
+        this.childMeetingLocations = childMeetingLocationList;
     }
 
     public void updateParentList(List<Parents> parentList) {
@@ -91,13 +91,13 @@ public class Child extends Person{
         parents.updateChild(null);
     }
 
-    public void addRide(ChildRide ride) {
-        this.childRides.add(ride);
+    public void addRide(ChildMeetingLocation ride) {
+        this.childMeetingLocations.add(ride);
         ride.updateChild(this);
     }
 
-    public void removeRide(ChildRide ride) {
-        this.childRides.remove(ride);
+    public void removeRide(ChildMeetingLocation ride) {
+        this.childMeetingLocations.remove(ride);
         ride.updateChild(null);
     }
 
