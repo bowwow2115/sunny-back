@@ -10,9 +10,9 @@ import com.example.sunny.model.dto.ChilMeetingLocationDto;
 import com.example.sunny.model.dto.MeetingLocationDto;
 import com.example.sunny.model.dto.SunnyRideDto;
 import com.example.sunny.repository.ChildRepository;
-import com.example.sunny.repository.ChildRideRepository;
+import com.example.sunny.repository.ChildMeetingLocationRepository;
 import com.example.sunny.repository.MeetingLoactionRepository;
-import com.example.sunny.service.ChildRideService;
+import com.example.sunny.service.ChildMeetingLocationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,8 +20,8 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ChildRideServiceImpl implements ChildRideService {
-    private final ChildRideRepository childRideRepository;
+public class ChildMeetingLocationServiceImpl implements ChildMeetingLocationService {
+    private final ChildMeetingLocationRepository childMeetingLocationRepository;
     private final ChildRepository childRepository;
 //    private final SunnyRideRepository sunnyRideRepository;
     private final MeetingLoactionRepository meetingLoactionRepository;
@@ -49,7 +49,7 @@ public class ChildRideServiceImpl implements ChildRideService {
                 .comment(object.getComment())
                 .build();
 
-        ChildMeetingLocation result = childRideRepository.save(childMeetingLocation);
+        ChildMeetingLocation result = childMeetingLocationRepository.save(childMeetingLocation);
 
         //MeetingLoaction 하위 SunnyRide 정보 추가 매핑
         MeetingLocationDto meetingLocationDto = new MeetingLocationDto(result.getMeetingLocation());
@@ -80,7 +80,7 @@ public class ChildRideServiceImpl implements ChildRideService {
                 .comment(object.getComment())
                 .build();
 
-        ChildMeetingLocation result = childRideRepository.save(childMeetingLocation);
+        ChildMeetingLocation result = childMeetingLocationRepository.save(childMeetingLocation);
 
         //MeetingLoaction 하위 SunnyRide 정보 추가 매핑
         MeetingLocationDto meetingLocationDto = new MeetingLocationDto(result.getMeetingLocation());
@@ -101,6 +101,6 @@ public class ChildRideServiceImpl implements ChildRideService {
 
     @Override
     public void deleteById(Long aLong) {
-        childRideRepository.deleteById(aLong);
+        childMeetingLocationRepository.deleteById(aLong);
     }
 }
