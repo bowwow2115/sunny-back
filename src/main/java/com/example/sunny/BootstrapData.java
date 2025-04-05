@@ -292,12 +292,12 @@ public class BootstrapData implements CommandLineRunner {
                     .build();
 
             // ChildRideDto 초기화
-            ChildRideDto sunnyChildRideAm = ChildRideDto.builder()
+            ChilMeetingLocationDto sunnyChildRideAm = ChilMeetingLocationDto.builder()
 //                    .time(amRideTimes[i])
                     .meetingLocation(amMeetingLocationList.get(i % amMeetingLocationList.size()))
                     .build();
 
-            ChildRideDto sunnyChildRidePm = ChildRideDto.builder()
+            ChilMeetingLocationDto sunnyChildRidePm = ChilMeetingLocationDto.builder()
                     .meetingLocation(pmMeetingLocationList.get(i % pmMeetingLocationList.size()))
                     .build();
 

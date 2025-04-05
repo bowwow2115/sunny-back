@@ -43,7 +43,7 @@ public class MeetingLocationServiceImpl implements MeetingLoactionService {
         MeetingLocation origin = meetingLoactionRepository.findById(object.getId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.ENTITY_NOT_FOUND, "수정하려는 승하차장소가 존재하지 않습니다."));
         MeetingLocation meetingLocation = object.toEntity();
-        meetingLocation.setChildRideList(origin.getChildRideList());
+        meetingLocation.setChildMeetingLocationList(origin.getChildMeetingLocationList());
         return new MeetingLocationDto(meetingLoactionRepository.save(meetingLocation));
     }
 

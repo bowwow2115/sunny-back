@@ -15,10 +15,11 @@ spring:
   jpa:
     properties:
       hibernate:
+        default_batch_fetch_size: 1000
         dialect: org.hibernate.dialect.PostgreSQLDialect
-#        format_sql: true
+        format_sql: true
         default_schema: sunny
-#    show-sql: true
+    show-sql: true
     hibernate:
       #  TODO: 배포시 수정
       ddl-auto: validate

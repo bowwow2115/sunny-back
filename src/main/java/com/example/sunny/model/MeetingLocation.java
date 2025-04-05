@@ -31,7 +31,7 @@ public class MeetingLocation extends BaseEntity{
 
     @OneToMany(mappedBy = "meetingLocation", cascade = CascadeType.ALL, orphanRemoval = true)
     @Setter
-    private List<ChildRide> childRideList = new ArrayList<>();
+    private List<ChildMeetingLocation> childMeetingLocationList = new ArrayList<>();
 
     @Builder
     public MeetingLocation(Long id, String createdBy, String modifiedBy, String name, String time, String comment, SunnyRide sunnyRide) {

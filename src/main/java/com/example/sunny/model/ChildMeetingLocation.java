@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "sunny_children_ride")
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
-public class ChildRide extends BaseEntity {
+public class ChildMeetingLocation extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "child_id")
     private Child child;
@@ -35,7 +35,7 @@ public class ChildRide extends BaseEntity {
     }
 
     @Builder
-    public ChildRide(Long id, String createdBy, String modifiedBy, Child child, MeetingLocation meetingLocation, String comment, String time) {
+    public ChildMeetingLocation(Long id, String createdBy, String modifiedBy, Child child, MeetingLocation meetingLocation, String comment, String time) {
         super(id, createdBy, modifiedBy);
         this.child = child;
         this.meetingLocation = meetingLocation;

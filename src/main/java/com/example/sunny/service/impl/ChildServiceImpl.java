@@ -3,7 +3,7 @@ package com.example.sunny.service.impl;
 import com.example.sunny.config.error.BusinessException;
 import com.example.sunny.config.error.ErrorCode;
 import com.example.sunny.model.Child;
-import com.example.sunny.model.ChildRide;
+import com.example.sunny.model.ChildMeetingLocation;
 import com.example.sunny.model.MeetingLocation;
 import com.example.sunny.model.dto.*;
 import com.example.sunny.repository.ChildRepository;
@@ -110,10 +110,10 @@ public class ChildServiceImpl implements ChildService {
                     .forEach((item) -> {
                         MeetingLocation meetingLocation = meetingLoactionRepository.findById(item.getMeetingLocation().getId()).orElseThrow(
                                 () -> new BusinessException(ErrorCode.INVALID_INPUT_VALUE, "선택한 차량이 존재하지 않습니다."));
-                        ChildRide childRide = new ChildRide();
-                                childRide.updateMeetingLocation(meetingLocation);
-                                childRide.updateComment(item.getComment());
-                                child.addRide(childRide);
+                        ChildMeetingLocation childMeetingLocation = new ChildMeetingLocation();
+                                childMeetingLocation.updateMeetingLocation(meetingLocation);
+                                childMeetingLocation.updateComment(item.getComment());
+                                child.addRide(childMeetingLocation);
                             });
 
         Child result = childRepository.save(child);
@@ -126,7 +126,7 @@ public class ChildServiceImpl implements ChildService {
         Child child = object.toEntity();
         Child origin = childRepository.findById(object.getId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.INVALID_INPUT_VALUE, "업데이트할 원아가 존재하지 않습니다."));
-        child.updateChildRideList(origin.getChildRides());
+        child.updateChildRideList(origin.getChildMeetingLocations());
         child.updateParentList(origin.getParents());
         return new ChildDto(childRepository.save(child));
     }
@@ -150,8 +150,8 @@ public class ChildServiceImpl implements ChildService {
     }
 
     private ChildDto addChildRide(ChildDto childDto, Child result) {
-        if(result.getChildRides() != null && result.getChildRides().size() != 0) {
-            List<ChildRideDto> childRideDtoList = result.getChildRides().stream()
+        if(result.getChildMeetingLocations() != null && result.getChildMeetingLocations().size() != 0) {
+            List<ChilMeetingLocationDto> chilMeetingLocationDtoList = result.getChildMeetingLocations().stream()
                     .map((item) -> {
                         //
                         MeetingLocationDto meetingLocationDto = new MeetingLocationDto(item.getMeetingLocation());
@@ -165,12 +165,12 @@ public class ChildServiceImpl implements ChildService {
                         sunnyRideDto.setMeetingLocationList(meetingLocationDtoList);
                         
                         meetingLocationDto.setSunnyRide(sunnyRideDto);
-                        ChildRideDto childRideDto = new ChildRideDto(item);
-                        childRideDto.setMeetingLocation(meetingLocationDto);
-                        return childRideDto;
+                        ChilMeetingLocationDto chilMeetingLocationDto = new ChilMeetingLocationDto(item);
+                        chilMeetingLocationDto.setMeetingLocation(meetingLocationDto);
+                        return chilMeetingLocationDto;
                     })
                     .collect(Collectors.toList());
-            childDto.setChildRideList(childRideDtoList);
+            childDto.setChildRideList(chilMeetingLocationDtoList);
         }
         return childDto;
     }
