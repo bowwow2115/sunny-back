@@ -25,10 +25,11 @@ public class ChildRepositoryTest {
     private MeetingLoactionRepository meetingLoactionRepository;
     @Autowired
     private BootstrapData bootstrapData;
+
     
     @Test
     @DisplayName("원아 중복 테스트")
-    public void checkChild() {
+    public void checkChildTest() {
         Child child = childRepository.save(Child.builder()
                 .id(1L)
                 .name("박어린이")
@@ -52,7 +53,7 @@ public class ChildRepositoryTest {
 
     @Test
     @DisplayName("재학중인 원아 가져오기 테스트")
-    public void getAttendingChildren() {
+    public void findAttendingChildrenTest() {
         childRepository.save(Child.builder()
                 .id(1L)
                 .name("박어린이")
@@ -186,6 +187,7 @@ public class ChildRepositoryTest {
     }
 
     @Test
+    @DisplayName("원아 부모정보 포함 찾기 테스트")
     public void findAllWithParentsTest() {
         //원아 모든 정보 포함해서 등록
         bootstrapData.makeTestData(3);
@@ -193,10 +195,18 @@ public class ChildRepositoryTest {
         //전체 원아 조회와 부모와 함께 조회 시의 수 비교
         List<Child> all = childRepository.findAll();
         List<Child> allWithParents = childRepository.findAllWithParents();
-        assertThat(all.size()).isEqualTo(allWithParents.size());
+
+            assertThat(all.size()).isEqualTo(allWithParents.size());
+        int count = 0;
+        for (Child child : allWithParents) {
+            if(child.getParents() != null) count++;
+        }
+        //부모 있는 경우가 3이상인지 확인
+        assertThat(count).isGreaterThanOrEqualTo(3);
     }
 
     @Test
+    @DisplayName("원아 찾기 승하차정보 포함 찾기 테스트")
     public void findAllWithRidesTest() {
         //원아 모든 정보 포함해서 등록
         bootstrapData.makeTestData(3);
@@ -204,7 +214,16 @@ public class ChildRepositoryTest {
         //전체 원아 조회와 차량과 함께 조회 시의 수 비교
         List<Child> all = childRepository.findAll();
         List<Child> allWithRide = childRepository.findAllWithRide();
-        assertThat(all.size()).isEqualTo(allWithRide.size());
 
+        assertThat(all.size()).isEqualTo(allWithRide.size());
+        int count = 0;
+
+        for (Child child : allWithRide) {
+            for(ChildMeetingLocation childMeetingLocation : child.getChildMeetingLocations()) {
+                if(childMeetingLocation.getMeetingLocation().getSunnyRide()!=null) count++;
+            }
+        }
+        //차량 정보있는 경우가 3이상인지 확인
+        assertThat(count).isGreaterThanOrEqualTo(3);
     }
 }

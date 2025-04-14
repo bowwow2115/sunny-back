@@ -69,20 +69,18 @@ public class ChildServiceImpl implements ChildService {
 
     @Override
     public List<ChildDto> findAll() {
-        return childRepository.findAllWithParents().stream()
-                .map((result)-> {
-                    ChildDto childDto = new ChildDto(result);
-                    return addParents(childDto, result);
-                })
+        return childRepository.findAll().stream()
+                .map(result -> new ChildDto(result))
                 .collect(Collectors.toList());
     }
+
 
     @Override
     public List<ChildDto> findAllWithRide() {
         return childRepository.findAllWithRide().stream()
                 .map((result)-> {
                     ChildDto childDto = new ChildDto(result);
-                    return addJoinData(childDto, result);
+                    return addChildRide(childDto, result);
                 })
                 .collect(Collectors.toList());
     }
