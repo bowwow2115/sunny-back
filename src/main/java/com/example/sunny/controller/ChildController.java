@@ -18,6 +18,11 @@ public class ChildController extends BasicController {
 
     @GetMapping("/all")
     public ResponseEntity<Map<String, Object>> getAllChildren() {
+        return createResponse(childService.findAll());
+    }
+
+    @GetMapping("/allWithRide")
+    public ResponseEntity<Map<String, Object>> getAllWithRide() {
         return createResponse(childService.findAllWithRide());
     }
 
