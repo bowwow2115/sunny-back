@@ -4,7 +4,7 @@ import com.example.sunny.code.SunnyCode;
 import com.example.sunny.model.Child;
 import com.example.sunny.model.dto.ChildDto;
 import com.example.sunny.repository.ChildRepository;
-import com.example.sunny.repository.MeetingLoactionRepository;
+import com.example.sunny.repository.MeetingLocationRepository;
 import com.example.sunny.service.impl.ChildServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,7 +29,7 @@ public class ChildServiceTest {
     @Mock
     private ChildRepository mockChildRepository;
     @Mock
-    private MeetingLoactionRepository mockMeetingLoactionRepository;
+    private MeetingLocationRepository mockMeetingLocationRepository;
     @InjectMocks
     private ChildServiceImpl mockChildService;
 

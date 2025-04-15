@@ -22,7 +22,7 @@ public class ChildRepositoryTest {
     @Autowired
     private SunnyRideRepository sunnyRideRepository;
     @Autowired
-    private MeetingLoactionRepository meetingLoactionRepository;
+    private MeetingLocationRepository meetingLocationRepository;
     @Autowired
     private BootstrapData bootstrapData;
 
@@ -129,14 +129,14 @@ public class ChildRepositoryTest {
                 .build());
 
         //승하차 장소 생성
-        MeetingLocation meetingLocationAm = meetingLoactionRepository.save(MeetingLocation.builder()
+        MeetingLocation meetingLocationAm = meetingLocationRepository.save(MeetingLocation.builder()
                 .time("10:00")
                 .name("김포시청")
                 .sunnyRide(sunnyRideAm)
                 .comment("~~~")
                 .build());
 
-        MeetingLocation meetingLocationPm = meetingLoactionRepository.save(MeetingLocation.builder()
+        MeetingLocation meetingLocationPm = meetingLocationRepository.save(MeetingLocation.builder()
                 .time("16:00")
                 .name("김포시청")
                 .sunnyRide(sunnyRidePm)
@@ -225,5 +225,23 @@ public class ChildRepositoryTest {
         }
         //차량 정보있는 경우가 3이상인지 확인
         assertThat(count).isGreaterThanOrEqualTo(3);
+    }
+    
+    @Test
+    @DisplayName("이름으로 원아찾기")
+    public void findByNameTest() {
+        Child input = Child.builder()
+                .name("박어린이")
+                .birthday(LocalDate.of(2023, 5, 24))
+                .status(SunnyCode.CHILD_STATUS_ATTENDING)
+                .admissionDate(LocalDate.of(2024, 3, 2))
+                .className("새싹반")
+                .build();
+
+        childRepository.save(input);
+
+        Child byName = childRepository.findByName(input.getName());
+
+        assertThat(byName.getName()).isEqualTo(input.getName());
     }
 }
