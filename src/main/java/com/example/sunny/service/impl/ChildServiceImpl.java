@@ -24,30 +24,30 @@ public class ChildServiceImpl implements ChildService {
     private final MeetingLocationRepository meetingLocationRepository;
 
     @Override
-    public ChildDto findByName(String name) {
-        Child result = childRepository.findByName(name);
-        ChildDto childDto = new ChildDto(result);
-        return addChildRide(childDto, result);
+    public List<ChildDto> findByName(String name) {
+        return childRepository.findByName(name).stream()
+                .map(ChildDto::new)
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<ChildDto> findChildWithBirthMonth(int month) {
         return childRepository.findChildWithBirthMonth(month).stream()
-                .map((result) -> new ChildDto(result))
+                .map(ChildDto::new)
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<ChildDto> checkChild(ChildDto object) {
         return childRepository.checkChild(object.toEntity()).stream()
-                .map(result -> new ChildDto(result))
+                .map(ChildDto::new)
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<ChildDto> getAttendingChildren() {
         return childRepository.findAttendingChildren().stream()
-                .map((result)-> new ChildDto(result))
+                .map(ChildDto::new)
                 .collect(Collectors.toList());
     }
 
@@ -70,7 +70,7 @@ public class ChildServiceImpl implements ChildService {
     @Override
     public List<ChildDto> findAll() {
         return childRepository.findAll().stream()
-                .map(result -> new ChildDto(result))
+                .map(ChildDto::new)
                 .collect(Collectors.toList());
     }
 

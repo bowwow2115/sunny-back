@@ -240,8 +240,8 @@ public class ChildRepositoryTest {
 
         childRepository.save(input);
 
-        Child byName = childRepository.findByName(input.getName());
+        List<Child> byNameList = childRepository.findByName(input.getName());
 
-        assertThat(byName.getName()).isEqualTo(input.getName());
+        byNameList.forEach(byName -> assertThat(byName.getName()).isEqualTo(input.getName()));
     }
 }
