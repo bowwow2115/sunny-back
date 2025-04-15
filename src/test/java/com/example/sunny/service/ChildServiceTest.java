@@ -15,6 +15,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -40,14 +41,16 @@ public class ChildServiceTest {
                 .id(1L)
                 .name("박어린이")
                 .build();
+        List<Child> mockChildList = new ArrayList<>();
+        mockChildList.add(mockChild);
 
-        Mockito.when(mockChildRepository.findByName("박어린이")).thenReturn(mockChild);
+        Mockito.when(mockChildRepository.findByName("박어린이")).thenReturn(mockChildList);
 
-        ChildDto result = mockChildService.findByName("박어린이");
+        List<ChildDto> resultList = mockChildService.findByName("박어린이");
 
-        assertThat(result)
+        resultList.forEach(result -> assertThat(result)
                 .extracting(ChildDto::getId, ChildDto::getName)
-                .containsExactly(1L, "박어린이");
+                .containsExactly(1L, "박어린이"));
     }
 
     @Test
