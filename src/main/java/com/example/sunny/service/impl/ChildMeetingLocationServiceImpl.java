@@ -11,7 +11,7 @@ import com.example.sunny.model.dto.MeetingLocationDto;
 import com.example.sunny.model.dto.SunnyRideDto;
 import com.example.sunny.repository.ChildRepository;
 import com.example.sunny.repository.ChildMeetingLocationRepository;
-import com.example.sunny.repository.MeetingLoactionRepository;
+import com.example.sunny.repository.MeetingLocationRepository;
 import com.example.sunny.service.ChildMeetingLocationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ public class ChildMeetingLocationServiceImpl implements ChildMeetingLocationServ
     private final ChildMeetingLocationRepository childMeetingLocationRepository;
     private final ChildRepository childRepository;
 //    private final SunnyRideRepository sunnyRideRepository;
-    private final MeetingLoactionRepository meetingLoactionRepository;
+    private final MeetingLocationRepository meetingLocationRepository;
     @Override
     public List<ChilMeetingLocationDto> findAll() {
         return null;
@@ -40,7 +40,7 @@ public class ChildMeetingLocationServiceImpl implements ChildMeetingLocationServ
         Child child = childRepository.findById(object.getChild().getId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.ENTITY_NOT_FOUND, "생성할 원아의 정보가 존재하지 않습니다."));
 
-        MeetingLocation meetingLocation = meetingLoactionRepository.findById(object.getMeetingLocation().getId())
+        MeetingLocation meetingLocation = meetingLocationRepository.findById(object.getMeetingLocation().getId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.ENTITY_NOT_FOUND, "생성할 차량의 정보가 존재하지 않습니다."));
 
         ChildMeetingLocation childMeetingLocation = ChildMeetingLocation.builder()
@@ -70,7 +70,7 @@ public class ChildMeetingLocationServiceImpl implements ChildMeetingLocationServ
         Child child = childRepository.findById(object.getChild().getId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.ENTITY_NOT_FOUND, "변경할 원아의 정보가 존재하지 않습니다."));
 
-        MeetingLocation meetingLocation = meetingLoactionRepository.findById(object.getMeetingLocation().getId())
+        MeetingLocation meetingLocation = meetingLocationRepository.findById(object.getMeetingLocation().getId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.ENTITY_NOT_FOUND, "생성할 차량의 정보가 존재하지 않습니다."));
 
         ChildMeetingLocation childMeetingLocation = ChildMeetingLocation.builder()

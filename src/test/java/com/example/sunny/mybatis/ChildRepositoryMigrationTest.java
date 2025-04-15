@@ -3,7 +3,7 @@ package com.example.sunny.mybatis;
 import com.example.sunny.code.SunnyCode;
 import com.example.sunny.model.*;
 import com.example.sunny.repository.ChildRepository;
-import com.example.sunny.repository.MeetingLoactionRepository;
+import com.example.sunny.repository.MeetingLocationRepository;
 import com.example.sunny.repository.SunnyRideRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,7 +33,7 @@ public class ChildRepositoryMigrationTest {
     @Autowired
     private SunnyRideRepository sunnyRideRepository;
     @Autowired
-    private MeetingLoactionRepository meetingLoactionRepository;
+    private MeetingLocationRepository meetingLocationRepository;
     
     @Test
     @DisplayName("원아 중복 테스트")
@@ -135,14 +135,14 @@ public class ChildRepositoryMigrationTest {
                 .build());
 
         //승하차 장소 생성
-        MeetingLocation meetingLocationAm = meetingLoactionRepository.save(MeetingLocation.builder()
+        MeetingLocation meetingLocationAm = meetingLocationRepository.save(MeetingLocation.builder()
                 .time("10:00")
                 .name("김포시청")
                 .sunnyRide(sunnyRideAm)
                 .comment("~~~")
                 .build());
 
-        MeetingLocation meetingLocationPm = meetingLoactionRepository.save(MeetingLocation.builder()
+        MeetingLocation meetingLocationPm = meetingLocationRepository.save(MeetingLocation.builder()
                 .time("16:00")
                 .name("김포시청")
                 .sunnyRide(sunnyRidePm)

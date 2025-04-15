@@ -7,7 +7,7 @@ import com.example.sunny.model.ChildMeetingLocation;
 import com.example.sunny.model.MeetingLocation;
 import com.example.sunny.model.dto.*;
 import com.example.sunny.repository.ChildRepository;
-import com.example.sunny.repository.MeetingLoactionRepository;
+import com.example.sunny.repository.MeetingLocationRepository;
 import com.example.sunny.service.ChildService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ChildServiceImpl implements ChildService {
     private final ChildRepository childRepository;
-    private final MeetingLoactionRepository meetingLoactionRepository;
+    private final MeetingLocationRepository meetingLocationRepository;
 
     @Override
     public ChildDto findByName(String name) {
@@ -106,7 +106,7 @@ public class ChildServiceImpl implements ChildService {
         if(object.getChildRideList() != null)
             object.getChildRideList().stream()
                     .forEach((item) -> {
-                        MeetingLocation meetingLocation = meetingLoactionRepository.findById(item.getMeetingLocation().getId()).orElseThrow(
+                        MeetingLocation meetingLocation = meetingLocationRepository.findById(item.getMeetingLocation().getId()).orElseThrow(
                                 () -> new BusinessException(ErrorCode.INVALID_INPUT_VALUE, "선택한 차량이 존재하지 않습니다."));
                         ChildMeetingLocation childMeetingLocation = new ChildMeetingLocation();
                                 childMeetingLocation.updateMeetingLocation(meetingLocation);
