@@ -1,12 +1,17 @@
 plugins {
-    id 'org.springframework.boot' version '2.7.5'
-    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
+    id 'org.springframework.boot' version '3.4.2'
+    id 'io.spring.dependency-management' version '1.1.7'
 }
 
-group = 'com.example'
+group = 'com.sunny'
 version = '1.0'
-sourceCompatibility = '11'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
 
 configurations {
     compileOnly {
@@ -19,50 +24,52 @@ repositories {
 }
 
 dependencies {
+    // Spring Boot Starters
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
-    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
-    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+
+    // JWT (버전 일치 및 최신화)
+    implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
+
+    // Database & MyBatis
+    runtimeOnly 'org.postgresql:postgresql'
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
+
+    // QueryDSL (Jakarta Namespace 대응)
+    implementation 'com.querydsl:querydsl-jpa:5.1.0:jakarta'
+    annotationProcessor "com.querydsl:querydsl-apt:5.1.0:jakarta"
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+
+    // Utils
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
-    runtimeOnly 'org.postgresql:postgresql'
-    implementation 'org.mybatis:mybatis:3.4.1'
-    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-    implementation("com.querydsl:querydsl-jpa:5.0.0")
-    annotationProcessor("com.querydsl:querydsl-apt:5.0.0:jpa")
-    annotationProcessor("jakarta.persistence:jakarta.persistence-api")
-    annotationProcessor("jakarta.annotation:jakarta.annotation-api")
+    implementation 'org.apache.poi:poi-ooxml:5.2.2'
+
+    // Test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
-    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
-    implementation 'org.apache.poi:poi-ooxml:5.2.2'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
-// QueryDSL 빌드 옵션 (선택) ~
-def querydslSrcDir = 'src/main/generated'
+def querydslDir = layout.buildDirectory.dir("generated/querydsl").get().asFile
+
+sourceSets {
+    main.java.srcDirs += querydslDir
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.getGeneratedSourceOutputDirectory().set(querydslDir)
+}
+
 clean {
-    delete file(querydslSrcDir)
-}
-
-tasks.withType(JavaCompile) {
-    options.generatedSourceOutputDirectory = file(querydslSrcDir)
+    delete querydslDir
 }
 
 tasks.named('test') {
     useJUnitPlatform()
-}
-
-// QueryDSL 설정
-sourceSets {
-    main {
-        java {
-            srcDirs = ['src/main/java', 'build/generated/sources/annotationProcessor/java/main']
-        }
-    }
-}
-
-compileJava {
-    options.annotationProcessorPath = configurations.annotationProcessor
 }
