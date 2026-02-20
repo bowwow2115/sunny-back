@@ -11,6 +11,8 @@ public interface ChildRepositoryCustom {
 
     List<Child> findAttendingChildren();
 
+    List<Child> findAttendingChildrenWithFetch();
+
     List<Child> findAllWithRide();
 
     List<Child> findAllWithParents();

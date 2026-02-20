@@ -71,4 +71,17 @@ public class ChildRepositoryCustomImpl implements ChildRepositoryCustom {
                 .fetch();
     }
 
+    @Override
+    public List<Child> findAttendingChildrenWithFetch() {
+        QChild qChild = QChild.child;
+        return queryFactory
+                .selectFrom(qChild)
+                .distinct()
+                .leftJoin(qChild.childMeetingLocations, QChildMeetingLocation.childMeetingLocation).fetchJoin()
+                .leftJoin(QChildMeetingLocation.childMeetingLocation.meetingLocation, QMeetingLocation.meetingLocation).fetchJoin()
+                .leftJoin(QMeetingLocation.meetingLocation.sunnyRide, QSunnyRide.sunnyRide).fetchJoin()
+                .where(qChild.status.eq(SunnyCode.CHILD_STATUS_ATTENDING))
+                .fetch();
+    }
+
 }
