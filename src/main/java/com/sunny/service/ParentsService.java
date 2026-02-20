@@ -2,6 +2,8 @@ package com.sunny.service;
 
 import com.sunny.model.dto.ParentsDto;
 
+import java.util.List;
+
 public interface ParentsService extends CrudService<ParentsDto, Long> {
-    ParentsDto findByName(String name);
+    List<ParentsDto> findByName(String name);
 }

@@ -1,14 +1,13 @@
 package com.sunny.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
 
 @Getter
 @Setter
@@ -21,7 +20,7 @@ public class User extends Person {
     @Column(name = "password", nullable = false)
     private String password;
     @Column(name = "role")
-    @ColumnDefault("user")
+    @ColumnDefault("USER")
     private String role;
     @Column(name = "status", nullable = false)
     private boolean status;

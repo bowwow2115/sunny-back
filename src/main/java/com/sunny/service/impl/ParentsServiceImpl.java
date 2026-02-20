@@ -11,7 +11,9 @@ import com.sunny.service.ParentsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -57,7 +59,9 @@ public class ParentsServiceImpl implements ParentsService {
     }
 
     @Override
-    public ParentsDto findByName(String name) {
-        return new ParentsDto(parentsRepository.findByName(name));
+    public List<ParentsDto> findByName(String name) {
+        List<Parents> parentsList = parentsRepository.findByName(name);
+        if(parentsList == null) parentsList = new ArrayList<>();
+        return parentsList.stream().map(ParentsDto::new).collect(Collectors.toList());
     }
 }
