@@ -5,20 +5,23 @@ import com.sunny.config.error.ErrorCode;
 import com.sunny.model.SunnyClass;
 import com.sunny.model.dto.SunnyClassDto;
 import com.sunny.repository.SunnyClassRepository;
-import com.sunny.service.SunnyClassServcie;
+import com.sunny.service.SunnyClassService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class SunnyClsssServiceImpl implements SunnyClassServcie {
+public class SunnyClassServiceImpl implements SunnyClassService {
 
     private final SunnyClassRepository sunnyClassRepository;
 
     @Override
+    @Cacheable(value = "sunnyClasses", key = "'all'")
     public List<SunnyClassDto> findAll() {
         return sunnyClassRepository.findAll().stream()
                 .map(SunnyClassDto::new)
@@ -26,27 +29,32 @@ public class SunnyClsssServiceImpl implements SunnyClassServcie {
     }
 
     @Override
+    @Cacheable(value = "sunnyClasses", key = "#aLong")
     public SunnyClassDto findById(Long aLong) {
         SunnyClass sunnyClass = sunnyClassRepository.findById(aLong).orElseThrow(() -> new BusinessException(ErrorCode.ENTITY_NOT_FOUND));
         return new SunnyClassDto(sunnyClass);
     }
 
     @Override
+    @CacheEvict(value = "sunnyClasses", allEntries = true)
     public SunnyClassDto create(SunnyClassDto object) {
         return new SunnyClassDto(sunnyClassRepository.save(object.toEntity()));
     }
 
     @Override
+    @CacheEvict(value = "sunnyClasses", allEntries = true)
     public SunnyClassDto update(SunnyClassDto object) {
         return new SunnyClassDto(sunnyClassRepository.save(object.toEntity()));
     }
 
     @Override
+    @CacheEvict(value = "sunnyClasses", allEntries = true)
     public void delete(SunnyClassDto object) {
         sunnyClassRepository.delete(object.toEntity());
     }
 
     @Override
+    @CacheEvict(value = "sunnyClasses", allEntries = true)
     public void deleteById(Long aLong) {
         sunnyClassRepository.deleteById(aLong);
     }

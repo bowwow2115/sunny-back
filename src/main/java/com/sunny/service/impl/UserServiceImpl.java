@@ -9,6 +9,8 @@ import com.sunny.repository.UserRepository;
 import com.sunny.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,12 +35,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Cacheable(value = "users", key = "#aLong")
     public UserDto findById(Long aLong) {
         User user = userRepository.findById(aLong).orElseThrow(() -> new BusinessException(ErrorCode.ENTITY_NOT_FOUND));
         return new UserDto(user);
     }
 
     @Override
+    @CacheEvict(value = "users", allEntries = true)
     public UserDto create(UserDto object) {
         User user = null;
         try {
@@ -64,6 +68,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @CacheEvict(value = "users", allEntries = true)
     public UserDto update(UserDto object) {
         User origin = userRepository.findById(object.getId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.INVALID_INPUT_VALUE, "업데이트할 유저가 존재하지 않습니다."));
@@ -80,11 +85,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @CacheEvict(value = "users", allEntries = true)
     public void delete(UserDto object) {
         userRepository.delete(object.toEntity());
     }
 
     @Override
+    @CacheEvict(value = "users", allEntries = true)
     public void deleteById(Long aLong) {
         userRepository.deleteById(aLong);
     }

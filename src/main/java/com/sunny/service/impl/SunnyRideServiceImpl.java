@@ -8,6 +8,8 @@ import com.sunny.repository.SunnyRideRepository;
 import com.sunny.service.SunnyRideService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.util.Comparator;
 import java.util.List;
@@ -19,6 +21,7 @@ public class SunnyRideServiceImpl implements SunnyRideService {
     private final SunnyRideRepository sunnyRideRepository;
 
     @Override
+    @Cacheable(value = "sunnyRides", key = "'all'")
     public List<SunnyRideDto> findAll() {
         return sunnyRideRepository.findAll().stream()
                 .map((result)-> {
@@ -29,17 +32,20 @@ public class SunnyRideServiceImpl implements SunnyRideService {
     }
 
     @Override
+    @Cacheable(value = "sunnyRides", key = "#aLong")
     public SunnyRideDto findById(Long aLong) {
         SunnyRide childRide = sunnyRideRepository.findById(aLong).orElseThrow(() -> new BusinessException(ErrorCode.ENTITY_NOT_FOUND));
         return new SunnyRideDto(childRide);
     }
 
     @Override
+    @CacheEvict(value = "sunnyRides", allEntries = true)
     public SunnyRideDto create(SunnyRideDto object) {
         return new SunnyRideDto(sunnyRideRepository.save(object.toEntity()));
     }
 
     @Override
+    @CacheEvict(value = "sunnyRides", allEntries = true)
     public SunnyRideDto update(SunnyRideDto object) {
         SunnyRide origin = sunnyRideRepository.findById(object.getId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.ENTITY_NOT_FOUND, "수정하려는 차량의 정보가 존재하지 않습니다."));
@@ -49,11 +55,13 @@ public class SunnyRideServiceImpl implements SunnyRideService {
     }
 
     @Override
+    @CacheEvict(value = "sunnyRides", allEntries = true)
     public void delete(SunnyRideDto object) {
         sunnyRideRepository.delete(object.toEntity());
     }
 
     @Override
+    @CacheEvict(value = "sunnyRides", allEntries = true)
     public void deleteById(Long aLong) {
         sunnyRideRepository.deleteById(aLong);
     }

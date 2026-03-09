@@ -12,6 +12,8 @@ import com.sunny.service.ChildService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +26,7 @@ public class ChildServiceImpl implements ChildService {
     private final MeetingLocationRepository meetingLocationRepository;
 
     @Override
+    @Cacheable(value = "childrenByName", key = "#name")
     public List<ChildDto> findByName(String name) {
         return childRepository.findByName(name).stream()
                 .map(ChildDto::new)
@@ -68,6 +71,7 @@ public class ChildServiceImpl implements ChildService {
     }
 
     @Override
+    @Cacheable(value = "children", key = "'all'")
     public List<ChildDto> findAll() {
         return childRepository.findAll().stream()
                 .map(ChildDto::new)
@@ -86,6 +90,7 @@ public class ChildServiceImpl implements ChildService {
     }
 
     @Override
+    @Cacheable(value = "children", key = "#aLong")
     public ChildDto findById(Long aLong) {
         Child result = childRepository.findById(aLong).orElseThrow(() -> new BusinessException(ErrorCode.ENTITY_NOT_FOUND, "해당 원아의 정보가 존재하지 않습니다."));
         ChildDto childDto = new ChildDto(result);
@@ -93,6 +98,7 @@ public class ChildServiceImpl implements ChildService {
     }
     @Transactional
     @Override
+    @CacheEvict(value = {"children","childrenWithRide","childrenByName"}, allEntries = true)
     public ChildDto create(ChildDto object) {
 
         Child child = object.toEntity();
@@ -120,6 +126,7 @@ public class ChildServiceImpl implements ChildService {
     }
 
     @Override
+    @CacheEvict(value = {"children","childrenWithRide","childrenByName"}, allEntries = true)
     public ChildDto update(ChildDto object) {
         Child child = object.toEntity();
         Child origin = childRepository.findById(object.getId())
@@ -136,6 +143,7 @@ public class ChildServiceImpl implements ChildService {
     }
 
     @Override
+    @CacheEvict(value = {"children","childrenWithRide","childrenByName"}, allEntries = true)
     public void deleteById(Long aLong) {
         childRepository.deleteById(aLong);
     }

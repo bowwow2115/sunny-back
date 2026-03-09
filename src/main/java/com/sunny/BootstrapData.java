@@ -22,7 +22,7 @@ public class BootstrapData implements CommandLineRunner {
 
     private final UserService userService;
     private final SunnyRideService sunnyRideService;
-    private final SunnyClassServcie sunnyClassServcie;
+    private final SunnyClassService sunnyClassService;
     private final ChildService childService;
     private final MeetingLoactionService meetingLoactionService;
 
@@ -236,21 +236,21 @@ public class BootstrapData implements CommandLineRunner {
                 .name("열매반")
                 .build();
 
-        SunnyClassDto sunnyClass = sunnyClassServcie.create(sunnyClassDto);
+        SunnyClassDto sunnyClass = sunnyClassService.create(sunnyClassDto);
         if(sunnyClass != null) log.info("반 생성");
 
         SunnyClassDto sunnyClassDto2 = SunnyClassDto.builder()
                 .name("씨앗반")
                 .build();
 
-        SunnyClassDto sunnyClass2 = sunnyClassServcie.create(sunnyClassDto2);
+        SunnyClassDto sunnyClass2 = sunnyClassService.create(sunnyClassDto2);
         if(sunnyClass2 != null) log.info("반 생성");
 
         SunnyClassDto sunnyClassDto3 = SunnyClassDto.builder()
                 .name("꽃잎반")
                 .build();
 
-        SunnyClassDto sunnyClass3 = sunnyClassServcie.create(sunnyClassDto3);
+        SunnyClassDto sunnyClass3 = sunnyClassService.create(sunnyClassDto3);
         if(sunnyClass3 != null) log.info("반 생성");
 
         List<ChildDto> childDtoList = new ArrayList<>();

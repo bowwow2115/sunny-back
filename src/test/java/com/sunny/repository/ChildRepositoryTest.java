@@ -49,6 +49,7 @@ public class ChildRepositoryTest {
         }
 
         private void resetQueryCount() {
+                entityManager.flush();
                 statistics.clear();
         }
 
@@ -276,14 +277,13 @@ public class ChildRepositoryTest {
         //원아 모든 정보 포함해서 등록
         bootstrapData.makeTestData(3);
 
-        resetQueryCount();
-        //전체 원아 조회와 차량과 함께 조회 시의 수 비교
         List<Child> all = childRepository.findAll();
+        resetQueryCount();
+        all.forEach(Child::getChildMeetingLocations);
         long queryCountAll = getQueryCount();
 
-        resetQueryCount();
         List<Child> allWithRide = childRepository.findAllWithRide();
-        long queryCountWithRide = getQueryCount();
+        resetQueryCount();
 
         assertThat(all.size()).isEqualTo(allWithRide.size());
         int count = 0;
@@ -293,6 +293,8 @@ public class ChildRepositoryTest {
                 if(childMeetingLocation.getMeetingLocation().getSunnyRide()!=null) count++;
             }
         }
+        long queryCountWithRide = getQueryCount();
+
         //차량 정보있는 경우가 3이상인지 확인
         assertThat(count).isGreaterThanOrEqualTo(3);
 

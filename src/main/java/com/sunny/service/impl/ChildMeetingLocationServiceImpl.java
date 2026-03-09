@@ -15,6 +15,8 @@ import com.sunny.repository.MeetingLocationRepository;
 import com.sunny.service.ChildMeetingLocationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
 
@@ -26,13 +28,15 @@ public class ChildMeetingLocationServiceImpl implements ChildMeetingLocationServ
 //    private final SunnyRideRepository sunnyRideRepository;
     private final MeetingLocationRepository meetingLocationRepository;
     @Override
+    @Cacheable(value = "childMeetingLocations", key = "'all'")
     public List<ChilMeetingLocationDto> findAll() {
         return null;
     }
 
     @Override
+    @Cacheable(value = "childMeetingLocations", key = "#aLong")
     public ChilMeetingLocationDto findById(Long aLong) {
-        return null;
+            return null;
     }
 
     @Override
@@ -87,7 +91,7 @@ public class ChildMeetingLocationServiceImpl implements ChildMeetingLocationServ
         SunnyRideDto sunnyRideDto = new SunnyRideDto(result.getMeetingLocation().getSunnyRide());
         meetingLocationDto.setSunnyRide( sunnyRideDto);
 
-        return ChilMeetingLocationDto.builder()
+                return ChilMeetingLocationDto.builder()
                 .meetingLocation(meetingLocationDto)
                 .child(new ChildDto(result.getChild()))
                 .id(result.getId())
@@ -100,7 +104,8 @@ public class ChildMeetingLocationServiceImpl implements ChildMeetingLocationServ
     }
 
     @Override
+    @CacheEvict(value = "childMeetingLocations", allEntries = true)
     public void deleteById(Long aLong) {
-        childMeetingLocationRepository.deleteById(aLong);
-    }
+                childMeetingLocationRepository.deleteById(aLong);
+        }
 }
