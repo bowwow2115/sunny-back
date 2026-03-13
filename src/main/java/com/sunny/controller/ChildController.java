@@ -1,5 +1,8 @@
 package com.sunny.controller;
 
+import com.sunny.code.Action;
+import com.sunny.config.aop.TrackHistory;
+import com.sunny.model.Child;
 import com.sunny.model.dto.ChildDto;
 import com.sunny.service.ChildService;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +20,7 @@ public class ChildController extends BasicController {
     private final ChildService childService;
 
     @GetMapping("/all")
+    @TrackHistory(action = Action.FIND_CHILD_ALL, targetType = Child.class, idParamName = "all")
     public ResponseEntity<Map<String, Object>> getAllChildren() {
         return createResponse(childService.findAll());
     }
@@ -27,6 +31,7 @@ public class ChildController extends BasicController {
     }
 
     @GetMapping("/{name}")
+    @TrackHistory(action = Action.FIND_CHILD_BYNAME, targetType = Child.class, idParamName = "all")
     public ResponseEntity<Map<String, Object>> getChildByName(@PathVariable("name") String name) {
         return createResponse(childService.findByName(name));
     }

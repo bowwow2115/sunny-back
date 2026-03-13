@@ -1,5 +1,6 @@
 package com.sunny.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import jakarta.persistence.*;
@@ -12,10 +13,12 @@ import jakarta.persistence.*;
 public class ChildMeetingLocation extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "child_id")
+    @JsonIgnore
     private Child child;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "meeting_location_id")
+    @JsonIgnore
     private MeetingLocation meetingLocation;
 
     @Column(name = "comment")

@@ -1,7 +1,7 @@
 package com.sunny.config;
 
-import com.sunny.config.jwt.JwtAuthenticationEntryPoint;
-import com.sunny.config.jwt.JwtRequestFilter;
+import com.sunny.config.auth.jwt.JwtAuthenticationEntryPoint;
+import com.sunny.config.auth.jwt.JwtRequestFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

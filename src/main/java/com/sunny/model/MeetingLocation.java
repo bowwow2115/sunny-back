@@ -1,5 +1,6 @@
 package com.sunny.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import jakarta.persistence.*;
@@ -27,6 +28,7 @@ public class MeetingLocation extends BaseEntity{
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ride_id", updatable = false)
+    @JsonIgnore
     private SunnyRide sunnyRide;
 
     @OneToMany(mappedBy = "meetingLocation", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -2,7 +2,7 @@ package com.sunny.controller;
 
 import com.sunny.config.error.BusinessException;
 import com.sunny.config.error.ErrorCode;
-import com.sunny.config.jwt.JwtTokenUtil;
+import com.sunny.config.auth.jwt.JwtTokenUtil;
 import com.sunny.model.User;
 import com.sunny.service.AuthUserDetailsService;
 import com.sunny.service.UserService;

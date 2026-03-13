@@ -1,4 +1,4 @@
-package com.sunny.config.jwt;
+package com.sunny.config.auth.jwt;
 
 import com.sunny.util.ServletUtil;
 import io.jsonwebtoken.Claims;

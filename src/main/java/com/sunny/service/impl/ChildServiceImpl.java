@@ -1,5 +1,7 @@
 package com.sunny.service.impl;
 
+import com.sunny.code.Action;
+import com.sunny.config.aop.TrackHistory;
 import com.sunny.config.error.BusinessException;
 import com.sunny.config.error.ErrorCode;
 import com.sunny.model.Child;
@@ -52,6 +54,7 @@ public class ChildServiceImpl implements ChildService {
     }
 
     @Override
+    @TrackHistory(targetType = Child.class, action = Action.UPDATE_CHILD_CLASS)
     @Transactional
     public List<ChildDto> updateChildrenClass(List<ChildDto> childrenList, String className) {
         List<Child> childList = new ArrayList<>();
@@ -92,6 +95,7 @@ public class ChildServiceImpl implements ChildService {
         return addJoinData(childDto, result);
     }
     @Transactional
+    @TrackHistory(action= Action.ADD_CHILD, targetType = Child.class)
     @Override
     public ChildDto create(ChildDto object) {
 

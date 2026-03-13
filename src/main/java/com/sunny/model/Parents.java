@@ -1,5 +1,6 @@
 package com.sunny.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import jakarta.persistence.*;
@@ -22,6 +23,7 @@ public class Parents extends Person{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "child_id", updatable = false)
     @EqualsAndHashCode.Include
+    @JsonIgnore
     private Child child;
 
     @Builder
