@@ -1,8 +1,11 @@
 package com.sunny.service;
 
 import com.sunny.model.BusinessHistory;
+import org.springframework.scheduling.annotation.Async;
 
 public interface HistoryService extends CrudService<BusinessHistory, Long> {
-    public void save(BusinessHistory businessHistory);
+    @Async
+    public void asyncCreate(BusinessHistory object);
+
 
 }

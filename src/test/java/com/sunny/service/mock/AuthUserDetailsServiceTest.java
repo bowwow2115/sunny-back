@@ -1,8 +1,9 @@
-package com.sunny.service;
+package com.sunny.service.mock;
 
 import com.sunny.code.SunnyCode;
 import com.sunny.model.User;
 import com.sunny.repository.UserRepository;
+import com.sunny.service.AuthUserDetailsService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

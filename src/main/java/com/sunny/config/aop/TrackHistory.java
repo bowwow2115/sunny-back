@@ -16,5 +16,5 @@ public @interface TrackHistory {
     Action action();
     Class<?> targetType();    // 대상 타입 (예: "Child")
     boolean idFromReturn() default true;
-    String idParamName() default "id"; // 파라미터 중 ID 로 사용할 키 이름
+    String idParamName() default "id"; // 파라미터 중 ID를 직간접적으로 가지고있는 것의 이름
 }

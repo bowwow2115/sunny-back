@@ -11,13 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class ExcelChildServiceImpl implements ExcelChildService {
 
     private final ChildService childService;
 
     @Override
-    @Transactional
     public List<ChildDto> createList(List<ChildDto> objectList) {
         List<ChildDto> childDtoList = new ArrayList<>();
         for (ChildDto object : objectList) {

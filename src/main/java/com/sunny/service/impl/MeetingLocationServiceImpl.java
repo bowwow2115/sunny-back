@@ -10,10 +10,12 @@ import com.sunny.repository.SunnyRideRepository;
 import com.sunny.service.MeetingLoactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class MeetingLocationServiceImpl implements MeetingLoactionService {
 

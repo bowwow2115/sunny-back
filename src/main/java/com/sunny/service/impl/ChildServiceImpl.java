@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ChildServiceImpl implements ChildService {
     private final ChildRepository childRepository;
     private final MeetingLocationRepository meetingLocationRepository;
@@ -54,7 +55,7 @@ public class ChildServiceImpl implements ChildService {
     }
 
     @Override
-    @TrackHistory(targetType = Child.class, action = Action.UPDATE_CHILD_CLASS)
+    @TrackHistory(targetType = Child.class, action = Action.UPDATE_CHILD_CLASS, idParamName = "childrenList")
     @Transactional
     public List<ChildDto> updateChildrenClass(List<ChildDto> childrenList, String className) {
         List<Child> childList = new ArrayList<>();
@@ -101,7 +102,7 @@ public class ChildServiceImpl implements ChildService {
 
         Child child = object.toEntity();
         //부모정보 존재 확인 후 등록
-        if(object.getParentList().size() != 0) {
+        if(object.getParentList() != null && object.getParentList().size() != 0) {
             for (ParentsDto parentsDto : object.getParentList()) {
                 child.addParents(parentsDto.toEntity());
             }

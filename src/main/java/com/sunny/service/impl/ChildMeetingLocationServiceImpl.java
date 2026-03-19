@@ -15,11 +15,13 @@ import com.sunny.repository.MeetingLocationRepository;
 import com.sunny.service.ChildMeetingLocationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ChildMeetingLocationServiceImpl implements ChildMeetingLocationService {
     private final ChildMeetingLocationRepository childMeetingLocationRepository;
     private final ChildRepository childRepository;

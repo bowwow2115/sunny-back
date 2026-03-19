@@ -22,13 +22,12 @@ public class BusinessHistory extends BaseEntity {
     private String url;             // api url
     private String ip;              // 사용자 ip
     private String content;         // 상세 내용
-
-     @JdbcTypeCode(SqlTypes.JSON)
-     @Column(columnDefinition = "jsonb")
-     private Map<String, Object> changedValue;
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(columnDefinition = "jsonb")
+    private Map<String, Object> newValue;   //변경된 값
 
     @Builder
-    public BusinessHistory(Long id, String createdBy, String modifiedBy, Long targetId, String targetType, String method, String url, String ip, String content, Map<String, Object> changedValue) {
+    public BusinessHistory(Long id, String createdBy, String modifiedBy, Long targetId, String targetType, String method, String url, String ip, String content, Map<String, Object> newValue) {
         super(id, createdBy, modifiedBy);
         this.targetId = targetId;
         this.targetType = targetType;
@@ -36,6 +35,6 @@ public class BusinessHistory extends BaseEntity {
         this.url = url;
         this.ip = ip;
         this.content = content;
-        this.changedValue = changedValue;
+        this.newValue = newValue;
     }
 }

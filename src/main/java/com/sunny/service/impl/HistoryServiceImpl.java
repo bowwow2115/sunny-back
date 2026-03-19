@@ -15,6 +15,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class HistoryServiceImpl implements HistoryService {
     private final HistoryRepository historyRepository;
+
+    @Override
+    @Async
+    public void asyncCreate(BusinessHistory object) {
+        historyRepository.save(object);
+    }
+
     @Override
     public List<BusinessHistory> findAll() {
         return historyRepository.findAll();
@@ -26,19 +33,7 @@ public class HistoryServiceImpl implements HistoryService {
     }
 
     @Override
-//    @Transactional
-    @Async
     public BusinessHistory create(BusinessHistory object) {
-
-//        TransactionSynchronizationManager.registerSynchronization(
-//                new TransactionSynchronization() {
-//                    @Override
-//                    public void afterCommit() {
-//                        // 메인 트랜잭션 커밋 후에만 실행
-//                        historyRepository.save(object);
-//                    }
-//                }
-//        );
         return historyRepository.save(object);
     }
 
@@ -55,11 +50,5 @@ public class HistoryServiceImpl implements HistoryService {
     @Override
     public void deleteById(Long aLong) {
 
-    }
-
-    @Override
-    @Async
-    public void save(BusinessHistory businessHistory) {
-        historyRepository.save(businessHistory);
     }
 }

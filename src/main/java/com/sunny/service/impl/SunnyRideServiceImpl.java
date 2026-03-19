@@ -8,12 +8,14 @@ import com.sunny.repository.SunnyRideRepository;
 import com.sunny.service.SunnyRideService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class SunnyRideServiceImpl implements SunnyRideService {
     private final SunnyRideRepository sunnyRideRepository;

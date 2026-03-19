@@ -1,4 +1,4 @@
-package com.sunny.service;
+package com.sunny.service.mock;
 
 import com.sunny.code.SunnyCode;
 import com.sunny.config.error.BusinessException;

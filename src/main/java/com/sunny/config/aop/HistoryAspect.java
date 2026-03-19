@@ -38,53 +38,34 @@ public class HistoryAspect {
     public Object logHistory(ProceedingJoinPoint joinPoint, TrackHistory trackHistory) throws Throwable {
 
         // 1. [Before] 파라미터에서 ID 시도 (수정/삭제용)
-        Long targetId = extractIdFromArgs(joinPoint, trackHistory.idParamName());
-        Object oldValue = null;
+        List<Long> targetIdList = extractIdFromArgs(joinPoint, trackHistory.idParamName());
 
-        // 2. 파라미터에 ID 가 있다면 (수정/삭제 케이스)
-        if (targetId != null) {
-            oldValue = entityManager.find(trackHistory.targetType(), targetId);
-        }
-
-        // 3. 비즈니스 로직 실행
+        // 2. 비즈니스 로직 실행
         Object result = joinPoint.proceed();
 
-        // 4. ID 재확인 (생성 케이스용)
-        if (targetId == null && trackHistory.idFromReturn() && result != null) {
-            targetId = extractIdFromObject(result, trackHistory.targetType());
+        // 3. ID 재확인 (생성 케이스용)
+        if (targetIdList == null && trackHistory.idFromReturn() && result != null) {
+            targetIdList = extractIdFromObject(result, trackHistory.targetType());
         }
 
         // 5. 새 값 추출
+        String httpMethod = requestUtil.getHttpMethod();
         Object newValue = null;
-        if (targetId != null) {
-            // 반환값이 엔티티면 그것을 사용, 아니면 DB 에서 조회
-            if (trackHistory.targetType().isInstance(result)) {
-                newValue = result;
-            } else {
-                newValue = entityManager.find(trackHistory.targetType(), targetId);
-            }
-        } else {
-            // ID 를 끝까지 못 찾았으면 반환값 전체를 새 값으로 간주 (DTO 등)
+
+        if (httpMethod != null && (httpMethod.equalsIgnoreCase("POST") || httpMethod.equalsIgnoreCase("PUT"))) {
             newValue = result;
         }
 
-        // 6. 이력 객체 생성 및 저장
-        BusinessHistory history = createHistory(targetId, trackHistory, oldValue, newValue);
-
-        historyService.save(history);
-
-//        transactionUtil.registerSynchronizationSafe(new TransactionSynchronization() {
-//            @Override
-//            public void afterCommit() {
-//                // 메인 트랜잭션 커밋 후에 비동기로 이력 저장
-//                historyService.save(history);
-//            }
-//        });
+        // 4. 이력 객체 생성 및 저장
+        for (Long id : targetIdList) {
+            BusinessHistory history = createHistory(id, trackHistory, newValue);
+            historyService.asyncCreate(history);
+        }
 
         return result;
     }
 
-    private BusinessHistory createHistory(Long targetId, TrackHistory trackHistory, Object oldValue, Object newValue) {
+    private BusinessHistory createHistory(Long targetId, TrackHistory trackHistory, Object newValue) {
         String userId = userContextUtil.getCurrentUserId();
         String userName = userContextUtil.getCurrentUserName();
         String url = requestUtil.getRequestURI();
@@ -100,7 +81,7 @@ public class HistoryAspect {
                 .targetId(targetId)
                 .createdBy(userId)
                 .content(userName)
-                .changedValue(JsonUtils.toDiffMap(oldValue, newValue))
+                .newValue(JsonUtils.toMap(newValue))
                 .build();
     }
 
@@ -124,7 +105,8 @@ public class HistoryAspect {
         return null;
     }
 
-    private Long extractIdFromObject(Object obj, Class clazz) {
+    private List<Long> extractIdFromObject(Object obj, Class clazz) {
+        List<Long> targetIdList = new ArrayList<>();
         if (obj == null) return null;
 
         try {
@@ -135,7 +117,9 @@ public class HistoryAspect {
                 String idFieldName = idField.getName();
                 Field dtoIdField = obj.getClass().getDeclaredField(idFieldName);
                 dtoIdField.setAccessible(true);
-                return getIdValue(dtoIdField.get(obj));
+                Long idValue = getIdValue(dtoIdField.get(obj));
+                targetIdList.add(idValue);
+                return targetIdList;
             }
 
         } catch (Exception e) {
@@ -205,33 +189,150 @@ public class HistoryAspect {
         return null;
     }
 
-    public Long extractIdFromArgs(ProceedingJoinPoint joinPoint, String idParamName) {
+    public List<Long> extractIdFromArgs(ProceedingJoinPoint joinPoint, String idParamName) {
         Method method = getMethod(joinPoint);
         if (method == null) {
-            log.warn("Method not found for joinPoint");
+            log.warn("Method not found for joinPoint: {}", joinPoint.getSignature());
             return null;
         }
 
-        // 1. 파라미터 이름 배열 조회
+        // 1. 파라미터 메타데이터 조회 (컴파일러 -parameters 옵션 필요)
         String[] parameterNames = discoverer.getParameterNames(method);
         if (parameterNames == null || parameterNames.length == 0) {
-            log.warn("Parameter names not found. Check -parameters compiler option.");
+            log.warn("Parameter names not found. Check compiler option: -parameters");
             return null;
         }
 
-        // 2. 파라미터 값 배열 조회
         Object[] args = joinPoint.getArgs();
 
-        // 3. 이름과 값 매핑하여 ID 탐색
+        // 2. 파라미터 이름으로 타겟 인자 찾기
         for (int i = 0; i < parameterNames.length; i++) {
             if (idParamName.equals(parameterNames[i])) {
-                return convertToLong(args[i], parameterNames[i]);
+                return extractIdFromValue(args[i], idParamName);
             }
         }
 
         log.debug("ID parameter '{}' not found in method {}", idParamName, method.getName());
         return null;
     }
+
+    /**
+     * 주어진 값에서 재귀적으로 ID (Long) 를 추출하는 유틸리티 메서드
+     * - 단순 타입: 바로 변환
+     * - 컬렉션/배열: 첫 번째 요소의 ID 추출
+     * - 객체: "id" 또는 "Id" 필드/게터 탐색
+     */
+    private List<Long> extractIdFromValue(Object value, String paramName) {
+        List<Long> idList = new ArrayList<>();
+        if (value == null) {
+            log.debug("Argument '{}' is null", paramName);
+            return null;
+        }
+
+        // Case 1: 이미 추출 가능한 단순 타입인 경우
+        if (value instanceof Number) {
+            long id = ((Number) value).longValue();
+            idList.add(id);
+            return idList;
+        }
+        if (value instanceof String) {
+            try {
+                long id = Long.parseLong((String) value);
+                idList.add(id);
+                return idList;
+            } catch (NumberFormatException e) {
+                log.warn("String ID '{}' cannot be parsed to Long", value);
+                return null;
+            }
+        }
+
+        // Case 2: 컬렉션인 경우 -> id 리스트로 반환
+        if (value instanceof Collection<?>) {
+            Collection<?> collection = (Collection<?>) value;
+            if (collection.isEmpty()) {
+                log.debug("Collection argument '{}' is empty", paramName);
+                return null;
+            }
+            for(Object obj : collection) {
+                List<Long> longs = extractIdFromValue(obj, paramName);
+                if (longs != null && longs.size() != 0) {
+                    idList.addAll(longs);
+                }
+            }
+            return idList;
+        }
+
+        // Case 3: 배열인 경우 -> 아이디 배열로 반환
+        if (value.getClass().isArray()) {
+            Long[] array = (Long[]) value;
+            if (array.length == 0) {
+                log.debug("Array argument '{}' is empty", paramName);
+                return null;
+            }
+            idList = Arrays.asList(array);
+            return idList;
+        }
+
+        // Case 4: 커스텀 객체 (DTO, Entity) 인 경우 -> 리플렉션으로 id 필드 탐색
+        return extractIdFromObject(value, paramName);
+    }
+
+    /**
+     * 객체 내부에서 'id' 라는 이름을 가진 필드 또는 게터 메서드를 찾아 값을 추출
+     */
+    private List<Long> extractIdFromObject(Object obj, String paramName) {
+        if (obj == null) return null;
+        List<Long> idList = new ArrayList<>();
+        Class<?> clazz = obj.getClass();
+
+        // 1. Getter 메서드 우선 탐색 (Java Bean convention: getId(), isId())
+        try {
+            Method getIdMethod = clazz.getMethod("getId");
+            if (getIdMethod.getReturnType().equals(Long.class) || getIdMethod.getReturnType().equals(long.class)) {
+                Long id = (Long) getIdMethod.invoke(obj);
+                idList.add(id);
+            }
+            // getId() 가 다른 객체를 반환하면 (예: UserId VO) 재귀 탐색
+            if (!getIdMethod.getReturnType().isPrimitive() && !getIdMethod.getReturnType().equals(String.class)) {
+                Object nestedId = getIdMethod.invoke(obj);
+                return extractIdFromValue(nestedId, paramName + ".id");
+            }
+        } catch (NoSuchMethodException e) {
+            // getId() 가 없으면 필드 탐색으로 진행
+        } catch (Exception e) {
+            log.warn("Failed to invoke getId() on object of type {}", clazz.getName(), e);
+        }
+
+        // 2. 필드 직접 탐색 (private 필드 접근 포함)
+        try {
+            Field idField = findFieldRecursive(clazz, "id");
+            if (idField != null) {
+                idField.setAccessible(true);
+                Object fieldValue = idField.get(obj);
+                return extractIdFromValue(fieldValue, paramName + ".id"); // 재귀 호출로 중첩 처리
+            }
+        } catch (Exception e) {
+            log.warn("Failed to access 'id' field on object of type {}", clazz.getName(), e);
+        }
+
+        log.debug("Could not extract ID from object of type: {}", clazz.getName());
+        return null;
+    }
+
+    /**
+     * 상위 클래스까지 포함하여 필드를 탐색하는 헬퍼 메서드
+     */
+    private Field findFieldRecursive(Class<?> clazz, String fieldName) {
+        while (clazz != null && clazz != Object.class) {
+            try {
+                return clazz.getDeclaredField(fieldName);
+            } catch (NoSuchFieldException e) {
+                clazz = clazz.getSuperclass();
+            }
+        }
+        return null;
+    }
+
 
     /**
      * ID 값을 Long 으로 변환 (다양한 타입 지원)
