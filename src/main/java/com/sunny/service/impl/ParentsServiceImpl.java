@@ -1,5 +1,7 @@
 package com.sunny.service.impl;
 
+import com.sunny.code.Action;
+import com.sunny.config.aop.TrackHistory;
 import com.sunny.config.error.BusinessException;
 import com.sunny.config.error.ErrorCode;
 import com.sunny.model.Child;
@@ -16,6 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.sunny.code.Action.ADD_PARENTS;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -23,6 +27,7 @@ public class ParentsServiceImpl implements ParentsService {
     private final ParentsRepository parentsRepository;
     private final ChildRepository childRepository;
     @Override
+    @TrackHistory(action = com.sunny.code.Action.FIND_PARENTS_ALL, targetType = Parents.class, noTargetId = true)
     public List<ParentsDto> findAll() {
         return null;
 //        return parentsRepository.findAll().stream()
@@ -31,12 +36,14 @@ public class ParentsServiceImpl implements ParentsService {
     }
 
     @Override
+    @TrackHistory(action = com.sunny.code.Action.FIND_PARENTS_BYID, targetType = Parents.class, idParamName = "aLong")
     public ParentsDto findById(Long aLong) {
         Parents parents = parentsRepository.findById(aLong).orElseThrow(() -> new BusinessException(ErrorCode.ENTITY_NOT_FOUND));
         return new ParentsDto(parents);
     }
 
     @Override
+    @TrackHistory(action = ADD_PARENTS, targetType = Parents.class, idParamName = "object")
     public ParentsDto create(ParentsDto object) {
         Parents parents = object.toEntity();
         Child child = childRepository.findById(object.getChildId())
@@ -46,21 +53,25 @@ public class ParentsServiceImpl implements ParentsService {
     }
 
     @Override
+    @TrackHistory(action = Action.UPDATE_PARENTS, targetType = Parents.class, idParamName = "object")
     public ParentsDto update(ParentsDto object) {
         return new ParentsDto(parentsRepository.save(object.toEntity()));
     }
 
     @Override
+    @TrackHistory(action = Action.DELETE_PARENTS, targetType = Parents.class, idParamName = "object")
     public void delete(ParentsDto object) {
         parentsRepository.delete(object.toEntity());
     }
 
     @Override
+    @TrackHistory(action = Action.DELETE_PARENTS_BYID, targetType = Parents.class, idParamName = "aLong")
     public void deleteById(Long aLong) {
         parentsRepository.deleteById(aLong);
     }
 
     @Override
+    @TrackHistory(action = Action.FIND_PARENTS_BYNAME, targetType = Parents.class)
     public List<ParentsDto> findByName(String name) {
         List<Parents> parentsList = parentsRepository.findByName(name);
         if(parentsList == null) parentsList = new ArrayList<>();

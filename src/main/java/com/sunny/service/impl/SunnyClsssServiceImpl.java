@@ -1,5 +1,6 @@
 package com.sunny.service.impl;
 
+import com.sunny.config.aop.TrackHistory;
 import com.sunny.config.error.BusinessException;
 import com.sunny.config.error.ErrorCode;
 import com.sunny.model.SunnyClass;
@@ -13,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.sunny.code.Action.*;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -21,6 +24,7 @@ public class SunnyClsssServiceImpl implements SunnyClassServcie {
     private final SunnyClassRepository sunnyClassRepository;
 
     @Override
+    @TrackHistory(action = FIND_CLASS_ALL, targetType = SunnyClass.class, noTargetId = true)
     public List<SunnyClassDto> findAll() {
         return sunnyClassRepository.findAll().stream()
                 .map(SunnyClassDto::new)
@@ -28,27 +32,32 @@ public class SunnyClsssServiceImpl implements SunnyClassServcie {
     }
 
     @Override
+    @TrackHistory(action = FIND_CLASS_BYID, targetType = SunnyClass.class)
     public SunnyClassDto findById(Long aLong) {
         SunnyClass sunnyClass = sunnyClassRepository.findById(aLong).orElseThrow(() -> new BusinessException(ErrorCode.ENTITY_NOT_FOUND));
         return new SunnyClassDto(sunnyClass);
     }
 
     @Override
+    @TrackHistory(action = CREATE_CLASS, targetType = SunnyClass.class, idParamName = "object")
     public SunnyClassDto create(SunnyClassDto object) {
         return new SunnyClassDto(sunnyClassRepository.save(object.toEntity()));
     }
 
     @Override
+    @TrackHistory(action = UPDATE_CLASS, targetType = SunnyClass.class, idParamName = "object")
     public SunnyClassDto update(SunnyClassDto object) {
         return new SunnyClassDto(sunnyClassRepository.save(object.toEntity()));
     }
 
     @Override
+    @TrackHistory(action = DELETE_CLASS, targetType = SunnyClass.class, idParamName = "object")
     public void delete(SunnyClassDto object) {
         sunnyClassRepository.delete(object.toEntity());
     }
 
     @Override
+    @TrackHistory(action = DELETE_CLASS_BYID, targetType = SunnyClass.class)
     public void deleteById(Long aLong) {
         sunnyClassRepository.deleteById(aLong);
     }

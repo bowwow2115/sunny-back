@@ -1,5 +1,8 @@
 package com.sunny.service.impl;
 
+import com.sunny.code.Action;
+import com.sunny.config.aop.TrackHistory;
+import com.sunny.model.Child;
 import com.sunny.model.dto.ChildDto;
 import com.sunny.service.ChildService;
 import com.sunny.service.ExcelChildService;
@@ -18,6 +21,7 @@ public class ExcelChildServiceImpl implements ExcelChildService {
     private final ChildService childService;
 
     @Override
+    @TrackHistory(action= Action.CREATE_CHILD_WITHEXCEL, targetType = Child.class, idParamName = "objectList")
     public List<ChildDto> createList(List<ChildDto> objectList) {
         List<ChildDto> childDtoList = new ArrayList<>();
         for (ChildDto object : objectList) {

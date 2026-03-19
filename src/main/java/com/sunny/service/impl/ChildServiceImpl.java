@@ -27,6 +27,7 @@ public class ChildServiceImpl implements ChildService {
     private final MeetingLocationRepository meetingLocationRepository;
 
     @Override
+    @TrackHistory(action= Action.FIND_CHILD_BYNAME, targetType = Child.class)
     public List<ChildDto> findByName(String name) {
         return childRepository.findByName(name).stream()
                 .map(ChildDto::new)
@@ -34,6 +35,7 @@ public class ChildServiceImpl implements ChildService {
     }
 
     @Override
+    @TrackHistory(action= Action.FIND_CHILD_BYBIRTHMONTH, targetType = Child.class)
     public List<ChildDto> findChildWithBirthMonth(int month) {
         return childRepository.findChildWithBirthMonth(month).stream()
                 .map(ChildDto::new)
@@ -41,6 +43,7 @@ public class ChildServiceImpl implements ChildService {
     }
 
     @Override
+    @TrackHistory(action= Action.FIND_CHILD_BYCLASSANDNAME, targetType = Child.class)
     public List<ChildDto> checkChild(ChildDto object) {
         return childRepository.checkChild(object.toEntity()).stream()
                 .map(ChildDto::new)
@@ -48,6 +51,7 @@ public class ChildServiceImpl implements ChildService {
     }
 
     @Override
+    @TrackHistory(action= Action.FIND_CHILD_ATTENDING, targetType = Child.class)
     public List<ChildDto> getAttendingChildren() {
         return childRepository.findAttendingChildren().stream()
                 .map(ChildDto::new)
@@ -56,7 +60,6 @@ public class ChildServiceImpl implements ChildService {
 
     @Override
     @TrackHistory(targetType = Child.class, action = Action.UPDATE_CHILD_CLASS, idParamName = "childrenList")
-    @Transactional
     public List<ChildDto> updateChildrenClass(List<ChildDto> childrenList, String className) {
         List<Child> childList = new ArrayList<>();
         childrenList.forEach((child) ->
@@ -72,6 +75,7 @@ public class ChildServiceImpl implements ChildService {
     }
 
     @Override
+    @TrackHistory(targetType = Child.class, action = Action.FIND_CHILD_ALL, noTargetId = true)
     public List<ChildDto> findAll() {
         return childRepository.findAll().stream()
                 .map(ChildDto::new)
@@ -80,6 +84,7 @@ public class ChildServiceImpl implements ChildService {
 
 
     @Override
+    @TrackHistory(targetType = Child.class, action = Action.FIND_CHILD_ALLWITHRIDE, noTargetId = true)
     public List<ChildDto> findAllWithRide() {
         return childRepository.findAllWithRide().stream()
                 .map((result)-> {
@@ -90,14 +95,15 @@ public class ChildServiceImpl implements ChildService {
     }
 
     @Override
+    @TrackHistory(targetType = Child.class, action = Action.FIND_CHILD_BYID, idParamName = "aLong")
     public ChildDto findById(Long aLong) {
         Child result = childRepository.findById(aLong).orElseThrow(() -> new BusinessException(ErrorCode.ENTITY_NOT_FOUND, "해당 원아의 정보가 존재하지 않습니다."));
         ChildDto childDto = new ChildDto(result);
         return addJoinData(childDto, result);
     }
-    @Transactional
-    @TrackHistory(action= Action.ADD_CHILD, targetType = Child.class)
+
     @Override
+    @TrackHistory(action= Action.ADD_CHILD, targetType = Child.class, idParamName = "object")
     public ChildDto create(ChildDto object) {
 
         Child child = object.toEntity();
@@ -125,6 +131,7 @@ public class ChildServiceImpl implements ChildService {
     }
 
     @Override
+    @TrackHistory(action= Action.UPDATE_CHILD, targetType = Child.class, idParamName = "object")
     public ChildDto update(ChildDto object) {
         Child child = object.toEntity();
         Child origin = childRepository.findById(object.getId())
@@ -135,12 +142,14 @@ public class ChildServiceImpl implements ChildService {
     }
 
     @Override
+    @TrackHistory(action= Action.DELETE_CHILD, targetType = Child.class, idParamName = "object")
     public void delete(ChildDto object) {
         Child child = object.toEntity();
         childRepository.delete(child);
     }
 
     @Override
+    @TrackHistory(action= Action.DELETE_CHILD, targetType = Child.class, idParamName = "aLong")
     public void deleteById(Long aLong) {
         childRepository.deleteById(aLong);
     }

@@ -36,8 +36,15 @@ public class HistoryAspect {
 
     @Around("@annotation(trackHistory)")
     public Object logHistory(ProceedingJoinPoint joinPoint, TrackHistory trackHistory) throws Throwable {
+        // 1. [Before] targetId가 필요 없는 경우
+        if(trackHistory.noTargetId()) {
+            Object result = joinPoint.proceed();
+            BusinessHistory history = createHistory(null, trackHistory, null);
+            historyService.asyncCreate(history);
+            return result;
+        }
 
-        // 1. [Before] 파라미터에서 ID 시도 (수정/삭제용)
+        // 2. 파라미터에서 ID 시도 (수정/삭제용)
         List<Long> targetIdList = extractIdFromArgs(joinPoint, trackHistory.idParamName());
 
         // 2. 비즈니스 로직 실행
@@ -56,10 +63,12 @@ public class HistoryAspect {
             newValue = result;
         }
 
-        // 4. 이력 객체 생성 및 저장
-        for (Long id : targetIdList) {
-            BusinessHistory history = createHistory(id, trackHistory, newValue);
-            historyService.asyncCreate(history);
+        if(targetIdList != null) {
+            // 4. 이력 객체 생성 및 저장
+            for (Long id : targetIdList) {
+                BusinessHistory history = createHistory(id, trackHistory, newValue);
+                historyService.asyncCreate(history);
+            }
         }
 
         return result;

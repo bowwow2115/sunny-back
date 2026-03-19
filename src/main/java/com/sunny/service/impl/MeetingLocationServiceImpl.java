@@ -1,5 +1,6 @@
 package com.sunny.service.impl;
 
+import com.sunny.config.aop.TrackHistory;
 import com.sunny.config.error.BusinessException;
 import com.sunny.config.error.ErrorCode;
 import com.sunny.model.MeetingLocation;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import static com.sunny.code.Action.*;
 
 @Service
 @Transactional
@@ -32,6 +35,7 @@ public class MeetingLocationServiceImpl implements MeetingLoactionService {
     }
 
     @Override
+    @TrackHistory(action = CREATE_MEETINGLOCATION, targetType = MeetingLocation.class, idParamName = "object")
     public MeetingLocationDto create(MeetingLocationDto object) {
         MeetingLocation meetingLocation = object.toEntity();
         SunnyRide sunnyRide = sunnyRideRepository.findById(object.getSunnyRide().getId())
@@ -41,6 +45,7 @@ public class MeetingLocationServiceImpl implements MeetingLoactionService {
     }
 
     @Override
+    @TrackHistory(action = UPDATE_MEETINGLOCATION, targetType = MeetingLocation.class, idParamName = "object")
     public MeetingLocationDto update(MeetingLocationDto object) {
         MeetingLocation origin = meetingLocationRepository.findById(object.getId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.ENTITY_NOT_FOUND, "수정하려는 승하차장소가 존재하지 않습니다."));
@@ -55,6 +60,7 @@ public class MeetingLocationServiceImpl implements MeetingLoactionService {
     }
 
     @Override
+    @TrackHistory(action = DELETE_MEETINGLOCATION_BYID, targetType = MeetingLocation.class)
     public void deleteById(Long aLong) {
         meetingLocationRepository.deleteById(aLong);
     }

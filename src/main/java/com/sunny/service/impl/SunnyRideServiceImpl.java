@@ -1,5 +1,7 @@
 package com.sunny.service.impl;
 
+import com.sunny.code.Action;
+import com.sunny.config.aop.TrackHistory;
 import com.sunny.config.error.BusinessException;
 import com.sunny.config.error.ErrorCode;
 import com.sunny.model.SunnyRide;
@@ -21,6 +23,7 @@ public class SunnyRideServiceImpl implements SunnyRideService {
     private final SunnyRideRepository sunnyRideRepository;
 
     @Override
+    @TrackHistory(action = Action.FIND_RIDE, targetType = SunnyRide.class, noTargetId = true)
     public List<SunnyRideDto> findAll() {
         return sunnyRideRepository.findAll().stream()
                 .map((result)-> {
@@ -31,12 +34,14 @@ public class SunnyRideServiceImpl implements SunnyRideService {
     }
 
     @Override
+    @TrackHistory(action = Action.FIND_RIDE_BYID, targetType = SunnyRide.class, idParamName = "aLong")
     public SunnyRideDto findById(Long aLong) {
         SunnyRide childRide = sunnyRideRepository.findById(aLong).orElseThrow(() -> new BusinessException(ErrorCode.ENTITY_NOT_FOUND));
         return new SunnyRideDto(childRide);
     }
 
     @Override
+    @TrackHistory(action = Action.FIND_RIDE_BYID, targetType = SunnyRide.class, idParamName = "aLong")
     public SunnyRideDto create(SunnyRideDto object) {
         return new SunnyRideDto(sunnyRideRepository.save(object.toEntity()));
     }
