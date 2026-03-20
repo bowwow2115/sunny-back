@@ -36,7 +36,8 @@ public class HistoryAspect {
 
     @Around("@annotation(trackHistory)")
     public Object logHistory(ProceedingJoinPoint joinPoint, TrackHistory trackHistory) throws Throwable {
-        // 1. [Before] targetId가 필요 없는 경우
+        // [Before]
+        // 1. targetId가 필요 없는 경우
         if(trackHistory.noTargetId()) {
             Object result = joinPoint.proceed();
             BusinessHistory history = createHistory(null, trackHistory, null);

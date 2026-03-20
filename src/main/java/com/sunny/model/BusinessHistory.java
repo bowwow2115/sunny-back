@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 
 @Entity
@@ -25,6 +26,18 @@ public class BusinessHistory extends BaseEntity {
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
     private Map<String, Object> newValue;   //변경된 값
+
+    @Builder
+    public BusinessHistory(Long id, LocalDateTime createdDate, LocalDateTime modifiedDate, String createdBy, String modifiedBy, Long targetId, String targetType, String method, String url, String ip, String content, Map<String, Object> newValue) {
+        super(id, createdDate, modifiedDate, createdBy, modifiedBy);
+        this.targetId = targetId;
+        this.targetType = targetType;
+        this.method = method;
+        this.url = url;
+        this.ip = ip;
+        this.content = content;
+        this.newValue = newValue;
+    }
 
     @Builder
     public BusinessHistory(Long id, String createdBy, String modifiedBy, Long targetId, String targetType, String method, String url, String ip, String content, Map<String, Object> newValue) {
