@@ -3,16 +3,21 @@ package com.sunny.service.impl;
 import com.sunny.config.error.BusinessException;
 import com.sunny.config.error.ErrorCode;
 import com.sunny.model.BusinessHistory;
+import com.sunny.model.dto.BusinessHistoryDto;
+import com.sunny.model.dto.BusinessHistorySearchCondition;
 import com.sunny.repository.HistoryRepository;
 import com.sunny.service.HistoryService;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,8 +32,10 @@ public class HistoryServiceImpl implements HistoryService {
     }
 
     @Override
-    public List<BusinessHistory> findByTargetIdAndType(Long targetId, String targetType) {
-        return historyRepository.findByTargetIdAndType(targetId, targetType);
+    public List<BusinessHistoryDto> findByTargetIdAndType(Long targetId, String targetType) {
+        return historyRepository.findByTargetIdAndType(targetId, targetType).stream()
+                .map(BusinessHistoryDto::new)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -45,32 +52,37 @@ public class HistoryServiceImpl implements HistoryService {
     }
 
     @Override
-    public List<BusinessHistory> findAll() {
-        return historyRepository.findAll();
+    @Transactional
+    public Page<BusinessHistoryDto> getHistoryByCondition(Pageable pageable, BusinessHistorySearchCondition businessHistorySearchCondition) {
+        return historyRepository.findHistoryByCondition(pageable, businessHistorySearchCondition).map(BusinessHistoryDto::new);
     }
 
     @Override
-    public BusinessHistory findById(Long aLong) {
-        return historyRepository.findById(aLong).orElseThrow(() -> new BusinessException(ErrorCode.ENTITY_NOT_FOUND));
+    public List<BusinessHistoryDto> findAll() {
+        return null;
     }
 
     @Override
-    public BusinessHistory create(BusinessHistory object) {
-        return historyRepository.save(object);
+    public BusinessHistoryDto findById(Long aLong) {
+        return new BusinessHistoryDto(historyRepository.findById(aLong)
+                .orElseThrow(() -> new BusinessException(ErrorCode.ENTITY_NOT_FOUND)));
     }
 
     @Override
-    public BusinessHistory update(BusinessHistory object) {
-        return historyRepository.save(object);
+    public BusinessHistoryDto create(BusinessHistoryDto object) {
+        return new BusinessHistoryDto(historyRepository.save(object.toEntity()));
     }
 
     @Override
-    public void delete(BusinessHistory object) {
+    public BusinessHistoryDto update(BusinessHistoryDto object) {
+        return null;
+    }
 
+    @Override
+    public void delete(BusinessHistoryDto object) {
     }
 
     @Override
     public void deleteById(Long aLong) {
-
     }
 }

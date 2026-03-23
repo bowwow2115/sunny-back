@@ -40,7 +40,7 @@ public class UserController extends BasicController {
                 userDetails.getAuthorities().contains(SunnyCode.ROLE_GENERAL_ADMIN)) {
             return createResponse(userService.update(userDto));
         } else {
-            throw new BusinessException(ErrorCode.EXCEPTION);
+            throw new BusinessException(ErrorCode.AUTHEXCEPTION);
         }
     }
 

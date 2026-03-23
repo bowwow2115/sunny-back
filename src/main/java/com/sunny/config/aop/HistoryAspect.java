@@ -5,7 +5,6 @@ import com.sunny.service.HistoryService;
 import com.sunny.util.JsonUtils;
 import com.sunny.util.RequestUtil;
 import com.sunny.util.UserContextUtil;
-import jakarta.persistence.EntityManager;
 import jakarta.persistence.Id;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +30,6 @@ public class HistoryAspect {
     // Spring Security 등을 통해 현재 사용자 정보를 가져오는 유틸
     private final UserContextUtil userContextUtil;
     private final RequestUtil requestUtil;
-    private final EntityManager entityManager;
     private static final ParameterNameDiscoverer discoverer = new DefaultParameterNameDiscoverer();
 
     @Around("@annotation(trackHistory)")

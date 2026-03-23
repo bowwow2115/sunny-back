@@ -1,6 +1,6 @@
 package com.sunny.service;
 
-import com.sunny.model.BusinessHistory;
+import com.sunny.model.dto.BusinessHistoryDto;
 import com.sunny.model.dto.ChildDto;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -31,11 +31,9 @@ public class HistoryServiceTest {
         // given
         LocalDate now = LocalDate.now();
         for (int i = 0; i < 10; i++) {
-            historyService.create(BusinessHistory.builder()
+            historyService.create(BusinessHistoryDto.builder()
                     .targetType("Test")
-                    .createdBy("testUser")
                     .createdDate(now.minusDays(i).atStartOfDay())
-                    .modifiedDate(now.atStartOfDay())
                     .build());
         }
 
@@ -53,8 +51,8 @@ public class HistoryServiceTest {
         ChildDto childDto1 = childList.get(0);
         ChildDto childDto2 = childList.get(1);
 
-        List<BusinessHistory> child1History = historyService.findByTargetIdAndType(childDto1.getId(), "Child");
-        List<BusinessHistory> child2History = historyService.findByTargetIdAndType(childDto2.getId(), "Child");
+        List<BusinessHistoryDto> child1History = historyService.findByTargetIdAndType(childDto1.getId(), "Child");
+        List<BusinessHistoryDto> child2History = historyService.findByTargetIdAndType(childDto2.getId(), "Child");
 
         //  create, update, find 총 3번의 이력이 남아야 한다.
         //  api를 통한 접근이 아니라 newValue, mehthod등의 데이터가 정상적으로 쌓이지 않음

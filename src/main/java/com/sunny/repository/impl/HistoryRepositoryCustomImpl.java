@@ -2,8 +2,12 @@ package com.sunny.repository.impl;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sunny.model.BusinessHistory;
+import com.sunny.model.dto.BusinessHistorySearchCondition;
 import com.sunny.repository.HistoryRepositoryCustom;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,6 +49,12 @@ public class HistoryRepositoryCustomImpl implements HistoryRepositoryCustom {
                 .execute();
     }
 
+    /**
+     * cutoffDate 이전에 생성된 히스토리의 아이디를 batchSize 만큼 조회
+     * @param cutoffDate
+     * @param batchSize
+     * @return
+     */
     @Override
     public List<Long> findOldHistory(LocalDateTime cutoffDate, int batchSize) {
         return queryFactory
@@ -55,4 +65,30 @@ public class HistoryRepositoryCustomImpl implements HistoryRepositoryCustom {
                 .limit(batchSize)
                 .fetch();
     }
+
+    /**
+     * 최근(자동생성된 아이디 기준) 생성된 히스토리를 페이지네이션하여 조회
+     * targetType 별로 조회 가능함
+     *
+     * @param pageable
+     * @return
+     */
+    @Override
+    public Page<BusinessHistory> findHistoryByCondition(Pageable pageable,
+                                                        BusinessHistorySearchCondition businessHistorySearchCondition) {
+        List<BusinessHistory> content = queryFactory
+                .selectFrom(businessHistory)
+                .orderBy(businessHistory.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        long total = queryFactory
+                .select(businessHistory.count())
+                .from(businessHistory)
+                .fetchOne();
+
+        return new PageImpl<>(content, pageable, total);
+    }
+
 }

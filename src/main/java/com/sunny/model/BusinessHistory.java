@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.Map;
 
 @Entity
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "sunny_business_history")
