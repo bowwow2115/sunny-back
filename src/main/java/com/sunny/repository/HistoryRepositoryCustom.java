@@ -1,7 +1,8 @@
 package com.sunny.repository;
 
 import com.sunny.model.BusinessHistory;
-import com.sunny.model.dto.BusinessHistorySearchCondition;
+import com.sunny.model.dto.BusinessHistoryDto;
+import com.sunny.model.dto.HistorySearchCondition;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -17,6 +18,6 @@ public interface HistoryRepositoryCustom {
 
     List<Long> findOldHistory(LocalDateTime cutoffDate, int batchSize);
 
-    Page<BusinessHistory> findHistoryByCondition(Pageable pageable,
-                                                 BusinessHistorySearchCondition businessHistorySearchCondition);
+    Page<BusinessHistoryDto> findHistoryByCondition(Pageable pageable,
+                                                    HistorySearchCondition historySearchCondition);
 }

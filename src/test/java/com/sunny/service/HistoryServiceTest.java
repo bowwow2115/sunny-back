@@ -2,10 +2,13 @@ package com.sunny.service;
 
 import com.sunny.model.dto.BusinessHistoryDto;
 import com.sunny.model.dto.ChildDto;
+import com.sunny.model.dto.HistorySearchCondition;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
@@ -19,6 +22,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class HistoryServiceTest {
     @Autowired
     private ChildService childService;
+    @Autowired
+    private ParentsService parentsService;
+    @Autowired
+    private SunnyClassServcie sunnyClassServcie;
+    @Autowired
+    private SunnyRideService sunnyRideService;
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private HistoryService historyService;
@@ -47,7 +58,7 @@ public class HistoryServiceTest {
 
     @Test
     public void updateChildrenClassOfHistoryTest() {
-        List<ChildDto> childList = updateChildrenClassTest();
+        List<ChildDto> childList = updateChildrenClass();
         ChildDto childDto1 = childList.get(0);
         ChildDto childDto2 = childList.get(1);
 
@@ -58,10 +69,26 @@ public class HistoryServiceTest {
         //  api를 통한 접근이 아니라 newValue, mehthod등의 데이터가 정상적으로 쌓이지 않음
         Assertions.assertThat(child1History).size().isEqualTo(3);
         Assertions.assertThat(child2History).size().isEqualTo(3);
-
     }
 
-    private List<ChildDto> updateChildrenClassTest() {
+    @Test
+    public void getHistoryByCondition_byName() {
+        insertChildren();
+        Pageable pageable = Pageable.ofSize(10);
+        HistorySearchCondition historySearchCondition = HistorySearchCondition.builder()
+                .targetType("Child")
+                .name("김어린이")
+                .orderBy("asc")
+                .build();
+        Page<BusinessHistoryDto> historyByCondition = historyService.getHistoryByCondition(pageable, historySearchCondition);
+        assertThat(historyByCondition).size().isGreaterThanOrEqualTo(2);
+        historyByCondition.forEach(history -> {
+            assertThat(history.getTargetType()).isEqualTo("Child");
+            assertThat(history.getName()).contains("김어린이");
+        });
+    }
+
+    private List<ChildDto> insertChildren() {
         ChildDto child1 = childService.create(ChildDto.builder()
                 .name("김어린이")
                 .admissionDate(LocalDate.now())
@@ -79,14 +106,20 @@ public class HistoryServiceTest {
         List<ChildDto> childList =  new ArrayList<>();
         childList.add(child1);
         childList.add(child2);
+        assertThat(childList).extracting(ChildDto::getId)
+                .allSatisfy(id -> assertThat(id).isNotNull());
+
+        return childList;
+    }
+
+    private List<ChildDto> updateChildrenClass() {
+        List<ChildDto> childList = insertChildren();
         childService.updateChildrenClass(childList, "반2");
 
-        ChildDto byId1 = childService.findById(child1.getId());
-        ChildDto byId2 = childService.findById(child2.getId());
-
-        assertThat(byId1.getClassName()).isEqualTo("반2");
-        assertThat(byId2.getClassName()).isEqualTo("반2");
-
+        childList.forEach(child -> {
+            ChildDto byId = childService.findById(child.getId());
+            assertThat(byId.getClassName()).isEqualTo("반2");
+        });
         return childList;
     }
 }

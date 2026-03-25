@@ -1,9 +1,9 @@
 package com.sunny.controller;
 
+import com.sunny.config.auth.jwt.JwtTokenUtil;
 import com.sunny.config.error.BusinessException;
 import com.sunny.config.error.ErrorCode;
-import com.sunny.config.auth.jwt.JwtTokenUtil;
-import com.sunny.model.User;
+import com.sunny.model.dto.UserDto;
 import com.sunny.service.AuthUserDetailsService;
 import com.sunny.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ public class LoginController extends BasicController {
     private final UserService userService;
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, Object>> doLogin(@RequestBody User user) {
+    public ResponseEntity<Map<String, Object>> doLogin(@RequestBody UserDto user) {
         Map<String,Object> result =new HashMap();
         try {
             // AuthenticationManager 에게 사용자 입력 정보를 전달한다

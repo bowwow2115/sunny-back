@@ -4,7 +4,7 @@ import com.sunny.config.error.BusinessException;
 import com.sunny.config.error.ErrorCode;
 import com.sunny.model.BusinessHistory;
 import com.sunny.model.dto.BusinessHistoryDto;
-import com.sunny.model.dto.BusinessHistorySearchCondition;
+import com.sunny.model.dto.HistorySearchCondition;
 import com.sunny.repository.HistoryRepository;
 import com.sunny.service.HistoryService;
 import jakarta.persistence.EntityManager;
@@ -53,8 +53,8 @@ public class HistoryServiceImpl implements HistoryService {
 
     @Override
     @Transactional
-    public Page<BusinessHistoryDto> getHistoryByCondition(Pageable pageable, BusinessHistorySearchCondition businessHistorySearchCondition) {
-        return historyRepository.findHistoryByCondition(pageable, businessHistorySearchCondition).map(BusinessHistoryDto::new);
+    public Page<BusinessHistoryDto> getHistoryByCondition(Pageable pageable, HistorySearchCondition historySearchCondition) {
+        return historyRepository.findHistoryByCondition(pageable, historySearchCondition);
     }
 
     @Override

@@ -2,7 +2,7 @@ package com.sunny.service;
 
 import com.sunny.model.BusinessHistory;
 import com.sunny.model.dto.BusinessHistoryDto;
-import com.sunny.model.dto.BusinessHistorySearchCondition;
+import com.sunny.model.dto.HistorySearchCondition;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
@@ -18,5 +18,5 @@ public interface HistoryService extends CrudService<BusinessHistoryDto, Long> {
 
     long deleteByCreatedDateBatch(LocalDateTime cutoffDate, int batchSize);
 
-    Page<BusinessHistoryDto> getHistoryByCondition(Pageable pageable, BusinessHistorySearchCondition businessHistorySearchCondition);
+    Page<BusinessHistoryDto> getHistoryByCondition(Pageable pageable, HistorySearchCondition historySearchCondition);
 }

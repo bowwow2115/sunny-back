@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Slf4j
-@Transactional
+@Transactional(readOnly = true)
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
@@ -45,6 +45,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     @TrackHistory(action = Action.CREATE_USER, targetType = User.class, idParamName = "object")
     public UserDto create(UserDto object) {
         User user = null;
@@ -57,8 +58,6 @@ public class UserServiceImpl implements UserService {
                             .name(object.getUserName())
                             .status(false)
                             .password(passwordEncoder.encode(object.getPassword()))
-//                            TODO: 배포 시 변경해야함
-//                            .role(object.getRole())
                             .role(SunnyCode.ROLE_GENERAL_USER)
                             .build()
             );
@@ -71,6 +70,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     @TrackHistory(action = Action.UPDATE_USER, targetType = User.class, idParamName = "object")
     public UserDto update(UserDto object) {
         User origin = userRepository.findById(object.getId())
@@ -88,12 +88,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     @TrackHistory(action = Action.DELETE_USER, targetType = User.class, idParamName = "object")
     public void delete(UserDto object) {
         userRepository.delete(object.toEntity());
     }
 
     @Override
+    @Transactional
     @TrackHistory(action = Action.DELETE_USER, targetType = User.class, idParamName = "aLong")
     public void deleteById(Long aLong) {
         userRepository.deleteById(aLong);

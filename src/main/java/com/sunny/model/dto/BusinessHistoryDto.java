@@ -24,6 +24,20 @@ public class BusinessHistoryDto {
     private String content;         // 상세 내용
     private String createdBy;         // 작업자
     private Map<String, Object> newValue;   //변경된 값
+    private String name; // targetType, targetId가 매칭되는 대상의 이름 (예: 원아 이름, 사용자 이름)
+
+    public BusinessHistoryDto(Long id, LocalDateTime createdDate, Long targetId, String targetType, String method, String url, String ip, String content, String createdBy, Map<String, Object> newValue) {
+        this.id = id;
+        this.createdDate = createdDate;
+        this.targetId = targetId;
+        this.targetType = targetType;
+        this.method = method;
+        this.url = url;
+        this.ip = ip;
+        this.content = content;
+        this.createdBy = createdBy;
+        this.newValue = newValue;
+    }
 
     public BusinessHistoryDto(BusinessHistory businessHistory) {
         this.id = businessHistory.getId();
