@@ -39,7 +39,6 @@ public class ChildRepositoryMigrationTest {
     @DisplayName("원아 중복 테스트")
     public void checkChild() {
         Child child = childRepository.save(Child.builder()
-                .id(1L)
                 .name("박어린이")
                 .birthday(LocalDate.of(2023, 5, 24))
                 .status(SunnyCode.CHILD_STATUS_ATTENDING)
@@ -63,7 +62,6 @@ public class ChildRepositoryMigrationTest {
     @DisplayName("재학중인 원아 가져오기 테스트")
     public void getAttendingChildren() {
         childRepository.save(Child.builder()
-                .id(1L)
                 .name("박어린이")
                 .birthday(LocalDate.of(2023, 5, 24))
                 .status(SunnyCode.CHILD_STATUS_ATTENDING)
@@ -72,7 +70,6 @@ public class ChildRepositoryMigrationTest {
                 .build());
 
         childRepository.save(Child.builder()
-                .id(2L)
                 .name("김어린이")
                 .birthday(LocalDate.of(2022, 1, 12))
                 .status("졸업")
@@ -81,7 +78,6 @@ public class ChildRepositoryMigrationTest {
                 .build());
 
         childRepository.save(Child.builder()
-                .id(3L)
                 .name("이어린이")
                 .birthday(LocalDate.of(2020, 5, 4))
                 .status(SunnyCode.CHILD_STATUS_ATTENDING)
@@ -101,7 +97,6 @@ public class ChildRepositoryMigrationTest {
     @DisplayName("반업데이트")
     public void updateChildrenClassTest() {
         Child oldChild = childRepository.save(Child.builder()
-                .id(1L)
                 .name("박어린이")
                 .birthday(LocalDate.of(2023, 5, 24))
                 .status(SunnyCode.CHILD_STATUS_ATTENDING)
@@ -175,7 +170,6 @@ public class ChildRepositoryMigrationTest {
         parentsList.add(parents);
 
         Child input = Child.builder()
-                .id(1L)
                 .name("박어린이")
                 .birthday(LocalDate.of(2023, 5, 24))
                 .status(SunnyCode.CHILD_STATUS_ATTENDING)

@@ -32,6 +32,7 @@ public class HistoryServiceImpl implements HistoryService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<BusinessHistoryDto> findByTargetIdAndType(Long targetId, String targetType) {
         return historyRepository.findByTargetIdAndType(targetId, targetType).stream()
                 .map(BusinessHistoryDto::new)
@@ -52,7 +53,7 @@ public class HistoryServiceImpl implements HistoryService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public Page<BusinessHistoryDto> getHistoryByCondition(Pageable pageable, HistorySearchCondition historySearchCondition) {
         return historyRepository.findHistoryByCondition(pageable, historySearchCondition);
     }
@@ -63,26 +64,31 @@ public class HistoryServiceImpl implements HistoryService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public BusinessHistoryDto findById(Long aLong) {
         return new BusinessHistoryDto(historyRepository.findById(aLong)
                 .orElseThrow(() -> new BusinessException(ErrorCode.ENTITY_NOT_FOUND)));
     }
 
     @Override
+    @Transactional
     public BusinessHistoryDto create(BusinessHistoryDto object) {
         return new BusinessHistoryDto(historyRepository.save(object.toEntity()));
     }
 
     @Override
+    @Transactional
     public BusinessHistoryDto update(BusinessHistoryDto object) {
         return null;
     }
 
     @Override
+    @Transactional
     public void delete(BusinessHistoryDto object) {
     }
 
     @Override
+    @Transactional
     public void deleteById(Long aLong) {
     }
 }

@@ -18,7 +18,7 @@ import java.util.List;
 import static com.sunny.code.Action.*;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class MeetingLocationServiceImpl implements MeetingLoactionService {
 
@@ -36,6 +36,7 @@ public class MeetingLocationServiceImpl implements MeetingLoactionService {
 
     @Override
     @TrackHistory(action = CREATE_MEETINGLOCATION, targetType = MeetingLocation.class, idParamName = "object")
+    @Transactional
     public MeetingLocationDto create(MeetingLocationDto object) {
         MeetingLocation meetingLocation = object.toEntity();
         SunnyRide sunnyRide = sunnyRideRepository.findById(object.getSunnyRide().getId())
@@ -46,6 +47,7 @@ public class MeetingLocationServiceImpl implements MeetingLoactionService {
 
     @Override
     @TrackHistory(action = UPDATE_MEETINGLOCATION, targetType = MeetingLocation.class, idParamName = "object")
+    @Transactional
     public MeetingLocationDto update(MeetingLocationDto object) {
         MeetingLocation origin = meetingLocationRepository.findById(object.getId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.ENTITY_NOT_FOUND, "수정하려는 승하차장소가 존재하지 않습니다."));
@@ -61,6 +63,7 @@ public class MeetingLocationServiceImpl implements MeetingLoactionService {
 
     @Override
     @TrackHistory(action = DELETE_MEETINGLOCATION_BYID, targetType = MeetingLocation.class)
+    @Transactional
     public void deleteById(Long aLong) {
         meetingLocationRepository.deleteById(aLong);
     }

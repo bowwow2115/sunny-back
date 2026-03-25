@@ -3,13 +3,11 @@ package com.sunny.service;
 import com.sunny.model.dto.BusinessHistoryDto;
 import com.sunny.model.dto.ChildDto;
 import com.sunny.model.dto.HistorySearchCondition;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -18,7 +16,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@Transactional
+//@Transactional
 public class HistoryServiceTest {
     @Autowired
     private ChildService childService;
@@ -37,38 +35,34 @@ public class HistoryServiceTest {
     /**
      * BaseEntity의 createDate PrePersist 어노테이션을 해제해야 정상작동
      */
-    @Test
-    public void deleteByCreatedDateBatchTest() {
-        // given
-        LocalDate now = LocalDate.now();
-        for (int i = 0; i < 10; i++) {
-            historyService.create(BusinessHistoryDto.builder()
-                    .targetType("Test")
-                    .createdDate(now.minusDays(i).atStartOfDay())
-                    .build());
-        }
-
-        // when
-        long deletedCount = historyService.deleteByCreatedDateBatch(now.minusDays(7).atStartOfDay(), 10);
-
-        // then
-        assertThat(deletedCount).isEqualTo(2);
-
-    }
+//    @Test
+//    public void deleteByCreatedDateBatchTest() {
+//        // given
+//        LocalDate now = LocalDate.now();
+//        for (int i = 0; i < 10; i++) {
+//            historyService.create(BusinessHistoryDto.builder()
+//                    .targetType("Test")
+//                    .createdDate(now.minusDays(i).atStartOfDay())
+//                    .build());
+//        }
+//
+//        // when
+//        long deletedCount = historyService.deleteByCreatedDateBatch(now.minusDays(7).atStartOfDay(), 10);
+//
+//        // then
+//        assertThat(deletedCount).isEqualTo(2);
+//    }
 
     @Test
     public void updateChildrenClassOfHistoryTest() {
         List<ChildDto> childList = updateChildrenClass();
-        ChildDto childDto1 = childList.get(0);
-        ChildDto childDto2 = childList.get(1);
 
-        List<BusinessHistoryDto> child1History = historyService.findByTargetIdAndType(childDto1.getId(), "Child");
-        List<BusinessHistoryDto> child2History = historyService.findByTargetIdAndType(childDto2.getId(), "Child");
-
-        //  create, update, find 총 3번의 이력이 남아야 한다.
-        //  api를 통한 접근이 아니라 newValue, mehthod등의 데이터가 정상적으로 쌓이지 않음
-        Assertions.assertThat(child1History).size().isEqualTo(3);
-        Assertions.assertThat(child2History).size().isEqualTo(3);
+        childList.forEach(childDto -> {
+            List<BusinessHistoryDto> historyDtos = historyService.findByTargetIdAndType(childDto.getId(), "Child");
+            //  create, update, find 총 3번의 이력이 남아야 한다.
+            //  api를 통한 접근이 아니라 newValue 등의 데이터가 정상적으로 쌓이지 않음
+            assertThat(historyDtos).size().isEqualTo(3);
+        });
     }
 
     @Test

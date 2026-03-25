@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ExcelChildServiceImpl implements ExcelChildService {
 
@@ -22,6 +22,7 @@ public class ExcelChildServiceImpl implements ExcelChildService {
 
     @Override
     @TrackHistory(action= Action.CREATE_CHILD_WITHEXCEL, targetType = Child.class, idParamName = "objectList")
+    @Transactional
     public List<ChildDto> createList(List<ChildDto> objectList) {
         List<ChildDto> childDtoList = new ArrayList<>();
         for (ChildDto object : objectList) {

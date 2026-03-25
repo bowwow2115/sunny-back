@@ -18,7 +18,7 @@ public class BusinessHistoryDto {
     private LocalDateTime createdDate;
     private Long targetId;        // 대상 ID (예: 원아, 사용자 id)
     private String targetType;      // 대상 타입 (예: Child, MeetingLocation)
-    private String method;          // 액션
+    private String action;          // 액션
     private String url;             // api url
     private String ip;              // 사용자 ip
     private String content;         // 상세 내용
@@ -26,12 +26,12 @@ public class BusinessHistoryDto {
     private Map<String, Object> newValue;   //변경된 값
     private String name; // targetType, targetId가 매칭되는 대상의 이름 (예: 원아 이름, 사용자 이름)
 
-    public BusinessHistoryDto(Long id, LocalDateTime createdDate, Long targetId, String targetType, String method, String url, String ip, String content, String createdBy, Map<String, Object> newValue) {
+    public BusinessHistoryDto(Long id, LocalDateTime createdDate, Long targetId, String targetType, String action, String url, String ip, String content, String createdBy, Map<String, Object> newValue) {
         this.id = id;
         this.createdDate = createdDate;
         this.targetId = targetId;
         this.targetType = targetType;
-        this.method = method;
+        this.action = action;
         this.url = url;
         this.ip = ip;
         this.content = content;
@@ -44,7 +44,7 @@ public class BusinessHistoryDto {
         this.createdDate = businessHistory.getCreatedDate();
         this.targetId = businessHistory.getTargetId();
         this.targetType = businessHistory.getTargetType();
-        this.method = businessHistory.getMethod();
+        this.action = businessHistory.getAction();
         this.url = businessHistory.getUrl();
         this.ip = businessHistory.getIp();
         this.createdBy = businessHistory.getCreatedBy();
@@ -57,7 +57,7 @@ public class BusinessHistoryDto {
                 .createdDate(createdDate)
                 .targetId(targetId)
                 .targetType(targetType)
-                .method(method)
+                .action(action)
                 .url(url)
                 .ip(ip)
                 .content(content)

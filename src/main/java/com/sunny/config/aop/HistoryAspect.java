@@ -78,14 +78,13 @@ public class HistoryAspect {
         String userName = userContextUtil.getCurrentUserName();
         String url = requestUtil.getRequestURI();
         String ip = requestUtil.getClientIp();
-        String method = requestUtil.getHttpMethod();
         String targetType = trackHistory.targetType().getSimpleName();
 
         return BusinessHistory.builder()
                 .targetType(targetType)
                 .url(url)
                 .ip(ip)
-                .method(method)
+                .action(trackHistory.action().name())
                 .targetId(targetId)
                 .createdBy(userId)
                 .content(userName)

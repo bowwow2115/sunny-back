@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class ChildServiceImpl implements ChildService {
     private final ChildRepository childRepository;
     private final MeetingLocationRepository meetingLocationRepository;
@@ -60,6 +60,7 @@ public class ChildServiceImpl implements ChildService {
 
     @Override
     @TrackHistory(targetType = Child.class, action = Action.UPDATE_CHILD_CLASS, idParamName = "childrenList")
+    @Transactional
     public List<ChildDto> updateChildrenClass(List<ChildDto> childrenList, String className) {
         List<Child> childList = new ArrayList<>();
         childrenList.forEach((child) ->
@@ -104,6 +105,7 @@ public class ChildServiceImpl implements ChildService {
 
     @Override
     @TrackHistory(action= Action.ADD_CHILD, targetType = Child.class, idParamName = "object")
+    @Transactional
     public ChildDto create(ChildDto object) {
 
         Child child = object.toEntity();
@@ -132,6 +134,7 @@ public class ChildServiceImpl implements ChildService {
 
     @Override
     @TrackHistory(action= Action.UPDATE_CHILD, targetType = Child.class, idParamName = "object")
+    @Transactional
     public ChildDto update(ChildDto object) {
         Child child = object.toEntity();
         Child origin = childRepository.findById(object.getId())
@@ -143,6 +146,7 @@ public class ChildServiceImpl implements ChildService {
 
     @Override
     @TrackHistory(action= Action.DELETE_CHILD, targetType = Child.class, idParamName = "object")
+    @Transactional
     public void delete(ChildDto object) {
         Child child = object.toEntity();
         childRepository.delete(child);
@@ -150,6 +154,7 @@ public class ChildServiceImpl implements ChildService {
 
     @Override
     @TrackHistory(action= Action.DELETE_CHILD, targetType = Child.class, idParamName = "aLong")
+    @Transactional
     public void deleteById(Long aLong) {
         childRepository.deleteById(aLong);
     }

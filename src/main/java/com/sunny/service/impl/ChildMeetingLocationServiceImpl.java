@@ -21,7 +21,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class ChildMeetingLocationServiceImpl implements ChildMeetingLocationService {
     private final ChildMeetingLocationRepository childMeetingLocationRepository;
     private final ChildRepository childRepository;
@@ -38,6 +38,7 @@ public class ChildMeetingLocationServiceImpl implements ChildMeetingLocationServ
     }
 
     @Override
+    @Transactional
     public ChilMeetingLocationDto create(ChilMeetingLocationDto object) {
         Child child = childRepository.findById(object.getChild().getId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.ENTITY_NOT_FOUND, "생성할 원아의 정보가 존재하지 않습니다."));
@@ -68,6 +69,7 @@ public class ChildMeetingLocationServiceImpl implements ChildMeetingLocationServ
     }
 
     @Override
+    @Transactional
     public ChilMeetingLocationDto update(ChilMeetingLocationDto object) {
         Child child = childRepository.findById(object.getChild().getId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.ENTITY_NOT_FOUND, "변경할 원아의 정보가 존재하지 않습니다."));
@@ -98,10 +100,12 @@ public class ChildMeetingLocationServiceImpl implements ChildMeetingLocationServ
     }
 
     @Override
+    @Transactional
     public void delete(ChilMeetingLocationDto object) {
     }
 
     @Override
+    @Transactional
     public void deleteById(Long aLong) {
         childMeetingLocationRepository.deleteById(aLong);
     }

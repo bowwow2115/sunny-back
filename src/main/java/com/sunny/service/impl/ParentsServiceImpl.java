@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 import static com.sunny.code.Action.ADD_PARENTS;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ParentsServiceImpl implements ParentsService {
     private final ParentsRepository parentsRepository;
@@ -44,6 +44,7 @@ public class ParentsServiceImpl implements ParentsService {
 
     @Override
     @TrackHistory(action = ADD_PARENTS, targetType = Parents.class, idParamName = "object")
+    @Transactional
     public ParentsDto create(ParentsDto object) {
         Parents parents = object.toEntity();
         Child child = childRepository.findById(object.getChildId())
@@ -54,18 +55,21 @@ public class ParentsServiceImpl implements ParentsService {
 
     @Override
     @TrackHistory(action = Action.UPDATE_PARENTS, targetType = Parents.class, idParamName = "object")
+    @Transactional
     public ParentsDto update(ParentsDto object) {
         return new ParentsDto(parentsRepository.save(object.toEntity()));
     }
 
     @Override
     @TrackHistory(action = Action.DELETE_PARENTS, targetType = Parents.class, idParamName = "object")
+    @Transactional
     public void delete(ParentsDto object) {
         parentsRepository.delete(object.toEntity());
     }
 
     @Override
     @TrackHistory(action = Action.DELETE_PARENTS_BYID, targetType = Parents.class, idParamName = "aLong")
+    @Transactional
     public void deleteById(Long aLong) {
         parentsRepository.deleteById(aLong);
     }

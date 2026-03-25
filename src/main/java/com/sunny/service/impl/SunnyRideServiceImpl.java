@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class SunnyRideServiceImpl implements SunnyRideService {
     private final SunnyRideRepository sunnyRideRepository;
@@ -42,11 +42,13 @@ public class SunnyRideServiceImpl implements SunnyRideService {
 
     @Override
     @TrackHistory(action = Action.FIND_RIDE_BYID, targetType = SunnyRide.class, idParamName = "aLong")
+    @Transactional
     public SunnyRideDto create(SunnyRideDto object) {
         return new SunnyRideDto(sunnyRideRepository.save(object.toEntity()));
     }
 
     @Override
+    @Transactional
     public SunnyRideDto update(SunnyRideDto object) {
         SunnyRide origin = sunnyRideRepository.findById(object.getId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.ENTITY_NOT_FOUND, "수정하려는 차량의 정보가 존재하지 않습니다."));
@@ -56,11 +58,13 @@ public class SunnyRideServiceImpl implements SunnyRideService {
     }
 
     @Override
+    @Transactional
     public void delete(SunnyRideDto object) {
         sunnyRideRepository.delete(object.toEntity());
     }
 
     @Override
+    @Transactional
     public void deleteById(Long aLong) {
         sunnyRideRepository.deleteById(aLong);
     }

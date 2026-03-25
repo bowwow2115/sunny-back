@@ -5,7 +5,7 @@ import com.sunny.config.error.ErrorCode;
 import com.sunny.model.SunnyClass;
 import com.sunny.model.dto.SunnyClassDto;
 import com.sunny.repository.SunnyClassRepository;
-import com.sunny.service.impl.SunnyClsssServiceImpl;
+import com.sunny.service.impl.SunnyClassServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,7 +29,7 @@ public class SunnyClassServiceTest {
     private SunnyClassRepository sunnyClassRepository;
 
     @InjectMocks
-    private SunnyClsssServiceImpl sunnyClassService;
+    private SunnyClassServiceImpl sunnyClassService;
 
     // ==================== findAll ====================
     @Test

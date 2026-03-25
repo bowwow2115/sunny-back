@@ -17,9 +17,9 @@ import java.util.stream.Collectors;
 import static com.sunny.code.Action.*;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class SunnyClsssServiceImpl implements SunnyClassServcie {
+public class SunnyClassServiceImpl implements SunnyClassServcie {
 
     private final SunnyClassRepository sunnyClassRepository;
 
@@ -40,24 +40,28 @@ public class SunnyClsssServiceImpl implements SunnyClassServcie {
 
     @Override
     @TrackHistory(action = CREATE_CLASS, targetType = SunnyClass.class, idParamName = "object")
+    @Transactional
     public SunnyClassDto create(SunnyClassDto object) {
         return new SunnyClassDto(sunnyClassRepository.save(object.toEntity()));
     }
 
     @Override
     @TrackHistory(action = UPDATE_CLASS, targetType = SunnyClass.class, idParamName = "object")
+    @Transactional
     public SunnyClassDto update(SunnyClassDto object) {
         return new SunnyClassDto(sunnyClassRepository.save(object.toEntity()));
     }
 
     @Override
     @TrackHistory(action = DELETE_CLASS, targetType = SunnyClass.class, idParamName = "object")
+    @Transactional
     public void delete(SunnyClassDto object) {
         sunnyClassRepository.delete(object.toEntity());
     }
 
     @Override
     @TrackHistory(action = DELETE_CLASS_BYID, targetType = SunnyClass.class)
+    @Transactional
     public void deleteById(Long aLong) {
         sunnyClassRepository.deleteById(aLong);
     }

@@ -97,7 +97,7 @@ public class HistoryRepositoryCustomImpl implements HistoryRepositoryCustom {
                         history.createdDate,
                         history.targetId,
                         history.targetType,
-                        history.method,
+                        history.action,
                         history.url,
                         history.ip,
                         history.content,
@@ -106,7 +106,7 @@ public class HistoryRepositoryCustomImpl implements HistoryRepositoryCustom {
                 ))
                 .from(history)
                 .where(
-                        methodEq(condition.getMethod()),
+                        methodEq(condition.getAction()),
                         ipEq(condition.getIp()),
                         createdByEq(condition.getCreatedBy()),
                         createdDateBetween(condition.getStartDate(), condition.getEndDate())
@@ -120,7 +120,7 @@ public class HistoryRepositoryCustomImpl implements HistoryRepositoryCustom {
                 .select(history.count())
                 .from(history)
                 .where(
-                        methodEq(condition.getMethod()),
+                        methodEq(condition.getAction()),
                         ipEq(condition.getIp()),
                         createdByEq(condition.getCreatedBy()),
                         createdDateBetween(condition.getStartDate(), condition.getEndDate()))
@@ -137,7 +137,7 @@ public class HistoryRepositoryCustomImpl implements HistoryRepositoryCustom {
                         history.createdDate,
                         history.targetId,
                         history.targetType,
-                        history.method,
+                        history.action,
                         history.url,
                         history.ip,
                         history.content,
@@ -150,7 +150,7 @@ public class HistoryRepositoryCustomImpl implements HistoryRepositoryCustom {
                 .where(
                         nameLike(condition.getName(), user),
                         typeCondition,
-                        methodEq(condition.getMethod()),
+                        methodEq(condition.getAction()),
                         ipEq(condition.getIp()),
                         createdByEq(condition.getCreatedBy()),
                         createdDateBetween(condition.getStartDate(), condition.getEndDate())
@@ -167,7 +167,7 @@ public class HistoryRepositoryCustomImpl implements HistoryRepositoryCustom {
                 .where(
                         nameLike(condition.getName(), user),
                         typeCondition,
-                        methodEq(condition.getMethod()),
+                        methodEq(condition.getAction()),
                         ipEq(condition.getIp()),
                         createdByEq(condition.getCreatedBy()),
                         createdDateBetween(condition.getStartDate(), condition.getEndDate())
@@ -185,7 +185,7 @@ public class HistoryRepositoryCustomImpl implements HistoryRepositoryCustom {
                         history.createdDate,
                         history.targetId,
                         history.targetType,
-                        history.method,
+                        history.action,
                         history.url,
                         history.ip,
                         history.content,
@@ -198,7 +198,7 @@ public class HistoryRepositoryCustomImpl implements HistoryRepositoryCustom {
                 .where(
                         nameLike(condition.getName(), qSunnyRide),
                         typeCondition,
-                        methodEq(condition.getMethod()),
+                        methodEq(condition.getAction()),
                         ipEq(condition.getIp()),
                         createdByEq(condition.getCreatedBy()),
                         createdDateBetween(condition.getStartDate(), condition.getEndDate())
@@ -215,7 +215,7 @@ public class HistoryRepositoryCustomImpl implements HistoryRepositoryCustom {
                 .where(
                         nameLike(condition.getName(), qSunnyRide),
                         typeCondition,
-                        methodEq(condition.getMethod()),
+                        methodEq(condition.getAction()),
                         ipEq(condition.getIp()),
                         createdByEq(condition.getCreatedBy()),
                         createdDateBetween(condition.getStartDate(), condition.getEndDate())
@@ -233,7 +233,7 @@ public class HistoryRepositoryCustomImpl implements HistoryRepositoryCustom {
                         history.createdDate,
                         history.targetId,
                         history.targetType,
-                        history.method,
+                        history.action,
                         history.url,
                         history.ip,
                         history.content,
@@ -246,7 +246,7 @@ public class HistoryRepositoryCustomImpl implements HistoryRepositoryCustom {
                 .where(
                         nameLike(condition.getName(), qClass),
                         typeCondition,
-                        methodEq(condition.getMethod()),
+                        methodEq(condition.getAction()),
                         ipEq(condition.getIp()),
                         createdByEq(condition.getCreatedBy()),
                         createdDateBetween(condition.getStartDate(), condition.getEndDate())
@@ -263,7 +263,7 @@ public class HistoryRepositoryCustomImpl implements HistoryRepositoryCustom {
                 .where(
                         nameLike(condition.getName(), qClass),
                         typeCondition,
-                        methodEq(condition.getMethod()),
+                        methodEq(condition.getAction()),
                         ipEq(condition.getIp()),
                         createdByEq(condition.getCreatedBy()),
                         createdDateBetween(condition.getStartDate(), condition.getEndDate())
@@ -281,7 +281,7 @@ public class HistoryRepositoryCustomImpl implements HistoryRepositoryCustom {
                         history.createdDate,
                         history.targetId,
                         history.targetType,
-                        history.method,
+                        history.action,
                         history.url,
                         history.ip,
                         history.content,
@@ -294,7 +294,7 @@ public class HistoryRepositoryCustomImpl implements HistoryRepositoryCustom {
                 .where(
                         nameLike(condition.getName(), parents),
                         typeCondition,
-                        methodEq(condition.getMethod()),
+                        methodEq(condition.getAction()),
                         ipEq(condition.getIp()),
                         createdByEq(condition.getCreatedBy()),
                         createdDateBetween(condition.getStartDate(), condition.getEndDate())
@@ -311,7 +311,7 @@ public class HistoryRepositoryCustomImpl implements HistoryRepositoryCustom {
                 .where(
                         nameLike(condition.getName(), parents),
                         typeCondition,
-                        methodEq(condition.getMethod()),
+                        methodEq(condition.getAction()),
                         ipEq(condition.getIp()),
                         createdByEq(condition.getCreatedBy()),
                         createdDateBetween(condition.getStartDate(), condition.getEndDate())
@@ -329,7 +329,7 @@ public class HistoryRepositoryCustomImpl implements HistoryRepositoryCustom {
                         history.createdDate,
                         history.targetId,
                         history.targetType,
-                        history.method,
+                        history.action,
                         history.url,
                         history.ip,
                         history.content,
@@ -342,7 +342,7 @@ public class HistoryRepositoryCustomImpl implements HistoryRepositoryCustom {
                 .where(
                         nameLike(condition.getName(), child),
                         typeCondition,
-                        methodEq(condition.getMethod()),
+                        methodEq(condition.getAction()),
                         ipEq(condition.getIp()),
                         createdByEq(condition.getCreatedBy()),
                         createdDateBetween(condition.getStartDate(), condition.getEndDate())
@@ -359,7 +359,7 @@ public class HistoryRepositoryCustomImpl implements HistoryRepositoryCustom {
                 .where(
                         nameLike(condition.getName(), child),
                         typeCondition,
-                        methodEq(condition.getMethod()),
+                        methodEq(condition.getAction()),
                         ipEq(condition.getIp()),
                         createdByEq(condition.getCreatedBy()),
                         createdDateBetween(condition.getStartDate(), condition.getEndDate())
@@ -371,7 +371,7 @@ public class HistoryRepositoryCustomImpl implements HistoryRepositoryCustom {
 
     private BooleanExpression[] makeConditionEq(HistorySearchCondition condition) {
         return new BooleanExpression[]{
-                methodEq(condition.getMethod()),
+                methodEq(condition.getAction()),
                 ipEq(condition.getIp()),
                 createdByEq(condition.getCreatedBy()),
                 createdDateBetween(condition.getStartDate(), condition.getEndDate())};
@@ -388,7 +388,7 @@ public class HistoryRepositoryCustomImpl implements HistoryRepositoryCustom {
         return hasText(ip) ? businessHistory.ip.eq(ip) : null;
     }
     private BooleanExpression methodEq(String method) {
-        return hasText(method) ? businessHistory.method.eq(method) : null;
+        return hasText(method) ? businessHistory.action.eq(method) : null;
     }
     private BooleanExpression nameLike(String name, QParents child) {
         return hasText(name) ? child.name.contains(name) : null;
