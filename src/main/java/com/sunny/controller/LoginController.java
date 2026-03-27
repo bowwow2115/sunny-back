@@ -6,6 +6,7 @@ import com.sunny.config.error.ErrorCode;
 import com.sunny.model.dto.UserDto;
 import com.sunny.service.AuthUserDetailsService;
 import com.sunny.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -32,8 +33,9 @@ public class LoginController extends BasicController {
     public ResponseEntity<Map<String, Object>> doLogin(@RequestBody UserDto user) {
         Map<String,Object> result =new HashMap();
         try {
-            // AuthenticationManager 에게 사용자 입력 정보를 전달한다
+            // 사용자 인증
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUserId(), user.getPassword()));
+            // 인증 성공 시 사용자 정보 조회
             UserDetails userDetails = authUserDetailsService.loadUserByUsername(user.getUserId());
 
             String token = jwtTokenUtil.generateToken(userDetails);
@@ -66,6 +68,10 @@ public class LoginController extends BasicController {
 
 
         return createResponse(result);
+    }
+    @PostMapping("/signup")
+    public ResponseEntity<Map<String, Object>> signUp(@RequestBody @Valid UserDto userDto) {
+        return createResponse(userService.create(userDto));
     }
 
 //    @PostMapping("/user")

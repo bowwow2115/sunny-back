@@ -171,7 +171,7 @@ JWT 토큰을 활용한 인증 기반 API입니다.
 #### 로그인
 
 ```http
-POST /sunny/api/auth/login
+POST /sunny/auth/login
 Content-Type: application/json
 
 {
@@ -183,7 +183,7 @@ Content-Type: application/json
 #### 토큰 갱신
 
 ```http
-POST /sunny/api/auth/refresh
+POST /sunny/auth/refresh
 Authorization: Bearer <refresh_token>
 ```
 

@@ -2,6 +2,8 @@ package com.sunny.config;
 
 import com.sunny.config.auth.jwt.JwtAuthenticationEntryPoint;
 import com.sunny.config.auth.jwt.JwtRequestFilter;
+import com.sunny.config.auth.oauth2.OAuth2LoginSuccessHandler;
+import com.sunny.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -29,6 +31,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtRequestFilter jwtRequestFilter;
+    private final CustomOAuth2UserService customOAuth2UserService;
+    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
     @Value("${server.domain:*}")
     String domain;
 
@@ -56,11 +60,13 @@ public class SecurityConfig {
                                 "/",
                                 "/login/**",
                                 "/logout/**",
-                                "/user",
                                 "/app/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
+                .oauth2Login(oAuth2 -> oAuth2
+                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
+                        .successHandler(oAuth2LoginSuccessHandler))
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 )

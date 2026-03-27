@@ -24,7 +24,7 @@ public class AuthUserDetailsService implements UserDetailsService {
         return org.springframework.security.core.userdetails.User.builder()
                 .username(user.getUserId())
                 .password(user.getPassword())
-                .roles(user.getRole())
+                .roles(user.getRole().name())
                 .build();
     }
 }

@@ -28,11 +28,6 @@ public class UserController extends BasicController {
         return createResponse(userService.findAll());
     }
 
-    @PostMapping
-    public ResponseEntity<Map<String, Object>> addUser(@RequestBody UserDto userDto) {
-        return createResponse(userService.create(userDto));
-    }
-
     @PutMapping
     public ResponseEntity<Map<String, Object>> updateUser(@RequestBody UserDto userDto, @AuthenticationPrincipal UserDetails userDetails) {
 
@@ -43,7 +38,6 @@ public class UserController extends BasicController {
             throw new BusinessException(ErrorCode.AUTHEXCEPTION);
         }
     }
-
     @DeleteMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Map<String, Object>> deleteUser(@RequestParam Long id) {

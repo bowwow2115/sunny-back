@@ -1,7 +1,6 @@
 package com.sunny.service.impl;
 
 import com.sunny.code.Action;
-import com.sunny.code.SunnyCode;
 import com.sunny.config.aop.TrackHistory;
 import com.sunny.config.error.BusinessException;
 import com.sunny.config.error.ErrorCode;
@@ -56,9 +55,9 @@ public class UserServiceImpl implements UserService {
                             .email(object.getEmail())
                             .userId(object.getUserId())
                             .name(object.getUserName())
-                            .status(false)
+                            .status(false) //회원가입 시 기본적으로 비활성화 상태로 생성, 관리자가 활성화 시켜야 로그인 가능
                             .password(passwordEncoder.encode(object.getPassword()))
-                            .role(SunnyCode.ROLE_GENERAL_USER)
+                            .role(User.Role.USER) //회원가입유저는 일반유저로 고정
                             .build()
             );
         } catch (ConstraintViolationException e) {
@@ -82,7 +81,7 @@ public class UserServiceImpl implements UserService {
         origin.setEmail(object.getEmail());
         origin.setTelephone(object.getTelephone());
 
-        if(origin.getRole().equals(SunnyCode.ROLE_GENERAL_ADMIN)) origin.setRole(object.getRole());
+        if(origin.getRole().equals(User.Role.USER)) origin.setRole(User.Role.USER); // 유저는 role 속성 변경 불가능
 
         return new UserDto(userRepository.save(origin));
     }
