@@ -5,6 +5,7 @@ import com.sunny.config.auth.jwt.JwtRequestFilter;
 import com.sunny.config.auth.oauth2.OAuth2LoginSuccessHandler;
 import com.sunny.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,14 +29,14 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 @EnableMethodSecurity
 @RequiredArgsConstructor
+@Slf4j
 public class SecurityConfig {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtRequestFilter jwtRequestFilter;
     private final CustomOAuth2UserService customOAuth2UserService;
     private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
     @Value("${server.domain:*}")
-    String domain;
-
+    private String domain;
     @Bean
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
@@ -60,21 +61,27 @@ public class SecurityConfig {
                                 "/",
                                 "/login/**",
                                 "/logout/**",
-                                "/app/**"
+                                "/app/**",
+                                "/test/**",
+                                "/oauth2/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oAuth2 -> oAuth2
+//                        .loginPage("/login")
+                        .authorizationEndpoint(endPoint -> endPoint
+                            .baseUri("/oauth2/authorization") // OAuth2 로그인 요청 URL
+                        )
+//                        .redirectionEndpoint(endpoint -> endpoint
+//                                .baseUri("/login/oauth2/code")  // 콜백 엔드포인트
+//                        )
                         .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
                         .successHandler(oAuth2LoginSuccessHandler))
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 )
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout(AbstractHttpConfigurer::disable);
-
-        // JWT 필터 위치 설정
-        httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-
         return httpSecurity.build();
     }
 

@@ -45,10 +45,7 @@ public class CustomOAuth2User implements OAuth2User, UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (oAuth2User != null) {
-            return oAuth2User.getAuthorities();
-        }
-        // 사용자 역할 (Role) 을 권한으로 변환
+        // 사용자 역할 (Role) 을 권한으로 변환(기존 사용자의 권한으로 고정)
         return java.util.Collections.singletonList(
             (GrantedAuthority) () -> "ROLE_" + user.getRole()
         );

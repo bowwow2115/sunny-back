@@ -58,6 +58,7 @@ public class UserServiceImpl implements UserService {
                             .status(false) //회원가입 시 기본적으로 비활성화 상태로 생성, 관리자가 활성화 시켜야 로그인 가능
                             .password(passwordEncoder.encode(object.getPassword()))
                             .role(User.Role.USER) //회원가입유저는 일반유저로 고정
+                            .provider(User.Provider.LOCAL) //회원가입유저는 로컬로 고정
                             .build()
             );
         } catch (ConstraintViolationException e) {

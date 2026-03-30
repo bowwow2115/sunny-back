@@ -1,13 +1,14 @@
 package com.sunny;
 
-import com.sunny.code.SunnyCode;
 import com.sunny.model.User;
 import com.sunny.model.dto.*;
 import com.sunny.model.embedded.Address;
+import com.sunny.repository.UserRepository;
 import com.sunny.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -20,7 +21,8 @@ import java.util.Random;
 @Slf4j
 public class BootstrapData implements CommandLineRunner {
 
-    private final UserService userService;
+    private final UserRepository userService;
+    private final PasswordEncoder passwordEncoder;
     private final SunnyRideService sunnyRideService;
     private final SunnyClassServcie sunnyClassServcie;
     private final ChildService childService;
@@ -35,17 +37,18 @@ public class BootstrapData implements CommandLineRunner {
 
         User admin = userService.findUserByUserId("admin");
         if(admin == null) {
-            UserDto user = UserDto.builder()
-                    .password("admin")
+            User user = User.builder()
+                    .password(passwordEncoder.encode("admin"))
                     .userId("admin")
-                    .userName("관리자")
-                    .role(SunnyCode.ROLE_GENERAL_ADMIN)
+                    .name("관리자")
+                    .role(User.Role.ADMIN)
+                    .provider(User.Provider.LOCAL)
                     .status(true)
                     .email("")
                     .telephone("")
                     .build();
 
-            UserDto userDto = userService.create(user);
+            User userDto = userService.save(user);
             if(userDto != null) log.info("어드민 생성");
         }
 //        makeTestData(10);

@@ -3,6 +3,8 @@ package com.sunny.service;
 import com.sunny.config.auth.oauth2.CustomOAuth2User;
 import com.sunny.config.auth.oauth2.OAuth2UserInfo;
 import com.sunny.config.auth.oauth2.OAuth2UserInfoFactory;
+import com.sunny.config.error.BusinessException;
+import com.sunny.config.error.ErrorCode;
 import com.sunny.model.User;
 import com.sunny.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +37,8 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         OAuth2User oAuth2User = loadUserProfile(userRequest);
 
         // 2. 제공자 구분 (google, naver, kakao)
-        String registrationId = userRequest.getClientRegistration().getRegistrationId();
+        User.Provider registrationId = User.Provider.valueOf(
+                userRequest.getClientRegistration().getRegistrationId().toUpperCase());
 
         // 3. 사용자 식별 키 속성명 (예: id, sub 등)
         String userNameAttributeName = userRequest.getClientRegistration()
@@ -91,7 +94,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         );
     }
 
-    private User saveOrUpdate(OAuth2UserInfo userInfo, String registrationId) {
+    private User saveOrUpdate(OAuth2UserInfo userInfo, User.Provider registrationId) {
         // 기존 사용자 찾기
         Optional<User> findUser = userRepository.findByProviderAndProviderId(registrationId, userInfo.getProviderId());
 
@@ -100,16 +103,17 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
             Optional<User> emailUser = userRepository.findByEmail(userInfo.getEmail());
             if(emailUser.isPresent()) {
                 User user = emailUser.get();
-                if(user.getProvider().equals(User.Provider.LOCAL)) { // 로컬 계정으로 등록된 사용자인 경우 연결
-                    user.setProvider(User.Provider.valueOf(registrationId.toUpperCase()));
+                if(user.getProvider() == User.Provider.LOCAL) { // 로컬 계정으로 등록된 사용자인 경우 연결
+                    user.setProvider(registrationId);
                     user.setProviderId(userInfo.getProviderId());
                     user = user.update(userInfo.getName(), userInfo.getPicture());
-                    userRepository.save(user);
+                    return userRepository.save(user);
                 } else    // 다른 OAuth2 제공자로 등록된 사용자인 경우 예외 처리
                     throw new IllegalArgumentException("이미 " + emailUser.get().getProvider() + " 계정으로 등록된 이메일입니다.");
             }
+            //TODO: 신규 사용자 생성 (필요한 경우 추가 정보 입력 요구)
+            throw new BusinessException(ErrorCode.USERNOTFOUND, "사용자를 찾을 수 없습니다.");
         }
-
         User update = findUser.get().update(userInfo.getName(), userInfo.getPicture());
         return userRepository.save(update);
     }
