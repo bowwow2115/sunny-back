@@ -1,6 +1,5 @@
 package com.sunny.service.mock;
 
-import com.sunny.code.SunnyCode;
 import com.sunny.model.User;
 import com.sunny.repository.UserRepository;
 import com.sunny.service.AuthUserDetailsService;
@@ -39,7 +38,7 @@ public class AuthUserDetailsServiceTest {
                 .email("test@example.com")
                 .password("encodedPassword")
                 .status(true)
-                .role(SunnyCode.ROLE_GENERAL_USER)
+                .role(User.Role.USER)
                 .build();
 
         when(userRepository.findUserByUserId(userId)).thenReturn(user);
@@ -52,7 +51,7 @@ public class AuthUserDetailsServiceTest {
         assertThat(result.getUsername()).isEqualTo(userId);
         assertThat(result.getPassword()).isEqualTo("encodedPassword");
         assertThat(result.getAuthorities()).extracting("authority")
-                .containsExactly("ROLE_" + SunnyCode.ROLE_GENERAL_USER);
+                .containsExactly("ROLE_USER");
         verify(userRepository, times(1)).findUserByUserId(userId);
     }
 
@@ -68,7 +67,7 @@ public class AuthUserDetailsServiceTest {
                 .email("admin@example.com")
                 .password("adminPassword")
                 .status(true)
-                .role(SunnyCode.ROLE_GENERAL_ADMIN)
+                .role(User.Role.ADMIN)
                 .build();
 
         when(userRepository.findUserByUserId(userId)).thenReturn(user);
@@ -81,7 +80,7 @@ public class AuthUserDetailsServiceTest {
         assertThat(result.getUsername()).isEqualTo(userId);
         assertThat(result.getPassword()).isEqualTo("adminPassword");
         assertThat(result.getAuthorities()).extracting("authority")
-                .containsExactly("ROLE_" + SunnyCode.ROLE_GENERAL_ADMIN);
+                .containsExactly("ROLE_ADMIN");
         verify(userRepository, times(1)).findUserByUserId(userId);
     }
 
@@ -111,7 +110,7 @@ public class AuthUserDetailsServiceTest {
                 .email("test@example.com")
                 .password("encodedPassword")
                 .status(false)
-                .role(SunnyCode.ROLE_GENERAL_USER)
+                .role(User.Role.USER)
                 .build();
 
         when(userRepository.findUserByUserId(userId)).thenReturn(user);
@@ -153,7 +152,7 @@ public class AuthUserDetailsServiceTest {
                 .email("test@user.com")
                 .password("encodedPassword")
                 .status(true)
-                .role(SunnyCode.ROLE_GENERAL_USER)
+                .role(User.Role.USER)
                 .build();
 
         when(userRepository.findUserByUserId(userId)).thenReturn(user);

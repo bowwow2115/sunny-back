@@ -3,6 +3,7 @@ package com.sunny.model.dto;
 import com.sunny.model.MeetingLocation;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import jakarta.validation.constraints.NotBlank;
@@ -34,6 +35,7 @@ public class MeetingLocationDto {
     private SunnyRideDto sunnyRide;
 
     @Valid
+    @Default
     private List<ChilMeetingLocationDto> childRideList = new ArrayList<>();
 
     public MeetingLocationDto(MeetingLocation meetingLocation) {

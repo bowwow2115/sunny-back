@@ -51,6 +51,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             id = jwtTokenUtil.getUsernameFromToken(jwtToken);
         } catch (IllegalArgumentException e) {
             log.error(e.getMessage());
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid JWT token");
             return;
         } catch (ExpiredJwtException ee) {
             log.error(ee.getMessage());
@@ -60,13 +61,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 cookie.setPath("/");
                 response.addCookie(cookie);
             }
-            if (request.getServletPath().contentEquals("/")) {
-                log.info("ExpiredJwtException : {} ", "getServletPath /");
-                request.getRequestDispatcher("/").forward(request, response);
-            } else {
-                log.info("ExpiredJwtException : {} ", request.getServletPath());
-                request.getRequestDispatcher("/exception/jwt").forward(request, response);
-            }
+            log.info("ExpiredJwtException : {} ", request.getServletPath());
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "JWT token expired");
             return;
         }
 
@@ -93,4 +89,3 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         chain.doFilter(request, response);
     }
 }
-

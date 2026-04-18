@@ -1,9 +1,10 @@
 package com.sunny.service.mock;
 
-import com.sunny.code.SunnyCode;
 import com.sunny.config.error.BusinessException;
 import com.sunny.model.User;
+import com.sunny.model.dto.UserSignupRequest;
 import com.sunny.model.dto.UserDto;
+import com.sunny.model.dto.UserUpdateRequest;
 import com.sunny.repository.UserRepository;
 import com.sunny.service.impl.UserServiceImpl;
 import org.junit.jupiter.api.DisplayName;
@@ -49,7 +50,7 @@ public class UserServiceTest {
                 .telephone("010-1234-5678")
                 .password("encodedPassword1")
                 .status(true)
-                .role(SunnyCode.ROLE_GENERAL_USER)
+                .role(User.Role.USER)
                 .build();
 
         User user2 = User.builder()
@@ -60,7 +61,7 @@ public class UserServiceTest {
                 .telephone("010-9876-5432")
                 .password("encodedPassword2")
                 .status(false)
-                .role(SunnyCode.ROLE_GENERAL_USER)
+                .role(User.Role.USER)
                 .build();
 
         List<User> userList = List.of(user1, user2);
@@ -103,7 +104,7 @@ public class UserServiceTest {
                 .email("kim@example.com")
                 .password("password")
                 .status(true)
-                .role(SunnyCode.ROLE_GENERAL_USER)
+                .role(User.Role.USER)
                 .build();
 
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
@@ -136,14 +137,12 @@ public class UserServiceTest {
     @DisplayName("사용자 생성 - 성공")
     void testCreate_Success() {
         // Given
-        UserDto userDto = UserDto.builder()
-                .userId("newuser")
-                .userName("박새로운")
-                .email("newuser@example.com")
-                .telephone("010-1111-1111")
-                .password("rawPassword")
-                .role(SunnyCode.ROLE_GENERAL_USER)
-                .build();
+        UserSignupRequest userDto = new UserSignupRequest();
+        userDto.setUserId("newuser");
+        userDto.setUserName("박새로운");
+        userDto.setEmail("newuser@example.com");
+        userDto.setTelephone("010-1111-1111");
+        userDto.setPassword("rawPassword");
 
         User savedUser = User.builder()
                 .id(1L)
@@ -153,7 +152,7 @@ public class UserServiceTest {
                 .telephone("010-1111-1111")
                 .password("encodedPassword")
                 .status(false)
-                .role(SunnyCode.ROLE_GENERAL_USER)
+                .role(User.Role.USER)
                 .build();
 
         when(passwordEncoder.encode("rawPassword")).thenReturn("encodedPassword");
@@ -175,12 +174,11 @@ public class UserServiceTest {
     @DisplayName("사용자 생성 - 중복된 사용자")
     void testCreate_UserAlreadyExists() {
         // Given
-        UserDto userDto = UserDto.builder()
-                .userId("existinguser")
-                .userName("기존사용자")
-                .email("existing@example.com")
-                .password("password")
-                .build();
+        UserSignupRequest userDto = new UserSignupRequest();
+        userDto.setUserId("existinguser");
+        userDto.setUserName("기존사용자");
+        userDto.setEmail("existing@example.com");
+        userDto.setPassword("password");
 
         when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
         when(userRepository.save(any(User.class)))
@@ -197,16 +195,13 @@ public class UserServiceTest {
     void testUpdate_Success() {
         // Given
         Long userId = 1L;
-        UserDto updateDto = UserDto.builder()
-                .id(userId)
-                .userId("user1")
-                .userName("김철수")
-                .email("newemail@example.com")
-                .telephone("010-9999-9999")
-                .password("newPassword")
-                .status(true)
-                .role(SunnyCode.ROLE_GENERAL_ADMIN)
-                .build();
+        UserUpdateRequest updateDto = new UserUpdateRequest();
+        updateDto.setId(userId);
+        updateDto.setUserId("user1");
+        updateDto.setEmail("newemail@example.com");
+        updateDto.setTelephone("010-9999-9999");
+        updateDto.setPassword("newPassword");
+        updateDto.setStatus(true);
 
         User existingUser = User.builder()
                 .id(userId)
@@ -216,7 +211,7 @@ public class UserServiceTest {
                 .telephone("010-1234-5678")
                 .password("oldPassword")
                 .status(false)
-                .role(SunnyCode.ROLE_GENERAL_ADMIN)
+                .role(User.Role.ADMIN)
                 .build();
 
         User updatedUser = User.builder()
@@ -227,7 +222,7 @@ public class UserServiceTest {
                 .telephone("010-9999-9999")
                 .password("encodedNewPassword")
                 .status(true)
-                .role(SunnyCode.ROLE_GENERAL_ADMIN)
+                .role(User.Role.ADMIN)
                 .build();
 
         when(userRepository.findById(userId)).thenReturn(Optional.of(existingUser));
@@ -250,22 +245,19 @@ public class UserServiceTest {
     void testUpdate_EmptyPassword() {
         // Given
         Long userId = 1L;
-        UserDto updateDto = UserDto.builder()
-                .id(userId)
-                .userId("user1")
-                .userName("김철수")
-                .email("newemail@example.com")
-                .password("")
-                .role(SunnyCode.ROLE_GENERAL_USER)
-                .status(true)
-                .build();
+        UserUpdateRequest updateDto = new UserUpdateRequest();
+        updateDto.setId(userId);
+        updateDto.setUserId("user1");
+        updateDto.setEmail("newemail@example.com");
+        updateDto.setPassword("");
+        updateDto.setStatus(true);
 
         User existingUser = User.builder()
                 .id(userId)
                 .userId("user1")
                 .name("김철수")
                 .password("oldPassword")
-                .role(SunnyCode.ROLE_GENERAL_USER)
+                .role(User.Role.USER)
                 .status(false)
                 .build();
 
@@ -285,10 +277,10 @@ public class UserServiceTest {
     @DisplayName("사용자 업데이트 - 사용자 없음")
     void testUpdate_UserNotFound() {
         // Given
-        UserDto updateDto = UserDto.builder()
-                .id(999L)
-                .password("newPassword")
-                .build();
+        UserUpdateRequest updateDto = new UserUpdateRequest();
+        updateDto.setId(999L);
+        updateDto.setUserId("missing-user");
+        updateDto.setPassword("newPassword");
 
         when(userRepository.findById(999L)).thenReturn(Optional.empty());
 
@@ -340,7 +332,7 @@ public class UserServiceTest {
                 .name("테스트사용자")
                 .email("test@example.com")
                 .password("password")
-                .role(SunnyCode.ROLE_GENERAL_USER)
+                .role(User.Role.USER)
                 .build();
 
         when(userRepository.findUserByUserId(userId)).thenReturn(user);

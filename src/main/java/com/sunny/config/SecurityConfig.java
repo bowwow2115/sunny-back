@@ -60,10 +60,13 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/",
                                 "/login/**",
+                                "/signup",
                                 "/logout/**",
                                 "/app/**",
                                 "/test/**",
-                                "/oauth2/**"
+                                "/oauth2/**",
+                                "/auth/jwt/refresh",
+                                "/auth/validation"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

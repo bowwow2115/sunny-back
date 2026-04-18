@@ -4,6 +4,7 @@ import com.sunny.model.Child;
 import com.sunny.model.embedded.Address;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import jakarta.validation.constraints.*;
@@ -42,7 +43,9 @@ public class ChildDto {
     @Size(min = 1, max = 50, message = "이름은 1자 이상 50자 이하로 입력해야 합니다.")
     private String name;
 
+    @Default
     private List<ChilMeetingLocationDto> childRideList = new ArrayList<>();
+    @Default
     private List<ParentsDto> parentList = new ArrayList<>();
 
 

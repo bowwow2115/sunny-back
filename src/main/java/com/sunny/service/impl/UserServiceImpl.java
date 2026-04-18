@@ -5,7 +5,9 @@ import com.sunny.config.aop.TrackHistory;
 import com.sunny.config.error.BusinessException;
 import com.sunny.config.error.ErrorCode;
 import com.sunny.model.User;
+import com.sunny.model.dto.UserSignupRequest;
 import com.sunny.model.dto.UserDto;
+import com.sunny.model.dto.UserUpdateRequest;
 import com.sunny.repository.UserRepository;
 import com.sunny.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -47,16 +49,22 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @TrackHistory(action = Action.CREATE_USER, targetType = User.class, idParamName = "object")
     public UserDto create(UserDto object) {
+        throw new UnsupportedOperationException("Use create(UserSignupRequest) for user creation.");
+    }
+
+    @Override
+    @Transactional
+    public UserDto create(UserSignupRequest request) {
         User user = null;
         try {
             user = userRepository.save(
                     User.builder()
-                            .telephone(object.getTelephone())
-                            .email(object.getEmail())
-                            .userId(object.getUserId())
-                            .name(object.getUserName())
+                            .telephone(request.getTelephone())
+                            .email(request.getEmail())
+                            .userId(request.getUserId())
+                            .name(request.getUserName())
                             .status(false) //회원가입 시 기본적으로 비활성화 상태로 생성, 관리자가 활성화 시켜야 로그인 가능
-                            .password(passwordEncoder.encode(object.getPassword()))
+                            .password(passwordEncoder.encode(request.getPassword()))
                             .role(User.Role.USER) //회원가입유저는 일반유저로 고정
                             .provider(User.Provider.LOCAL) //회원가입유저는 로컬로 고정
                             .build()
@@ -73,14 +81,23 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @TrackHistory(action = Action.UPDATE_USER, targetType = User.class, idParamName = "object")
     public UserDto update(UserDto object) {
-        User origin = userRepository.findById(object.getId())
+        throw new UnsupportedOperationException("Use update(UserUpdateRequest) for user updates.");
+    }
+
+    @Override
+    @Transactional
+    public UserDto update(UserUpdateRequest request) {
+        User origin = userRepository.findById(request.getId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.INVALID_INPUT_VALUE, "업데이트할 유저가 존재하지 않습니다."));
 
-        if(!object.getPassword().isBlank()) origin.setPassword(passwordEncoder.encode(object.getPassword()));
+        String password = request.getPassword();
+        if (password != null && !password.isBlank()) {
+            origin.setPassword(passwordEncoder.encode(password));
+        }
 
-        origin.setStatus(object.isStatus());
-        origin.setEmail(object.getEmail());
-        origin.setTelephone(object.getTelephone());
+        origin.setStatus(request.isStatus());
+        origin.setEmail(request.getEmail());
+        origin.setTelephone(request.getTelephone());
 
         if(origin.getRole().equals(User.Role.USER)) origin.setRole(User.Role.USER); // 유저는 role 속성 변경 불가능
 

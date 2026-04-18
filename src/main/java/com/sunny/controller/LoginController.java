@@ -3,7 +3,8 @@ package com.sunny.controller;
 import com.sunny.config.auth.jwt.JwtTokenUtil;
 import com.sunny.config.error.BusinessException;
 import com.sunny.config.error.ErrorCode;
-import com.sunny.model.dto.UserDto;
+import com.sunny.model.dto.LoginRequest;
+import com.sunny.model.dto.UserSignupRequest;
 import com.sunny.service.AuthUserDetailsService;
 import com.sunny.service.UserService;
 import jakarta.validation.Valid;
@@ -30,7 +31,7 @@ public class LoginController extends BasicController {
     private final UserService userService;
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, Object>> doLogin(@RequestBody UserDto user) {
+    public ResponseEntity<Map<String, Object>> doLogin(@RequestBody @Valid LoginRequest user) {
         Map<String,Object> result =new HashMap();
         try {
             // 사용자 인증
@@ -70,8 +71,8 @@ public class LoginController extends BasicController {
         return createResponse(result);
     }
     @PostMapping("/signup")
-    public ResponseEntity<Map<String, Object>> signUp(@RequestBody @Valid UserDto userDto) {
-        return createResponse(userService.create(userDto));
+    public ResponseEntity<Map<String, Object>> signUp(@RequestBody @Valid UserSignupRequest userSignupRequest) {
+        return createResponse(userService.create(userSignupRequest));
     }
 
 //    @PostMapping("/user")

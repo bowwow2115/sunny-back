@@ -3,7 +3,7 @@ package com.sunny.controller;
 import com.sunny.code.SunnyCode;
 import com.sunny.config.error.BusinessException;
 import com.sunny.config.error.ErrorCode;
-import com.sunny.model.dto.UserDto;
+import com.sunny.model.dto.UserUpdateRequest;
 import com.sunny.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,11 +30,12 @@ public class UserController extends BasicController {
     }
 
     @PutMapping
-    public ResponseEntity<Map<String, Object>> updateUser(@Valid @RequestBody UserDto userDto, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<Map<String, Object>> updateUser(@Valid @RequestBody UserUpdateRequest userUpdateRequest, @AuthenticationPrincipal UserDetails userDetails) {
 
-        if(userDetails.getUsername().equals(userDto.getUserId()) ||
-                userDetails.getAuthorities().contains(SunnyCode.ROLE_GENERAL_ADMIN)) {
-            return createResponse(userService.update(userDto));
+        if(userDetails.getUsername().equals(userUpdateRequest.getUserId()) ||
+                userDetails.getAuthorities().stream()
+                        .anyMatch(authority -> authority.getAuthority().equals("ROLE_" + SunnyCode.ROLE_GENERAL_ADMIN))) {
+            return createResponse(userService.update(userUpdateRequest));
         } else {
             throw new BusinessException(ErrorCode.AUTHEXCEPTION);
         }
