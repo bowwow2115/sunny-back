@@ -12,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.Map;
 
@@ -29,7 +30,7 @@ public class UserController extends BasicController {
     }
 
     @PutMapping
-    public ResponseEntity<Map<String, Object>> updateUser(@RequestBody UserDto userDto, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<Map<String, Object>> updateUser(@Valid @RequestBody UserDto userDto, @AuthenticationPrincipal UserDetails userDetails) {
 
         if(userDetails.getUsername().equals(userDto.getUserId()) ||
                 userDetails.getAuthorities().contains(SunnyCode.ROLE_GENERAL_ADMIN)) {
@@ -38,6 +39,7 @@ public class UserController extends BasicController {
             throw new BusinessException(ErrorCode.AUTHEXCEPTION);
         }
     }
+
     @DeleteMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Map<String, Object>> deleteUser(@RequestParam Long id) {

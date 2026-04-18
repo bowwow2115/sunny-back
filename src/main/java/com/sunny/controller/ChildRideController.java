@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ public class ChildRideController extends BasicController {
     private final ChildService childService;
 
     @PutMapping
-    public ResponseEntity<Map<String, Object>> updateChildRide(@RequestBody ChilMeetingLocationDto chilMeetingLocationDto) {
+    public ResponseEntity<Map<String, Object>> updateChildRide(@Valid @RequestBody ChilMeetingLocationDto chilMeetingLocationDto) {
         return createResponse(childMeetingLocationService.update(chilMeetingLocationDto));
     }
 
@@ -32,12 +33,12 @@ public class ChildRideController extends BasicController {
     }
 
     @PostMapping
-    public ResponseEntity<Map<String, Object>> addChildRide(@RequestBody ChilMeetingLocationDto chilMeetingLocationDto) {
+    public ResponseEntity<Map<String, Object>> addChildRide(@Valid @RequestBody ChilMeetingLocationDto chilMeetingLocationDto) {
         return createResponse(childMeetingLocationService.create(chilMeetingLocationDto));
     }
 
     @PostMapping("/list")
-    public ResponseEntity<Map<String, Object>> addChildRideList(@RequestBody List<ChilMeetingLocationDto> chilMeetingLocationDtoList) {
+    public ResponseEntity<Map<String, Object>> addChildRideList(@Valid @RequestBody List<ChilMeetingLocationDto> chilMeetingLocationDtoList) {
         List<ChilMeetingLocationDto> resultList = new ArrayList<>();
         for (ChilMeetingLocationDto chilMeetingLocationDto : chilMeetingLocationDtoList)
             resultList.add(childMeetingLocationService.create(chilMeetingLocationDto));

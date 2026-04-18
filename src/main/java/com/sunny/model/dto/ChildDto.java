@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.*;
+import jakarta.validation.Valid;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -17,12 +19,29 @@ import java.util.List;
 @NoArgsConstructor
 public class ChildDto {
     private Long id;
+
+    @NotNull(message = "입학일은 필수입니다.")
+    @PastOrPresent(message = "입학일은 현재 또는 과거 날짜여야 합니다.")
     private LocalDate admissionDate;
+
+    @NotBlank(message = "반 이름은 필수입니다.")
+    @Size(min = 1, max = 50, message = "반 이름은 1자 이상 50자 이하로 입력해야 합니다.")
     private String className;
+
+    @Valid
     private Address address;
+
+    @NotNull(message = "생년월일은 필수입니다.")
+    @PastOrPresent(message = "생년월일은 현재 또는 과거 날짜여야 합니다.")
     private LocalDate birthday;
+
+    @Size(max = 20, message = "상태는 20자 이하로 입력해야 합니다.")
     private String status;
+
+    @NotBlank(message = "이름은 필수입니다.")
+    @Size(min = 1, max = 50, message = "이름은 1자 이상 50자 이하로 입력해야 합니다.")
     private String name;
+
     private List<ChilMeetingLocationDto> childRideList = new ArrayList<>();
     private List<ParentsDto> parentList = new ArrayList<>();
 

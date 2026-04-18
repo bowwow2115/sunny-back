@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ public class AuthController extends BasicController{
 
     @PostMapping("/jwt/refresh")
     public ResponseEntity<Map<String, Object>> refreshJwt(HttpServletRequest request,
-                                          @RequestBody JwtDto jwtDto) {
+                                          @Valid @RequestBody JwtDto jwtDto) {
         if(jwtDto.getRefreshToken() == null) throw new BusinessException(ErrorCode.INVALID_INPUT_VALUE, "invalid input - refreshJwt");
         String userId = null;
         try {

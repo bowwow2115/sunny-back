@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.Map;
 
@@ -22,7 +23,7 @@ public class ClassController extends BasicController {
     }
 
     @PostMapping
-    public ResponseEntity<Map<String, Object>> addClass(@RequestBody SunnyClassDto sunnyClass) {
+    public ResponseEntity<Map<String, Object>> addClass(@Valid @RequestBody SunnyClassDto sunnyClass) {
         return createResponse(sunnyClassServcie.create(sunnyClass));
     }
 

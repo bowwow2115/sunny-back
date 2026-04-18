@@ -5,6 +5,7 @@ import com.sunny.service.ChildService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -47,12 +48,12 @@ public class ChildController extends BasicController {
     }
 
     @PostMapping
-    public ResponseEntity<Map<String, Object>> addChild(@RequestBody ChildDto child) {
+    public ResponseEntity<Map<String, Object>> addChild(@Valid @RequestBody ChildDto child) {
         return createResponse(childService.create(child));
     }
 
     @PutMapping
-    public ResponseEntity<Map<String, Object>> editChild(@RequestBody ChildDto child) {
+    public ResponseEntity<Map<String, Object>> editChild(@Valid @RequestBody ChildDto child) {
         return createResponse(childService.update(child));
     }
 
@@ -74,7 +75,7 @@ public class ChildController extends BasicController {
     }
 
     @PutMapping("/all/class")
-    public ResponseEntity<Map<String, Object>> updateChildrenClass(@RequestBody List<ChildDto> childDtoList,
+    public ResponseEntity<Map<String, Object>> updateChildrenClass(@Valid @RequestBody List<ChildDto> childDtoList,
                                                                    @RequestParam(value = "className") String className) {
         return createResponse(childService.updateChildrenClass(childDtoList, className));
     }

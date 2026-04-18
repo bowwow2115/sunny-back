@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.Map;
 
@@ -22,12 +23,12 @@ public class RideController extends BasicController{
     }
 
     @PostMapping
-    public ResponseEntity<Map<String, Object>> addRide(@RequestBody SunnyRideDto sunnyRideDto) {
+    public ResponseEntity<Map<String, Object>> addRide(@Valid @RequestBody SunnyRideDto sunnyRideDto) {
         return createResponse(sunnyRideService.create(sunnyRideDto));
     }
 
     @PutMapping
-    public ResponseEntity<Map<String, Object>> updateRide(@RequestBody SunnyRideDto sunnyRideDto) {
+    public ResponseEntity<Map<String, Object>> updateRide(@Valid @RequestBody SunnyRideDto sunnyRideDto) {
         return createResponse(sunnyRideService.update(sunnyRideDto));
     }
 

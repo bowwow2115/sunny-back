@@ -5,6 +5,7 @@ import com.sunny.service.MeetingLoactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.Map;
 
@@ -13,13 +14,14 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class MeetingLocationController extends BasicController{
     private final MeetingLoactionService meetingLoactionService;
+
     @PutMapping
-    public ResponseEntity<Map<String, Object>> updateMeetingLoaction(@RequestBody MeetingLocationDto meetingLocation) {
+    public ResponseEntity<Map<String, Object>> updateMeetingLoaction(@Valid @RequestBody MeetingLocationDto meetingLocation) {
        return createResponse(meetingLoactionService.update(meetingLocation));
     }
 
     @PostMapping
-    public ResponseEntity<Map<String, Object>> addMeetingLoaction(@RequestBody MeetingLocationDto meetingLocation) {
+    public ResponseEntity<Map<String, Object>> addMeetingLoaction(@Valid @RequestBody MeetingLocationDto meetingLocation) {
         return createResponse(meetingLoactionService.create(meetingLocation));
     }
 
@@ -27,4 +29,5 @@ public class MeetingLocationController extends BasicController{
     public ResponseEntity<Map<String, Object>> deleteMeetingLoaction(@RequestParam Long id) {
         meetingLoactionService.deleteById(id);
         return createResponse();
-    }}
+    }
+}
