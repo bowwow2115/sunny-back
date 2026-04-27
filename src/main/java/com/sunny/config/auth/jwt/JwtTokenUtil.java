@@ -11,9 +11,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.Serializable;
-import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
@@ -67,7 +67,11 @@ public class JwtTokenUtil implements Serializable {
 
     //for retrieveing any information from token we will need the secret key
     private Claims getAllClaimsFromToken(String token) {
-        return Jwts.parser().setSigningKey(secret).build().parseClaimsJws(token).getBody();
+        return Jwts.parser()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 
     //check if the token has expired
@@ -146,7 +150,7 @@ public class JwtTokenUtil implements Serializable {
 //        return "admin".equals(role);
 //    }
 
-    public Key getSigningKey() {
+    public SecretKey getSigningKey() {
         byte[] keyBytes = Base64.getDecoder().decode(secret);
         return new SecretKeySpec(keyBytes, SignatureAlgorithm.HS512.getJcaName());
     }

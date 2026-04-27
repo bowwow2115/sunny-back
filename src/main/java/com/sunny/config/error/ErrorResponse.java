@@ -20,7 +20,7 @@ public class ErrorResponse {
 
 
     private ErrorResponse(final ErrorCode code, final List<FieldError> errors) {
-        this.message = code.getMessage();
+        this.message = errors.get(0) != null ? errors.get(0).getReason() : code.getMessage();
         this.status = code.getStatus();
         this.code = code.getCode();
     }

@@ -16,90 +16,61 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-//@Transactional
 public class HistoryServiceTest {
     @Autowired
     private ChildService childService;
-    @Autowired
-    private ParentsService parentsService;
-    @Autowired
-    private SunnyClassServcie sunnyClassServcie;
-    @Autowired
-    private SunnyRideService sunnyRideService;
-    @Autowired
-    private UserService userService;
 
     @Autowired
     private HistoryService historyService;
-
-    /**
-     * BaseEntity의 createDate PrePersist 어노테이션을 해제해야 정상작동
-     */
-//    @Test
-//    public void deleteByCreatedDateBatchTest() {
-//        // given
-//        LocalDate now = LocalDate.now();
-//        for (int i = 0; i < 10; i++) {
-//            historyService.create(BusinessHistoryDto.builder()
-//                    .targetType("Test")
-//                    .createdDate(now.minusDays(i).atStartOfDay())
-//                    .build());
-//        }
-//
-//        // when
-//        long deletedCount = historyService.deleteByCreatedDateBatch(now.minusDays(7).atStartOfDay(), 10);
-//
-//        // then
-//        assertThat(deletedCount).isEqualTo(2);
-//    }
 
     @Test
     public void updateChildrenClassOfHistoryTest() {
         List<ChildDto> childList = updateChildrenClass();
 
         childList.forEach(childDto -> {
-            List<BusinessHistoryDto> historyDtos = historyService.findByTargetIdAndType(childDto.getId(), "Child");
-            //  create, update, find 총 3번의 이력이 남아야 한다.
-            //  api를 통한 접근이 아니라 newValue 등의 데이터가 정상적으로 쌓이지 않음
-            assertThat(historyDtos).size().isEqualTo(3);
+            List<BusinessHistoryDto> historyDtos = waitForHistory(childDto.getId(), "Child", 3);
+            assertThat(historyDtos).hasSize(3);
         });
     }
 
     @Test
     public void getHistoryByCondition_byName() {
         insertChildren();
+
         Pageable pageable = Pageable.ofSize(10);
         HistorySearchCondition historySearchCondition = HistorySearchCondition.builder()
                 .targetType("Child")
-                .name("김어린이")
+                .name("test-child")
                 .orderBy("asc")
                 .build();
+
         Page<BusinessHistoryDto> historyByCondition = historyService.getHistoryByCondition(pageable, historySearchCondition);
         assertThat(historyByCondition).size().isGreaterThanOrEqualTo(2);
         historyByCondition.forEach(history -> {
             assertThat(history.getTargetType()).isEqualTo("Child");
-            assertThat(history.getName()).contains("김어린이");
+            assertThat(history.getName()).contains("test-child");
         });
     }
 
     private List<ChildDto> insertChildren() {
         ChildDto child1 = childService.create(ChildDto.builder()
-                .name("김어린이")
+                .name("test-child-1")
                 .admissionDate(LocalDate.now())
                 .birthday(LocalDate.now())
-                .className("반")
+                .className("class-a")
                 .build());
 
         ChildDto child2 = childService.create(ChildDto.builder()
-                .name("김어린이2")
+                .name("test-child-2")
                 .admissionDate(LocalDate.now())
                 .birthday(LocalDate.now())
-                .className("반")
+                .className("class-a")
                 .build());
 
-        List<ChildDto> childList =  new ArrayList<>();
+        List<ChildDto> childList = new ArrayList<>();
         childList.add(child1);
         childList.add(child2);
+
         assertThat(childList).extracting(ChildDto::getId)
                 .allSatisfy(id -> assertThat(id).isNotNull());
 
@@ -108,12 +79,32 @@ public class HistoryServiceTest {
 
     private List<ChildDto> updateChildrenClass() {
         List<ChildDto> childList = insertChildren();
-        childService.updateChildrenClass(childList, "반2");
+        childService.updateChildrenClass(childList, "class-b");
 
         childList.forEach(child -> {
             ChildDto byId = childService.findById(child.getId());
-            assertThat(byId.getClassName()).isEqualTo("반2");
+            assertThat(byId.getClassName()).isEqualTo("class-b");
         });
         return childList;
+    }
+
+    private List<BusinessHistoryDto> waitForHistory(Long targetId, String targetType, int expectedSize) {
+        long deadline = System.currentTimeMillis() + 3000;
+        List<BusinessHistoryDto> historyDtos = new ArrayList<>();
+
+        while (System.currentTimeMillis() < deadline) {
+            historyDtos = historyService.findByTargetIdAndType(targetId, targetType);
+            if (historyDtos.size() >= expectedSize) {
+                return historyDtos;
+            }
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                break;
+            }
+        }
+
+        return historyDtos;
     }
 }
